@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\PengemudiController;
+use App\Models\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +42,8 @@ Route::get('/landingpage', function () {
 // Route::get('/postlogin', 'LoginController@postlogin')->name('postlogin');
 
 
-Route::get('/registrasi', [ViewController::class, 'register']);
+Route::get('/registrasi', [AuthController::class, 'register'])->name('registrasi');
+Route::post('/registrasi', [AuthController::class, 'processregistrasi'])->name('processregistrasi');
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'processLogin'])->name('processlogin');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -59,6 +63,10 @@ Route::middleware('auth:admin,pengemudi')->group(function () {
     Route::put('/mobil/{id}', [MobilController::class, 'update']);
     // Route::get('/mobil-delete/{id}', [MobilController::class, 'delete']);
     Route::delete('/mobil-delete/{id}', [MobilController::class, 'delete']);
+
+    Route::get('/pengguna', [UserController::class, 'index'])->name('pengguna');
+    Route::get('/profile-admin', [AdminController::class, 'profile'])->name('profileadmin');
+    Route::get('/profile-pengemudi', [PengemudiController::class, 'profile'])->name('profilepengemudi');
 // Route::middleware(['auth', 'checkLevel:admin'])->group(function () {
 //     // Rute untuk admin
 //     Route::get('/dashboard_admin', [ViewController::class, 'index']);
@@ -74,6 +82,11 @@ Route::middleware('auth:admin,pengemudi')->group(function () {
 
 Route::middleware('auth:user')->group(function () {
         Route::get('/home', [ViewController::class, 'reservasi']);
+        Route::get('/profile', [ViewController::class, 'profile'])->name('profile');
+        Route::get('/profile-edit', [ViewController::class, 'profileedit'])->name('profileedit');
+        Route::get('/password', [AuthController::class, 'password'])->name('resetpassword');
+        Route::post('/password-reset', [AuthController::class, 'password_action'])->name('processpassword');
+        Route::put('/parofile', [UserController::class, 'profile'])->name('profileupdate');
     });
 // Route::middleware('auth:pengemudi')->group(function () {
 //     // Route::group(['middleware' => ['auth:user,pengemudi','ceklevel:admin,pelanggan']], function (){

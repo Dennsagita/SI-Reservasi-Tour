@@ -18,13 +18,20 @@
     @include('template_admin.metadata')
   </head>
 
+      <!-- Popup -->
+      @include('template_admin.popup')
+      <!-- end popup -->
   <body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
+    
+
     <!-- sidenav  -->
     @include('template_admin.sidenav')
     <!-- end sidenav -->
 
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
       
+   
+
       <!-- Navbar -->
       @include('template_admin.navbar')
       <!-- end Navbar -->

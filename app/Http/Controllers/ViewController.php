@@ -22,4 +22,13 @@ class ViewController extends Controller
     {
         return view('post/registrasi');
     }
+
+    public function profile()
+    {
+        return view('post/profile');
+    }
+    public function profileedit()
+    {
+        return view('post/profile-edit');
+    }
 }

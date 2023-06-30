@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 @endif
-                <form action="mobil-insert" method="POST">
+                <form action="mobil-insert" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div>
@@ -54,6 +54,18 @@
                             <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
                             <textarea name="keterangan" id="keterangan" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required placeholder="Keterangan"></textarea>
                         </div>
+                    </div>
+                    <div class="upload__box">
+                       
+                        <div class="upload__btn-box">
+                            <label class="upload__btn btn btn-primary">
+                                <p class="">Unggah Gambar  
+                                </p>
+                                <input type="file" name="images[]" multiple data-max_length="20"
+                                    class="upload__inputfile">
+                            </label>
+                        </div>
+                        <div class="upload__img-wrap"></div>
                     </div>
                     <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                         Tambah Data Mobil

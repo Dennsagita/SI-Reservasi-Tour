@@ -50,5 +50,9 @@ class PengemudiController extends Controller
         }
         return redirect('/pengemudi');
     }
+    public function profile()
+    {
+        return view('post_admin/profile-pengemudi/profile');
+    }
 
 }

@@ -65,6 +65,8 @@ class MobilController extends Controller
         return redirect('/mobil');
     }
     
+   
+
 
 
 }

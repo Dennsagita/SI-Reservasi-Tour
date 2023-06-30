@@ -12,5 +12,5 @@
     @include('template_lp.footer')
     @include('template_lp.metascript')
 </body>
-
+    
 </html>
