@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('pakets', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_mobil')->nullable()->after('id');
-            $table->foreign('id_mobil')->references('id')->on('mobils')->onDelete('restrict');
+        Schema::table('pemesanans', function (Blueprint $table) {
+            $table->integer('nominal_dp')->after('bukti_dp');
         });
     }
 
@@ -26,9 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('pakets', function (Blueprint $table) {
-            $table->dropForeign(['id_mobil']);
-            $table->dropColumn('id_mobil');
+        Schema::table('pemesanans', function (Blueprint $table) {
+            $table->dropColumn('nominal_dp');
         });
     }
 };

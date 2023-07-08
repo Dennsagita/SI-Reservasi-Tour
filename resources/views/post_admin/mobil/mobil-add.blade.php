@@ -1,6 +1,6 @@
 @extends('layouts.app_admin')
 @section('action')
-@section('title', 'Tambah Pengemudi')
+@section('title', 'Tambah Mobil')
 @endsection
 
 @section('content')

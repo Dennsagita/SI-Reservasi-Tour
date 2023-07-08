@@ -37,7 +37,9 @@
 
        @if (Str::length(Auth::guard('admin')->user()) > 0)
        <li class="mt-0.5 w-full">
-         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors" href="../pages/billing.html">
+         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors
+         {{ request()->segment(1) == 'pemesanan' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}"
+          href="{{ route('pemesanan') }}">
            <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center fill-current stroke-0 text-center xl:p-2.5">
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
               <title>pesanan</title>
@@ -131,7 +133,10 @@
        </li>
 
        <li class="mt-0.5 w-full">
-        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors" href="../pages/profile.html">
+        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors
+        {{ request()->segment(1) == 'paket' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }} 
+        {{ request()->segment(1) == 'paket-add' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
+        href="{{ route('managepaket') }}">
            <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
              <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                <title>paket</title>
@@ -180,7 +185,7 @@
          </a>
        </li>
 
-       <li class="mt-0.5 w-full">
+       {{-- <li class="mt-0.5 w-full">
         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors" href="../pages/sign-up.html">
           <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
@@ -204,7 +209,7 @@
           </div>
           <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Jadwal</span>
         </a>
-      </li>
+      </li> --}}
 
       <li class="mt-0.5 w-full">
         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors

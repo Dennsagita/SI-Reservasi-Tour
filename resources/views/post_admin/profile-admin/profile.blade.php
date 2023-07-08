@@ -50,9 +50,9 @@
         
         <!-- card 1 -->
 
-        <div class="w-full max-w-full px-3 mt-0 mb- md:mb-6 md:w-1/2 md:flex-none lg:w-2/3 lg:flex-none mb-mobile:mb-6">
+        <div class="w-full max-w-full px-3 mt-0 mb-2 md:mb-6 md:w-1/2 md:flex-none lg:w-2/3 lg:flex-none mb-mobile:mb-6 sm:b-15">
             
-        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8">
+        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-10">
             <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Work fast from anywhere</h5>
             <p class="mb-5 text-base text-gray-500 sm:text-lg">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
             <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">

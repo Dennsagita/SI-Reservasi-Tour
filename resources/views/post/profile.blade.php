@@ -12,7 +12,7 @@
         <div class="flex flex-wrap -mx-3">
         <div class="flex-none w-auto max-w-full px-3">
             <div class="text-base ease-soft-in-out h-18.5 w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200">
-                <img src="{{ ('/assets/img/bruce-mars.jpg') }}" alt="profile_image" class="w-full shadow-soft-sm rounded-xl" />
+                <img src="{{  asset($user->images->count() ? 'storage/' . $user->images->first()->src : 'assets/images/blog/user-1.png') }}" alt="" class="w-full shadow-soft-sm rounded-xl" />
             </div>
         </div>
         <div class="flex-none w-auto max-w-full px-3 my-auto">
@@ -53,7 +53,7 @@
 
         <div class="w-full max-w-full px-3 mt-0 mb- md:mb-6 md:w-1/2 md:flex-none lg:w-2/3 lg:flex-none mb-mobile:mb-6">
             
-        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8">
+        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-10">
             <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Work fast from anywhere</h5>
             <p class="mb-5 text-base text-gray-500 sm:text-lg">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
             <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">

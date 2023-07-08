@@ -20,4 +20,15 @@
  <!-- main script file  -->
  <script src="{{ asset('assets/js/soft-ui-dashboard-tailwind.js?v=1.0.4') }}" async></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+ <script src="{{ asset('js/jquery.min.js') }}"></script>
+
+ {{-- <script>
+    $(document).ready(function() {
+        // Ambil ID pengemudi dari URL
+        var pengemudiId = {{ $id_pengemudi }};
+
+        // Gunakan ID pengemudi sesuai kebutuhan, misalnya untuk mengisi nilai input
+        $('#mobilForm input[name="id_pengemudi"]').val(pengemudiId);
+    });
+</script> --}}
  

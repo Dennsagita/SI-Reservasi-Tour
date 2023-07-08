@@ -18,11 +18,10 @@ return new class extends Migration
             $table->date('tgl_tour_mulai');
             $table->date('tgl_tour_selesai');
             $table->date('tgl_berangkat');
-            $table->dateTime('jam_datang');
-            $table->string('lokasi_penjemputan', 200)->require();
-            $table->integer('jml_penumpang')->require();
+            $table->time('jam_datang');
+            $table->string('lokasi_penjemputan');
             $table->binary('bukti_dp');
-            $table->enum('status_pemesanan', ['diterima', 'batal']);
+            $table->enum('status_pemesanan', ['diterima', 'batal', 'baru', 'selesai']);
             $table->timestamps();
         });
     }

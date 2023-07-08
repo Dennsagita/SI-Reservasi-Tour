@@ -11,7 +11,7 @@
         <div class="flex flex-wrap -mx-3">
         <div class="flex-none w-auto max-w-full px-3">
             <div class="text-base ease-soft-in-out h-18.5 w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200">
-                <img src="{{ ('/assets/img/bruce-mars.jpg') }}" alt="profile_image" class="w-full shadow-soft-sm rounded-xl" />
+                <img src="{{  asset($user->images->count() ? 'storage/' . $user->images->first()->src : 'assets/images/blog/user-1.png') }}" alt="" class="w-full shadow-soft-sm rounded-xl" />
             </div>
         </div>
         <div class="flex-none w-auto max-w-full px-3 my-auto">
@@ -28,9 +28,10 @@
             <div class="p-6 mt-6 pb-0 mb-6 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
             <section class="bg-white">
                     <h2 class="mb-4 text-xl font-bold text-gray-900 ">Ubah Data Pfroil</h2>
-                    <form action="{{ route('profileupdate') }}" method="post">
+                    <form action="{{ route('profileupdate') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" id="deleted_images" name="deleted_images">
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="w-full">
                             <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 ">Nama</label>
@@ -47,6 +48,26 @@
                         <div class="w-full">
                             <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 ">Alamat</label>
                             <input type="text" name="alamat" id="alamat" value="{{ Auth::guard('user')->user()->alamat }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan alamat" required="">
+                        </div>
+                        <div class="upload__box">
+                            @error('images[]')
+                            <small class="text-xs text-red-500 ml-1">{{ '*' . $message }}</small>
+                            @enderror
+                            <div class="upload__btn-box">
+                                <label class="upload__btn btn btn-primary">
+                                    <p>Choose An Image</p>
+                                    <input type="file" name="image" accept="image/*" multiple data-max_length="20" class="upload__inputfile">
+                                </label>
+                            </div>
+                            <div class="upload__img-wrap">
+                                @foreach ($user->images as $item => $image)
+                                <div class='upload__img-box'>
+                                    <div style='background-image: url({{ asset('storage/' . $image->src) }})' data-number='{{ $item }}' data-id="{{ $image->id }}" data-file='{{ 'storage/' . $image->src }}' class='img-bg'>
+                                        <div class='upload__img-close'></div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
                         </div>
                         <div class="pt-8">

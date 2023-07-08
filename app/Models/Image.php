@@ -15,6 +15,11 @@ class Image extends Model
     protected $table = 'images';
     protected $fillable = ['src', 'thumb', 'alt', 'imageable_id', 'imageable_type'];
 
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
+
     public static function uploadImage($img_response, $rezize = true)
     {
         if ($rezize == true) {

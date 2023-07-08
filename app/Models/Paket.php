@@ -2,33 +2,27 @@
 
 namespace App\Models;
 
-use App\Models\Paket;
-use App\Models\Pengemudi;
-use App\Models\Image;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Mobil;
 
-
-class Mobil extends Model
+class Paket extends Model
 {
     use HasFactory;
-
-    public function pengemudi()
+    public function mobil()
     {
-        return $this->BelongsTo(Pengemudi::class, 'id_pengemudi');
+        return $this->BelongsTo(Mobil::class, 'id_mobil');
     }
-
-    public function paket()
+    public function pesanan()
     {
-        return $this->hasMany(Paket::class, 'id_mobil', 'id');
+        return $this->hasMany(Pesanan::class, 'id_paket', 'id');
     }
-    
     protected $fillable = [
-        'id_pengemudi',
-        'no_plat_mobil',
-        'merk',
-        'nama_mobil',
+        'id_mobil',
+        'nama',
+        'destinasi',
         'keterangan',
+        'harga',
     ];
 
      //relation
@@ -41,24 +35,24 @@ class Mobil extends Model
     {
         parent::boot();
 
-        self::creating(function ($mobil) {
-            $mobil->id = request()->id;
+        self::creating(function ($paket) {
+            $paket->id = request()->id;
         });
 
-        self::created(function ($mobil) {
+        self::created(function ($paket) {
             foreach (request()->file('images') ?? [] as $key => $image) {
                 $uploaded = Image::uploadImage($image);
                 Image::create([
                     'thumb' => 'thumbnails/' . $uploaded['thumb']->basename,
                     'src' => 'images/' . $uploaded['src']->basename,
                     'alt' => Image::getAlt($image),
-                    'imageable_id' => $mobil->id,
-                    'imageable_type' => "App\Models\Mobil"
+                    'imageable_id' => $paket->id,
+                    'imageable_type' => "App\Models\Paket"
                 ]);
             }
         });
 
-        self::updating(function ($mobil) {
+        self::updating(function ($paket) {
 
             $img_array = explode(',', request()->deleted_images);
             array_pop($img_array);
@@ -78,8 +72,8 @@ class Mobil extends Model
                     'thumb' => 'thumbnails/' . $uploaded['thumb']->basename,
                     'src' => 'images/' . $uploaded['src']->basename,
                     'alt' => Image::getAlt($image),
-                    'imageable_id' => $mobil->id,
-                    'imageable_type' => "App\Models\Mobil"
+                    'imageable_id' => $paket->id,
+                    'imageable_type' => "App\Models\Paket"
                 ]);
             }
         });
@@ -88,18 +82,13 @@ class Mobil extends Model
             // ... code here
         });
 
-        self::deleting(function ($mobil) {
-            foreach ($mobil->images as $key => $image) {
+        self::deleting(function ($paket) {
+            foreach ($paket->images as $key => $image) {
                 $image->delete();
             }
         });
 
-        self::deleted(function ($mobil) {
+        self::deleted(function ($paket) {
         });
-
-        // self::deleted(function ($model) {
-        //     Paket::whereIn('id', $model->paket->map(fn ($item) => $item->id))->update(['id_mobil', NULL]);
-        // });
     }
-    
 }

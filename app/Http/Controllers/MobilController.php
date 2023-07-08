@@ -16,10 +16,18 @@ class MobilController extends Controller
         $mobil = Mobil::with('pengemudi')->paginate(10);
         return view('post_admin/mobil/mobil', ['mobilList' => $mobil]);
     }
-    public function create()
+    public function registrasi($id_pengemudi)
     {
-        $class = Pengemudi::select('id', 'nama')->get();
-        return view('post_admin/mobil/mobil-add', ['pengemudi' => $class]);
+        return view('post/mobil-registrasi', compact('id_pengemudi'));
+    }
+    public function processregistrasimobil(MobilCreateRequest $request)
+    {
+        $mobil = Mobil::create($request->all());
+        if ($mobil) {
+            Session::flash('status', 'success');
+            Session::flash('message', 'Tambah Data Mobil Berhasil');
+        }
+        return redirect('/login');
     }
     public function store(MobilCreateRequest $request)
     {
@@ -31,7 +39,6 @@ class MobilController extends Controller
         // $mobil->keterangan = $request->keterangan;
         // $mobil->save();
         
-
         $mobil = Mobil::create($request->all());
         if ($mobil) {
             Session::flash('status', 'success');
@@ -64,9 +71,5 @@ class MobilController extends Controller
         
         return redirect('/mobil');
     }
-    
-   
-
-
 
 }

@@ -44,6 +44,37 @@ class AuthController extends Controller
 
         return redirect('/login')->with('success', 'Registration success. Please login!');
     }
+
+    public function registerpengemudi()
+    {
+        $data['title'] = 'Register';
+        return view('post/registrasi-pengemudi', $data);
+    }
+
+    public function processregistrasipengemudi(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'no_telp' => 'required|numeric',
+            'alamat' => 'required',
+            'email' => 'required|unique:users',
+            'password' => 'required',
+            'password_confirm' => 'required|same:password',
+        ]);
+
+        $pengemudi = new Pengemudi([
+            'nama' => $request->nama,
+            'no_telp' => $request->no_telp,
+            'alamat' => $request->alamat,
+            'email' => $request->email,
+            'status' => $request->status,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $pengemudi->save();
+
+        return redirect()->route('registrasimobil', $pengemudi->id);
+    }
     
     public function processLogin(Request $request)
     {

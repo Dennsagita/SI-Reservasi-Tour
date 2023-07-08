@@ -11,9 +11,10 @@
         <div class="p-6 mt-6 pb-0 mb-6 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
         <section class="bg-white dark:bg-gray-900">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Form Edit Data Mobil</h2>
-                <form action="/mobil/{{ $mobil->id }}" method="post">
+                <form action="/mobil/{{ $mobil->id }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" id="deleted_images" name="deleted_images">
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div>
                             <label for="id_pengemudi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Pemilik</label>
@@ -50,6 +51,26 @@
                         <div class="sm:col-span-2">
                             <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
                             <textarea name="keterangan" id="keterangan" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required placeholder="Keterangan">{{ $mobil->keterangan }}</textarea>
+                        </div>
+                        <div class="upload__box">
+                            @error('images[]')
+                            <small class="text-xs text-red-500 ml-1">{{ '*' . $message }}</small>
+                            @enderror
+                            <div class="upload__btn-box">
+                                <label class="upload__btn btn btn-primary">
+                                    <p>Choose An Image</p>
+                                    <input type="file" name="images[]" multiple data-max_length="10" class="upload__inputfile">
+                                </label>
+                            </div>
+                            <div class="upload__img-wrap">
+                                @foreach ($mobil->images as $item => $image)
+                                <div class='upload__img-box'>
+                                    <div style='background-image: url({{ asset('storage/' . $image->src) }})' data-number='{{ $item }}' data-id="{{ $image->id }}" data-file='{{ 'storage/' . $image->src }}' class='img-bg'>
+                                        <div class='upload__img-close'></div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">

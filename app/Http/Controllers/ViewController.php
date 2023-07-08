@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use id;
+use App\Models\User;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ViewController extends Controller
 {
@@ -10,7 +14,7 @@ class ViewController extends Controller
     {
         return view('post_admin/dashboard');
     }
-    public function reservasi()
+    public function home()
     {
         return view('post/landing-page');
     }
@@ -22,10 +26,16 @@ class ViewController extends Controller
     {
         return view('post/registrasi');
     }
+    public function reservasi()
+    {
+        return view('post/reservasi');
+    }
 
     public function profile()
     {
-        return view('post/profile');
+        $user = User::all();
+        // $user = User::find(Auth::id());
+        return view('post/profile', ['userList' => $user]);
     }
     public function profileedit()
     {

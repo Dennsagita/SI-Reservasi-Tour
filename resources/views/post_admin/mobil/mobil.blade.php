@@ -41,16 +41,17 @@
             <div class="p-0 overflow-x-auto">
               <div class="p-0 px-4 mb-4">
               <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                <a href="mobil-add">Tambah Data</a></button>
+                <a href="{{ route('mobil-add') }}">Tambah Data</a></button>
               </div>
               <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
                 <thead class="align-bottom">
                   <tr>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
-                    <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pemilik</th>
+                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pemilik</th>
                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No Plat Kendaraan</th>
                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70"">Merk | Nama Mobil</th>
                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Keterangan</th>
+                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Foto Mobil</th>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                   </tr>
                 </thead>
@@ -61,14 +62,7 @@
                       <h6 class="mb-0 leading-normal text-sm text-center">{{ $loop->iteration }}</h6>
                   </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                      <div class="flex px-2 py-1">
-                        <div>
-                          <img src="{{ asset($item->images->count() ? 'storage/'. $item->images->first()->src : 'assets/images/blog/user-1.png') }}" class="inline-flex items-center justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl" alt="{{ $item->nama }}" />
-                        </div>
-                        <div class="flex flex-col justify-center">
                           <h6 class="mb-0 leading-normal text-sm">{{ $item->pengemudi->nama }}</h6>
-                        </div>
-                      </div>
                     </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->no_plat_mobil }}</p>
@@ -79,6 +73,11 @@
                     </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->keterangan }}</p>
+                    </td>
+                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                      <div>
+                        <img src="{{ asset($item->images->count() ? 'storage/'. $item->images->first()->src : 'assets/images/blog/mobilkosong.png') }}" class="inline-flex items-center justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl" alt="{{ $item->nama }}" />
+                      </div>
                     </td>
                     <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                               {{-- <a href="mobil-edit/{{ $item->id }}" class="px-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center"><i class="fa-solid fa-pen-to-square"></i></a> --}}
