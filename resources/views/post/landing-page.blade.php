@@ -1,11 +1,23 @@
 @extends('layouts.app')
 @section('action')
-@endsection
+@section('title', 'Halaman Home')
 
 @section('content')
 
 <section class="relative bg-white py-26 mb-6 lg:pt-[100px]">
-    
+    {{-- @if(Session::has('status'))
+    <div id="toast-success" class="flex items-center w-full p-4 mb-4 text-gray-500 bg-white rounded-lg shadow" role="alert">
+     <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
+         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+         <span class="sr-only">Check icon</span>
+     </div>
+     <div class="ml-3 text-sm font-normal">{{ Session::get('message') }}</div>
+     <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8" data-dismiss-target="#toast-success" aria-label="Close">
+         <span class="sr-only">Close</span>
+         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+     </button>
+     </div>
+   @endif --}}
     <div class="mx-auto max-w-7xl px-8 md:px-6 z-50">
         <div class="flex flex-wrap">
             <div class="w-full lg:w-5/12">
@@ -14,7 +26,7 @@
                 <p class="text-slate-500 mb-8 max-w-[480px] text-base"> Jelajahi pengalaman yang luar biasa untuk mengeksplorasi keindahan pulau Bali . Tour ini akan membawa Anda ke destinasi wisata populer di Bali
                 </p>
                 
-                <button class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 sm:w-auto"><a href="/paket">Pilih Paket Tujuan Anda</a></button>
+                <button class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 sm:w-auto"><a href="{{ route('paketHome') }}">Pilih Paket Tujuan Anda</a></button>
 
                 <button class="mt-4 box-border w-full rounded-md border border-blue-500/20 px-8 py-2.5 font-semibold text-blue-500 shadow-md shadow-blue-500/10 duration-200 sm:ml-4 sm:mt-0 sm:w-auto ">Register Now</button>
 
@@ -524,8 +536,40 @@
     </div>
 </section>
 
-
+{{-- <!-- Modal -->
+<div class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50 hidden" id="berhasilLogin">
+    <div class="bg-white w-1/2 p-6 rounded-lg">
+      <h2 class="text-xl font-bold mb-4">Login Success</h2>
+      <p class="mb-4">You have successfully logged in.</p>
+      <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('berhasilLogin');
+      var modalClose = modal.querySelector('[data-dismiss="modal"]');
+  
+      modalClose.addEventListener('click', function() {
+        modal.classList.add('hidden');
+      });
+  
+      modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+    });
+  
+    @if(session('login_success'))
+      document.addEventListener('DOMContentLoaded', function() {
+        var modal = document.getElementById('berhasilLogin');
+        modal.classList.remove('hidden');
+      });
+    @endif
+  </script> --}}
 <!-- ====== END Contact ====== -->
 
 <!-- ====== END Contact ====== -->
-@stop
+@endsection

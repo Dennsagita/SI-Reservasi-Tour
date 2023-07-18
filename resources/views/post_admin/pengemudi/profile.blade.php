@@ -1,7 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
-@section('title', 'Profile')
-
+@section('title', 'Profile Pengemudi')
+@section('navbar', 'Pengemudi')
+@section('data', 'Profile')
 @section('content')
 <div class="w-full px-6 bg-gray-DEFAULT-50 mx-auto">
     <div class="relative flex items-center p-0 mt-6 overflow-hidden bg-center bg-cover min-h-75 rounded-2xl" style="background-image: url('../assets/img/curved-images/curved0.jpg'); background-position-y: 50%">
@@ -11,7 +12,7 @@
         <div class="flex flex-wrap -mx-3">
         <div class="flex-none w-auto max-w-full px-3">
             <div class="text-base ease-soft-in-out h-18.5 w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200">
-                <img src="{{ ('/assets/img/bruce-mars.jpg') }}" alt="profile_image" class="w-full shadow-soft-sm rounded-xl" />
+                <img src="{{  asset($pengemudi->images->count() ? 'storage/' . $pengemudi->images->first()->src : 'assets/images/blog/user-1.png') }}" alt="" class="w-full shadow-soft-sm rounded-xl" />
             </div>
         </div>
         <div class="flex-none w-auto max-w-full px-3 my-auto">
@@ -42,7 +43,7 @@
                     </li>
                   </ul>
                 </div>
-                <button class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 sm:w-auto"><a href="#">Ubah Profil</a></button>
+                <button class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 sm:w-auto"><a href="{{ route('profileEditPengemudi') }}">Ubah Profil</a></button>
                 </div>
               </div>
             </div>
@@ -56,16 +57,11 @@
             <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Work fast from anywhere</h5>
             <p class="mb-5 text-base text-gray-500 sm:text-lg">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
             <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                <a href="{{ route('resetpassword') }}" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                <a href="{{ route('resetpasswordPengemudi') }}" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                     <div class="text-left">
                         <div class="-mt-1 font-sans text-sm font-semibold">Ubah Password</div>
                     </div>
-                </a>
-                <a href="#" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
-                    <div class="text-left">
-                        <div class="-mt-1 font-sans text-sm font-semibold">Detail Pesanan</div>
-                    </div>
-                </a>
+                </a>  
             </div>
         </div>
 

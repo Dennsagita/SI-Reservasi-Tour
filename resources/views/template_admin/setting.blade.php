@@ -1,5 +1,5 @@
 <div fixed-plugin>
-    <a fixed-plugin-button class="bottom-7.5 right-7.5 text-xl z-990 shadow-soft-lg rounded-circle fixed cursor-pointer bg-white px-4 py-2 text-slate-700">
+    <a fixed-plugin-button class="bottom-7.5 hidden right-7.5 text-xl z-990 shadow-soft-lg rounded-circle fixed cursor-pointer bg-white px-4 py-2 text-slate-700">
       <i class="py-2 pointer-events-none fa fa-cog"> </i>
     </a>
     <!-- -right-90 in loc de 0-->

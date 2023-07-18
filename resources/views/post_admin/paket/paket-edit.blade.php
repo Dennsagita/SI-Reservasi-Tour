@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Ubah Paket')
+@section('navbar', 'Paket')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')

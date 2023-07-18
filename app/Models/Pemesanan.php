@@ -21,7 +21,10 @@ class Pemesanan extends Model
     {
         return $this->BelongsTo(User::class, 'id_user');
     }
-
+    // public function mobil()
+    // {
+    //     return $this->hasOneThrough(Mobil::class, Paket::class, 'id_mobil', 'id_paket');
+    // }
     protected $fillable = [
         'id_user',
         'id_paket',

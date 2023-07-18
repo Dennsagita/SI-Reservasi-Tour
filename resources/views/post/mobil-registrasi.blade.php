@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('action')
-
+@section('title', 'Registrasi Mobil')
 
 @section('content')
 <div class="w-full px-6 py-6 mx-auto mt-20">
@@ -31,7 +31,7 @@
                             <div>
                                 <input type="hidden" name="id_pengemudi" value="{{ $id_pengemudi }}">
                             </div>
-                            <div class="w-full">
+                            <div class="sm:col-span-2">
                                 <label for="no_plat_mobil" class="block mb-2 text-sm font-medium text-gray-900">Nomor Plat Mobil</label>
                                 <input type="text" name="no_plat_mobil" id="no_plat_mobil" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="No Plat Kendaraan" required="">
                             </div>

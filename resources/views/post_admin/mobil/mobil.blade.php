@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Mobil')
+@section('navbar', 'Mobil')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')
@@ -67,7 +69,7 @@
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->no_plat_mobil }}</p>
                     </td>
-                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent>
+                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                         <h6 class="mb-0 leading-normal text-sm">{{ $item->merk }}</h6>
                         <p class="mb-0 leading-tight text-xs text-slate-400">{{ $item->nama_mobil }}</p>
                     </td>
@@ -112,7 +114,7 @@
                                   </div>
                               </div>
                               <button class=" text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-bg-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
-                              onclick="window.location.href='#'">
+                              onclick="window.location.href='mobil-detail/{{ $item->id }}'">
                                 <i class="fa-solid fa-circle-info"></i>
                               </button>
                     </td>

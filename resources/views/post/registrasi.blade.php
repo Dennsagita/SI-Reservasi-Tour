@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('action')
-
+@section('title', 'Registrasi')
 
 @section('content')
 <main class="mt-0 transition-all duration-200 ease-soft-in-out">
@@ -76,4 +76,4 @@
         </div>
       </div>
     </section>
-    @stop
+    @endsection

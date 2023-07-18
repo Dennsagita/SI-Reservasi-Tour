@@ -2,21 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Mobil;
+use App\Models\Pemesanan;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Paket extends Model
 {
     use HasFactory;
-    public function mobil()
-    {
-        return $this->BelongsTo(Mobil::class, 'id_mobil');
-    }
+    // public function mobil()
+    // {
+    //     return $this->BelongsTo(Mobil::class, 'id_mobil');
+    // }
     public function pesanan()
     {
-        return $this->hasMany(Pesanan::class, 'id_paket', 'id');
+        return $this->hasMany(Pemesanan::class, 'id_paket', 'id');
     }
+
+    public function mobil1()
+    {
+        return $this->belongsToMany(Mobil::class, 'paket_mobil', 'id_paket', 'id_mobil')
+                    ->withPivot('konfirmasi')
+                    ->withTimestamps();
+    }
+
+    public function paketMobil()
+{
+    return $this->hasMany(PaketMobil::class, 'id_paket');
+}
+
     protected $fillable = [
         'id_mobil',
         'nama',

@@ -1,7 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app_admin')
 @section('action')
-@section('title', 'Ubah Password')
-
+@section('title', 'Ubah Password Admin')
+@section('navbar', 'Admin')
+@section('data', 'Ubah Password')
 @section('content')
 <main class="mt-0 transition-all duration-200 ease-soft-in-out">
     <section class="min-h-screen mb-32">
@@ -38,7 +39,7 @@
               </div>
               @endif
               <div class="flex-auto p-6">
-                <form action="{{ route('processpassword') }}" method="post">
+                <form action="{{ route('processpasswordAdmin') }}" method="post">
                   {{ csrf_field() }}
                   <label class="mb-2 ml-1 cursor-pointer select-none text-sm font-bold text-slate-700" for="old_password"> Password Lama</label>
                   <div class="mb-4">
@@ -63,4 +64,4 @@
         </div>
       </div>
     </section>
-@stop
+@endsection

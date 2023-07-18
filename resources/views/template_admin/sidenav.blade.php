@@ -1,6 +1,6 @@
  <!-- sidenav  -->
 
- <aside class="max-w-62.5 ease-nav-brand z-110 fixed inset-y-0 my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 ">
+ <aside class="max-w-62.5 ease-nav-brands fixed inset-y-0 my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 z-10 xl:z-0">
    <div class="h-18.5">
      <i class="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden" sidenav-close></i>
      <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700" href="javascript:;" target="_blank">
@@ -135,7 +135,9 @@
        <li class="mt-0.5 w-full">
         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors
         {{ request()->segment(1) == 'paket' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }} 
-        {{ request()->segment(1) == 'paket-add' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
+        {{ request()->segment(1) == 'paket-add' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+        {{ request()->segment(1) == 'paket-edit' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+        {{ request()->segment(1) == 'paket-detail' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
         href="{{ route('managepaket') }}">
            <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
              <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -293,7 +295,7 @@
 
         @elseif (Str::length(Auth::guard('admin')->user()) > 0)
         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors
-        {{ request()->segment(1) == 'profile-admin' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" href="{{ route('profileadmin') }}">
+        {{ request()->segment(1) == 'profile-admin' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" href="{{ route('profileAdmin') }}">
           <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
              <title>profil</title>

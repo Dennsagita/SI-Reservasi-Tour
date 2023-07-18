@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Paket')
+@section('navbar', 'Paket')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')
@@ -47,11 +49,10 @@
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Destinasi</th>
-                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Keterangan</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Foto Paket</th>
-                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Merk|Mobil</th>
-                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi</th>
+                  {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi</th> --}}
+                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi | Mobil</th>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                 </tr>
               </thead>
@@ -68,9 +69,6 @@
                     <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->destinasi }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->keterangan }}</p>
-                </td>
-                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <p class="mb-0 font-semibold leading-tight text-xs">Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -78,7 +76,7 @@
                     <img src="{{ asset($item->images->count() ? 'storage/'. $item->images->first()->src : 'assets/images/blog/user-1.png') }}" class="inline-flex items-center justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl" alt="{{ $item->nama }}" />
                     </div>
                 </td>
-                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                   @if ($item->mobil) 
                   <h6 class="mb-0 leading-normal text-sm">
                     {{ $item->mobil->merk }} 
@@ -87,8 +85,8 @@
                     @endif</h6>  
                   {{-- <h6 class="mb-0 leading-normal text-sm">{{ $item->mobil->merk }}</h6>
                     <p class="mb-0 leading-tight text-xs text-slate-400">{{ $item->mobil->nama_mobil }}</p> --}}
-                </td>
-                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                {{-- </td> --}} 
+                {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                   @if ($item->mobil && $item->mobil->pengemudi)
                       <p class="mb-0 leading-normal text-sm">
                           {{ $item->mobil->pengemudi->nama }}
@@ -99,6 +97,14 @@
                       </p>
                   @endif
                   {{-- <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->mobil->pengemudi->nama }}</p> --}}
+              </td>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                @foreach ($item->mobil1 as $data)
+                @if ($data->pivot->konfirmasi)
+                <h6 class="mb-0 leading-normal text-sm">- {{ $data->pengemudi->nama }}</h6>
+                <p class="mb-0 leading-tight text-xs text-slate-400">&nbsp;&nbsp;&nbsp;{{ $data->nama_mobil }}</p>
+                @endif
+                @endforeach
               </td>
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                             {{-- <a href="mobil-edit/{{ $item->id }}" class="px-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center"><i class="fa-solid fa-pen-to-square"></i></a> --}}
@@ -133,7 +139,7 @@
                                 </div>
                             </div>
                             <button class=" text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-bg-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
-                            onclick="window.location.href='#'">
+                            onclick="window.location.href='paket-detail/{{ $item->id }}'">
                               <i class="fa-solid fa-circle-info"></i>
                             </button>
                   </td>
@@ -144,8 +150,58 @@
           </div>
         </div>
       </div>
+      <div class="flex flex-wrap mt-10 -mx-3">
+        <div class="flex-none w-full max-w-full px-3">
+            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+              <div class="p-6 mt-4 pb-0 mb-2 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
+                <h6>Tabel Pemesanan</h6>
+              </div>
+              <div class="flex-auto px-0 pt-0 pb-2">
+                <div class="p-0 overflow-x-auto">
+                  
+                  <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
+                    <thead class="align-bottom">
+                      <tr>
+                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Paket</th>
+                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi</th>
+                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($belumKonfirmasiPaket as $paket)
+                          @foreach($paket->mobil1 as $mobil)
+                                  <tr>
+                                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                          <h6 class="mb-0 ml-10 leading-normal text-sm">{{ $paket->nama }}</h6>
+                                          <p class="mb-0 ml-10 leading-tight text-xs text-slate-400"></p>
+                                      </td>
+                                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                          <h6 class="mb-0 ml-10 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
+                                          <p class="mb-0 ml-10 leading-tight text-xs text-slate-400">{{ $mobil->nama_mobil }}</p>
+                                      </td>
+                                      <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
+                                          <form action="{{ route('confirmPaket') }}" method="post">
+                                              @csrf
+                                              <input type="hidden" name="id_paket" value="{{ $paket->id }}">
+                                              <input type="hidden" name="id_mobil" value="{{ $mobil->id }}">
+                                              <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">Konfirmasi</button>
+                                          </form>
+                                      </td>
+                                  </tr>
+
+                          @endforeach
+                      @endforeach
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
-  </div>
+
+    
+    </div>
   <div>
     {{ $paketList->links() }}
   </div>

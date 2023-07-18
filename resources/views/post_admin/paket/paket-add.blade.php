@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Tambah Paket')
+@section('navbar', 'Paket')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')
@@ -54,6 +56,14 @@
                                 <option value="{{ $item->id }}">{{ $item->merk }} {{ $item->nama_mobil }}</option>
                                 @endforeach
                             </select>
+                            {{-- <div class="sm:col-span-2">
+                                @foreach ($paket as $paket)
+                                    <div>
+                                        <input type="checkbox" name="paket_ids[]" value="{{ $paket->id }}" {{ in_array($paket->nama, $mobil->paket1->pluck('nama')->toArray()) ? 'checked' : '' }}>
+                                        <label>{{ $paket->nama }}</label>
+                                    </div>
+                                @endforeach
+                            </div> --}}
                         </div>
                     </div>
                     <div class="upload__box">

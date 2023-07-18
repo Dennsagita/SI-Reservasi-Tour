@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Pengemudi;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -85,22 +87,22 @@ class AuthController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
- 
+            session()->flash('loginBerhasil', true);
             return redirect()->intended('dashboard');
         }
         else if (Auth::guard('pengemudi')->attempt($credentials)) {
             $request->session()->regenerate();
- 
-            return redirect()->intended('dashboard');
+            session()->flash('loginBerhasil', true);
+            return redirect()->intended('pengemudi-paket');
         }
         else if (Auth::guard('user')->attempt($credentials)) {
             $request->session()->regenerate();
- 
+            session()->flash('loginBerhasil', true);
             return redirect()->intended('/home');
         }
- 
+
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'gagal-login' => 'Email atau password Tidak Sesuai',
         ])->onlyInput('email');
     
     }
@@ -113,16 +115,33 @@ class AuthController extends Controller
 
     public function password_action(Request $request)
     {
+
         $request->validate([
             'old_password' => 'required|current_password',
             'new_password' => 'required',
             'new_password_confirm'=>'required|same:new_password',
         ]);
-        $user = User::find(Auth::id());
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-        $request->session()->regenerate();
-        return redirect()->intended('/home');
+
+
+        if(Str::length(Auth::guard('user')->user()) > 0){
+            $user = User::find(Auth::id());
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            $request->session()->regenerate();
+            return redirect()->intended('/home');
+        }elseif(Str::length(Auth::guard('admin')->user()) > 0){
+            $admin = Admin::find(Auth::id());
+            $admin->password = Hash::make($request->new_password);
+            $admin->save();
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard');
+        }elseif(Str::length(Auth::guard('pengemudi')->user()) > 0){
+            $pengemudi = Pengemudi::find(Auth::id());
+            $pengemudi->password = Hash::make($request->new_password);
+            $pengemudi->save();
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard');
+        }
     }
 
     public function logout(Request $request)

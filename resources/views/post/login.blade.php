@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('action')
-@endsection
+@section('title', 'Login')
 
 @section('content')
 <main class="mt-0 transition-all duration-200 ease-soft-in-out">
@@ -15,6 +15,11 @@
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="flex-auto p-6">
+                  @if($errors->has('gagal-login'))
+                  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4">
+                      {{ $errors->first('gagal-login') }}
+                  </div>
+              @endif
                   <form action="{{route('processlogin')}}" method="post">
                     {{ csrf_field() }}
                     <label for="email" class="mb-2 ml-1 font-bold text-xs text-slate-700">Email</label>
@@ -30,9 +35,7 @@
                       <label class="mb-2 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700" for="rememberMe">Remember me</label>
                     </div>
                     <div class="text-center">
-                      {{-- <a href="/dashboard_admin"> --}}
-                        <button type="submit" class="inline-block w-full px-6 py-3 mt-6 mb-0 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer shadow-soft-md bg-x-25 bg-150 leading-pro text-xs ease-soft-in tracking-tight-soft bg-gradient-to-tl from-blue-600 to-cyan-400 hover:scale-102 hover:shadow-soft-xs active:opacity-85">Sign in</button>
-                      {{-- </a> --}}
+                      <button type="submit" class="inline-block w-full px-6 py-3 mt-6 mb-0 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer shadow-soft-md bg-x-25 bg-150 leading-pro text-xs ease-soft-in tracking-tight-soft bg-gradient-to-tl from-blue-600 to-cyan-400 hover:scale-102 hover:shadow-soft-xs active:opacity-85">Sign in</button>
                     </div>
                   </form>
                 </div>
@@ -73,4 +76,44 @@
       </div>
     </section>
   </main>
-  @stop
+
+
+{{-- <!-- Modal -->
+<div class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50 hidden" id="berhasilLogin">
+  <div class="bg-white w-1/2 p-6 rounded-lg">
+    <h2 class="text-xl font-bold mb-4">Login Success</h2>
+    <p class="mb-4">You have successfully logged in.</p>
+    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" data-dismiss="modal">Close</button>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('berhasilLogin');
+    var modalToggle = document.querySelector('[data-toggle="modal"]');
+    var modalClose = modal.querySelector('[data-dismiss="modal"]');
+
+    modalToggle.addEventListener('click', function() {
+      modal.classList.remove('hidden');
+    });
+
+    modalClose.addEventListener('click', function() {
+      modal.classList.add('hidden');
+    });
+
+    modal.addEventListener('click', function(event) {
+      if (event.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  });
+
+  @if(session('login_success'))
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('berhasilLogin');
+      modal.classList.remove('hidden');
+    });
+  @endif
+</script> --}}
+@endsection

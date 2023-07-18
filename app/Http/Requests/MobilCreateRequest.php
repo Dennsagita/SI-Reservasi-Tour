@@ -28,6 +28,7 @@ class MobilCreateRequest extends FormRequest
             'id_pengemudi' => 'unique:mobils',
             'merk' => 'required',
             'nama_mobil' => 'required|max:80',
+            'paket' => 'unique:mobils',
         ];
     }
 

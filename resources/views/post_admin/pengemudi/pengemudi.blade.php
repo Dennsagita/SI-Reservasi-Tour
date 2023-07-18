@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
-@section('title', 'Tabel')
+@section('title', 'Kelola Pengemudi')
+@section('navbar', 'Pengemudi')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')
@@ -51,6 +53,7 @@
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nomor Telpon</th>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Tour</th>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Tanggal Registrasi</th>
+                    <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                   </tr>
                 </thead>
                 @foreach ($pengemudiList as $data)
@@ -59,7 +62,7 @@
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <div class="flex px-2 py-1">
                         <div>
-                          <img src="../assets/img/team-2.jpg" class="inline-flex items-center justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl" alt="user1" />
+                          <img src="{{ asset($data->images->count() ? 'storage/'. $data->images->first()->src : 'assets/images/blog/profilnone.png') }}" class="inline-flex items-center justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl" alt="{{ $data->nama }}" class="inline-flex items-center justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl"/>
                         </div>
                         <div class="flex flex-col justify-center">
                           <h6 class="mb-0 leading-normal text-sm">{{ $data->nama }}</h6>

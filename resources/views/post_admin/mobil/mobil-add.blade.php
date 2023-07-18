@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Tambah Mobil')
+@section('navbar', 'Mobil')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')

@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Edit Pengemudi')
+@section('navbar', 'Pengemudi')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')

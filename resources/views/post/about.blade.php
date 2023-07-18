@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('action')
-@endsection
+@section('title', 'Tentang Kami')
 
 @section('content')
 
@@ -36,7 +36,10 @@
                         <p class="ml-4 max-w-md font-medium text-slate-600">Id quos et quidem perspiciatis similique! Rerum, natus temporibus.</p>
                     </li>
                 </ul>
-                 <a href="{{ route('registrasipengemudi') }}"><button class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 md:w-max">Bergabung mengemudi dengan kami</button></a>
+                <button data-modal-target="syaratKetentuanModal" data-modal-toggle="syaratKetentuanModal" class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 md:w-max">Bergabung mengemudi dengan kami</button>
+
+  
+  
             </div>
 
             <!-- about img -->
@@ -278,4 +281,4 @@
 <!-- ====== END Contact ====== -->
 
 <!-- ====== END Contact ====== -->
-@stop
+@endsection

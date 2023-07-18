@@ -1,6 +1,8 @@
 @extends('layouts.app_admin')
 @section('action')
 @section('title', 'Pemesanan')
+@section('navbar', 'Pemesanan')
+@section('data', 'Pengelolaan Data')
 @endsection
 
 @section('content')
@@ -37,15 +39,12 @@
         </div>
         <div class="flex-auto px-0 pt-0 pb-2">
           <div class="p-0 overflow-x-auto">
-            <div class="p-0 px-4 mb-4">
-            <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-              <a href="{{ route('paket-add') }}">Tambah Data</a></button>
-            </div>
+            
             <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
               <thead class="align-bottom">
                 <tr>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
-                  <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">ID Pesanan</th>
+                  <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No Pesanan</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pemesan|No Telp</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Tanggal Mulai Tour</th>
@@ -65,7 +64,7 @@
                     <h6 class="mb-0 leading-normal text-sm text-center">{{ $loop->iteration }}</h6>
                 </td> 
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $item->id }}</h6>
+                    <h6 class="mb-0 leading-normal text-sm text-center"><h6 class="mb-0 leading-normal text-sm text-center">{{ sprintf('%06d', $item->id) }}</h6></h6>
                 </td> 
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <h6 class="mb-0 leading-normal text-sm">{{ $item->user->nama }}</h6>
@@ -80,16 +79,21 @@
                       @endif</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->tgl_tour_mulai }}</p>
+                    <p class="mb-0 font-semibold leading-tight text-xs">{{ \Carbon\Carbon::parse($item->tgl_tour_mulai)->isoFormat('DD MMMM YYYY') }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->tgl_tour_selesai }}</p>
+                    <p class="mb-0 font-semibold leading-tight text-xs">{{ \Carbon\Carbon::parse($item->tgl_tour_selesai)->isoFormat('DD MMMM YYYY') }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->jam_datang }}</p>
+                    <p class="mb-0 font-semibold leading-tight text-xs">{{ \Carbon\Carbon::parse($item->jam_datang)->isoFormat('HH:mm') }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <p class="mb-0 font-semibold leading-tight text-xs">Rp. {{ number_format($item->paket->harga, 0, ',', '.') }}</p>
+                    <p class="mb-0 font-semibold leading-tight text-xs">
+                      @if($item->paket)
+                      Rp. {{ number_format($item->paket->harga, 0, ',', '.') }}
+                      @else
+                      -
+                      @endif</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <div>
@@ -100,7 +104,9 @@
                   <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->status_pemesanan }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                  @if ($item->paket && $item->paket->mobil && $item->paket->mobil->pengemudi) 
+                  {{-- <h6 class="mb-0 leading-normal text-sm">{{ $item->mobil->nama_mobil }}</h6>
+                  <p class="mb-0 leading-tight text-xs text-slate-400"></p> --}}
+                  {{-- @if ($item->paket && $item->paket->mobil && $item->paket->mobil->pengemudi) 
                     <h6 class="mb-0 leading-normal text-sm">
                       {{ $item->paket->mobil->pengemudi->nama }} 
                       @else
@@ -111,7 +117,19 @@
                     {{ $item->paket->mobil->merk }} {{ $item->paket->mobil->nama_mobil }}
                     @else
                     -
-                    @endif</p>
+                    @endif</p> --}}
+                    @foreach ($item->paket->mobil1->random(1) as $mobil)
+                    @if ($mobil->pivot->konfirmasi)
+                        @if ($mobil->pengemudi)
+                            <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
+                        @endif
+                        <p class="mb-0 leading-tight text-xs text-slate-400">
+                            {{ $mobil->merk }} {{ $mobil->nama_mobil }}
+                        </p>
+                        <br>
+                    @endif
+                  @endforeach
+
                 </td>
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                             {{-- <a href="mobil-edit/{{ $item->id }}" class="px-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center"><i class="fa-solid fa-pen-to-square"></i></a> --}}
@@ -119,7 +137,7 @@
                             onclick="window.location.href='pemesanan-edit/{{ $item->id }}'">
                             <i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                            <button data-modal-target="popup-modal-2" data-modal-toggle="popup-modal-2" class=" text-white bg-pink-800 hover:bg-pink-900 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            {{-- <button data-modal-target="popup-modal-2" data-modal-toggle="popup-modal-2" class=" text-white bg-pink-800 hover:bg-pink-900 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             <i class="fa-solid fa-trash"></i>
                             </button>
 
@@ -144,7 +162,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <button class=" text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-bg-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
                             onclick="window.location.href='#'">
                               <i class="fa-solid fa-circle-info"></i>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('action')
-@endsection
+@section('title', 'Profil')
 
 @section('content')
 
@@ -62,9 +62,9 @@
                         <div class="-mt-1 font-sans text-sm font-semibold">Ubah Password</div>
                     </div>
                 </a>
-                <a href="#" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                <a href="{{ route('detailPesanan') }}" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                     <div class="text-left">
-                        <div class="-mt-1 font-sans text-sm font-semibold">Detail Pesanan</div>
+                        <div class="-mt-1 font-sans text-sm font-semibold">Pesanan Anda</div>
                     </div>
                 </a>
             </div>
@@ -73,6 +73,4 @@
         </div>
     </div>
 </div>
-
-
-@stop
+@endsection

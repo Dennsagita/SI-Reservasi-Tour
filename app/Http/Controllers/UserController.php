@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Image;
+use App\Models\Pemesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -30,9 +31,9 @@ class UserController extends Controller
         return view('post/profile', $data);
     }
 
-    public function create()
+    public function createData()
     {
-        return view('post_admin/user-add');
+        return view('post_admin/pengguna/pengguna-add');
     }
     public function store(Request $request)
     {
@@ -59,16 +60,29 @@ class UserController extends Controller
             Session::flash('status', 'success');
             Session::flash('message', 'Tambah Data user Berhasil');
         }
-        return redirect('/user');
+        return redirect()->route('pengguna');
     }
 
-    public function edit(Request $request, $id)
+    public function showData(Request $request, $id)
     {
-        
-        $user = User::where('id_mobil', $id)->get();
-        // $mobil = Mobil::findOrFail('id_mobil', $id)->get();
-        dd($user);
-        // return view('post_admin/mobil-edit');
+        $pengguna = User::findOrFail($id);
+        return view('post_admin/pengguna/pengguna-detail', compact('pengguna'));
+    }
+    public function editData(Request $request, $id)
+    {
+        $pengguna = User::findOrFail($id);
+        return view('post_admin/pengguna/pengguna-edit', compact('pengguna'));
+    }
+
+    public function updateData(Request $request, $id)
+    {
+        $pengguna = User::findOrfail($id);
+       $pengguna->update($request->all());
+       if ($pengguna) {
+        Session::flash('edit', 'success');
+        Session::flash('textedit', 'Ubah Data Mobil Berhasil');
+        }
+        return redirect()->route('pengguna');
     }
     //ubah profile
     public function profile(Request $request)
@@ -120,6 +134,23 @@ class UserController extends Controller
     {
         $data = ['user' => $user->where('id', auth()->user()->id)->first()] ;
         return view('post/profile-edit', $data);
+    }
+
+    public function detailPesanan()
+{
+    $user = Auth::guard('user')->user();
+    $pesanan = Pemesanan::with('paket.mobil')->where('id_user', $user->id)->get();
+    
+    return view('post.pesanan-detailUser', compact('pesanan','user'));
+}
+
+
+    public function delete($id)
+    {
+        $deletedpaket = User::findOrfail($id);
+        $deletedpaket->delete();
+        
+        return redirect('/paket');
     }
 
     

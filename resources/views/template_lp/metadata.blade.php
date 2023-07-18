@@ -2,13 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link rel="icon" type="image/png" sizes="76x76" href="{{ asset('assets/LogoTittle.png') }}" />
-<title>
-    {{ request()->segment(1) == '' ? 'Home' : '' }} 
-    {{ request()->segment(1) == 'paket' ? 'Paket' : '' }}
-    {{ request()->segment(1) == 'about' ? 'About' : '' }}
-    {{ request()->segment(1) == 'login' ? 'Login' : '' }}
-    {{ request()->segment(1) == 'registrasi' ? 'Registrasi' : '' }}
-</title>
+<title>@yield('title')</title>
 <link rel="stylesheet" href="{{ asset('font/css/all.min.css') }}">
 <!--     Fonts and icons     -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -33,6 +27,9 @@
 <style type="text/tailwindcss">
     body{
         font-family: 'Inter', sans-serif;
+    }
+    .bg-modal-overlay {
+        background-color: rgba(0, 0, 0, 0.5);
     }
 </style>
 @vite(['resources/css/app.css','resources/js/app.js']) 

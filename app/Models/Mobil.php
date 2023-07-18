@@ -18,11 +18,17 @@ class Mobil extends Model
         return $this->BelongsTo(Pengemudi::class, 'id_pengemudi');
     }
 
-    public function paket()
-    {
-        return $this->hasMany(Paket::class, 'id_mobil', 'id');
-    }
+    // public function paket()
+    // {
+    //     return $this->hasMany(Paket::class, 'id_mobil', 'id');
+    // }
     
+    public function paket1()
+    {
+        return $this->belongsToMany(Paket::class, 'paket_mobil','id_mobil','id_paket')
+                    ->withPivot('konfirmasi')
+                    ->withTimestamps();
+    }
     protected $fillable = [
         'id_pengemudi',
         'no_plat_mobil',

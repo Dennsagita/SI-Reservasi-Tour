@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('action')
-@endsection
+@section('title', 'Reservasi')
 
 @section('content')
 <div class="max-w-full py-30" style="background-image: linear-gradient(115deg, #a8b8d8, #f8fafc)">
@@ -76,6 +76,12 @@
                     <label for="status_pemesanan" class="block mb-2 text-sm font-medium text-gray-900">Status Pemesanan</label>
                     <input type="text" name="status_pemesanan" id="status_pemesanan" value="baru" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
                 </div>
+            </div>
+            <div class="w-full">
+                <h4 class="mb-1 text-xl font-bold text-slate-700">Total Pembayaran</h4>
+                @foreach ($paket as $item)
+                <p id="total_pembayaran" class="text-base text-slate-400">Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
+                @endforeach
             </div>
             <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-slate-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800">
                 Reservasi
