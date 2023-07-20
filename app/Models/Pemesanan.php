@@ -21,6 +21,12 @@ class Pemesanan extends Model
     {
         return $this->BelongsTo(User::class, 'id_user');
     }
+
+    public function batalPesanan()
+{
+    return $this->hasOne(BatalPesanan::class, 'id_pemesanan');
+}
+
     // public function mobil()
     // {
     //     return $this->hasOneThrough(Mobil::class, Paket::class, 'id_mobil', 'id_paket');

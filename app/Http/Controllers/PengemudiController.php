@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\Mobil;
 use App\Models\Paket;
+use App\Models\Pemesanan;
 use App\Models\Pengemudi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,14 +41,110 @@ class PengemudiController extends Controller
     //     return redirect('/pengemudi');
     // }
 
-    public function paketPengemudi()
-    {
-        // Mendapatkan daftar mobil yang dimiliki oleh pengemudi
-        $pengemudi = Pengemudi::find(auth()->user()->id);
-        $mobils = $pengemudi->mobil;
-        $paket = Paket::where('id', '!=', $mobils)->get(['id', 'nama']);
+//     public function paketPengemudi()
+// {
+//     // Mendapatkan daftar mobil yang dimiliki oleh pengemudi
+//     $pengemudi = Pengemudi::find(auth()->user()->id);
+//     $mobils = $pengemudi->mobil;
+//     $paket = Paket::where('id', '!=', $mobils->pluck('id'))->get(['id', 'nama']);
+//     $pemesanan = Pemesanan::with('paket.mobil1')->whereIn('id_mobil', $mobils->pluck('id'))->get();
+    
+//     // Query berhasil, lanjutkan dengan operasi yang diperlukan    
+//     return view('post_admin.dash-pengemudi.dashboard', compact('mobils', 'paket'));
+// }
 
-        return view('post_admin.dash-pengemudi.dashboard', compact('mobils','paket'));
+    public function dashboardPengemudi()
+    {
+        $pengemudi = Pengemudi::findOrFail(auth()->user()->id);
+        $mobils = $pengemudi->mobil;
+
+        if ($mobils->isEmpty()) {
+            // Jika pengemudi tidak memiliki mobil, tampilkan pesan error
+            abort(404, 'Mobil tidak ditemukan.');
+        }
+
+        $paketIds = $mobils->pluck('id');
+        $paket = Paket::whereHas('paketMobil', function ($query) use ($paketIds) {
+            $query->whereIn('id_mobil', $paketIds)->where('konfirmasi', 1);
+        })->get();
+
+        $pengemudiId = Pengemudi::findOrFail(auth()->user()->id)->id;
+
+        $paketMobilIds = Mobil::whereHas('pengemudi', function ($query) use ($pengemudiId) {
+            $query->where('id', $pengemudiId);
+        })->pluck('id');
+
+        $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
+            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
+        })->get();
+
+            return view('post_admin.dash-pengemudi.dashboard', compact('mobils', 'paket', 'pemesanan', 'pengemudi'));
+    }
+
+    public function pesananPengemudi()
+    {
+        $pengemudi = Pengemudi::findOrFail(auth()->user()->id);
+        $mobils = $pengemudi->mobil;
+
+        if ($mobils->isEmpty()) {
+            // Jika pengemudi tidak memiliki mobil, tampilkan pesan error
+            abort(404, 'Mobil tidak ditemukan.');
+        }
+
+        $paketIds = $mobils->pluck('id');
+        $paket = Paket::whereHas('paketMobil', function ($query) use ($paketIds) {
+            $query->whereIn('id_mobil', $paketIds)->where('konfirmasi', 1);
+        })->get();
+
+        $pengemudiId = Pengemudi::findOrFail(auth()->user()->id)->id;
+
+        $paketMobilIds = Mobil::whereHas('pengemudi', function ($query) use ($pengemudiId) {
+            $query->where('id', $pengemudiId);
+        })->pluck('id');
+
+        $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
+            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
+        })->get();
+
+            return view('post_admin.dash-pengemudi.pengemudi-pesanan.pesanan', compact('mobils', 'paket', 'pemesanan'));
+    }
+
+    public function detailPesananPengemudi($id)
+    {
+        $pemesanan = Pemesanan::findOrFail($id);
+
+        // Pastikan bahwa pengemudi yang sedang login adalah pengemudi yang terkait dengan mobil pada pemesanan
+        $authenticatedPengemudiId = auth()->user()->id;
+        if (!$pemesanan->paket->mobil1->where('pivot.konfirmasi', true)
+                ->where('exists', true)
+                ->where('pengemudi.id', $authenticatedPengemudiId)->isEmpty()) {
+            return view('post_admin.dash-pengemudi.pengemudi-pesanan.detail-pesanan', compact('pemesanan'));
+        }
+
+        // Jika pengemudi yang sedang login tidak terkait dengan mobil pada pemesanan, tampilkan pesan error atau redirect ke halaman lain
+        abort(403, 'Anda tidak memiliki akses ke detail pesanan ini.');
+    }
+
+    public function processSelesaiPesanan(Request $request, $id)
+    {
+        $konfirmasiPesanan = Pemesanan::findOrFail($id);
+
+        // Validasi input form konfirmasi batal pesanan
+        $request->validate([
+            'status_pemesanan' => 'required'
+        ]);
+
+            // Ubah status pemesanan pada pemesanan yang terkait
+        if ($request->status_pemesanan == 'diterima') {
+            $konfirmasiPesanan->status_pemesanan = 'selesai';
+        }
+        $konfirmasiPesanan->save();
+
+        // Ubah status pemesanan pada batal pesanan itu sendiri
+        $konfirmasiPesanan->status_pemesanan = $request->status_pemesanan;
+        $konfirmasiPesanan->save();
+
+        return redirect()->route('pesananPengemudi')->with('selesai', 'Selesai pesanan berhasil');
     }
 
     public function selectPaket(Request $request)
@@ -202,5 +299,35 @@ class PengemudiController extends Controller
         
         return redirect('/pengemudi');
     }
+
+    public function processStatus(Request $request, $id)
+    {
+        // Validasi input form konfirmasi batal pesanan
+        $request->validate([
+            'status' => 'required|in:tour,tidak-tour'
+        ]);
+
+        // Temukan pengemudi berdasarkan ID
+        $pengemudi = Pengemudi::find(auth()->user()->id);
+
+        // // Ubah status pengemudi berdasarkan nilai yang diterima dari form
+        // $pengemudi->status = $request->status;
+        // $pengemudi->save();
+
+        if ($request->status == 'tidak-tour') {
+            $pengemudi->status = 'tour';
+        }
+        elseif ($request->status == 'tour') {
+            $pengemudi->status = 'tidak-tour';
+        }
+        $pengemudi->save();
+
+        // Ubah status pemesanan pada batal pesanan itu sendiri
+        $pengemudi->status = $request->status;
+        $pengemudi->save();
+
+        return redirect()->route('dashboardPengemudi')->with('selesai', 'Status  Tour Berhasil diubah');
+    }
+
 
 }

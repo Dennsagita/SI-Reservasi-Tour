@@ -30,16 +30,16 @@
                         <img src="{{ asset('assets/LogoTittle.png') }}" class="text-3xl">
                     </div>
                     <div class="w-full">
-                        <h4 class="mb-1 text-xl font-bold text-slate-700">Nomor Pesanan: {{ $item->id }}</h4>
+                        <h4 class="mb-1 text-xl font-bold text-slate-700">Nomor Pesanan: {{ sprintf('%06d', $item->id) }}</h4>
                         <p id="total_pembayaran" class="text-base text-slate-400">
-                            @if($item->paket && $item->paket->mobil)
+                            @if($item->paket && $item->paket->mobil1)
                             {{ $item->paket->nama }}
                             @else
                             -
                             @endif
                         </p>
                         <div class="flex justify mt-2">
-                            <a href="#" class="text-blue-800 hover:text-blue-600">Detail Pesanan</a>
+                            <a href="{{ route('detailUserPesanan', ['id' => $item->id]) }}" class="text-blue-800 hover:text-blue-600">Detail Pesanan</a>
                         </div>
                     </div>
                 </div>

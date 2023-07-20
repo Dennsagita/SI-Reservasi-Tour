@@ -88,12 +88,12 @@ class AuthController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
             session()->flash('loginBerhasil', true);
-            return redirect()->intended('dashboard');
+            return redirect()->intended(route('dashboard'));
         }
         else if (Auth::guard('pengemudi')->attempt($credentials)) {
             $request->session()->regenerate();
             session()->flash('loginBerhasil', true);
-            return redirect()->intended('pengemudi-paket');
+            return redirect()->intended(route('dashboardPengemudi'));
         }
         else if (Auth::guard('user')->attempt($credentials)) {
             $request->session()->regenerate();

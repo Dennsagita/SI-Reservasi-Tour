@@ -137,12 +137,19 @@ class UserController extends Controller
     }
 
     public function detailPesanan()
-{
-    $user = Auth::guard('user')->user();
-    $pesanan = Pemesanan::with('paket.mobil')->where('id_user', $user->id)->get();
-    
-    return view('post.pesanan-detailUser', compact('pesanan','user'));
-}
+    {
+        $user = Auth::guard('user')->user();
+        $pesanan = Pemesanan::with('paket.mobil1')->where('id_user', $user->id)->get();
+        
+        return view('post.pesanan-detailUser', compact('pesanan','user'));
+    }
+
+    public function detailUserPesanan($id)
+    {
+        $user = Auth::guard('user')->user();
+        $pemesanan = Pemesanan::with('paket.mobil1','user')->findOrFail($id);;
+        return view('post.pesananUserDetail', compact('pemesanan','user'));
+    }
 
 
     public function delete($id)

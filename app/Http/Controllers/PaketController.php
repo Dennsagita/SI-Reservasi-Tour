@@ -70,13 +70,13 @@ class PaketController extends Controller
     }
     public function show(Request $request, $id)
     {
-        $paket = Paket::with('mobil', 'mobil1')->findOrFail($id);
+        $paket = Paket::with('mobil1')->findOrFail($id);
         $mobil = Mobil::where('id', '!=', $paket)->get(['id', 'nama_mobil', 'merk', 'id_pengemudi']);
         return view('post_admin/paket/paket-detail', ['paket' => $paket, 'mobil' => $mobil]);
     }
     public function edit(Request $request, $id)
     {
-        $paket = Paket::with('mobil')->findOrFail($id);
+        $paket = Paket::with('mobil1')->findOrFail($id);
         $mobil = Mobil::where('id', '!=', $paket)->get(['id', 'nama_mobil', 'merk']);
         return view('post_admin/paket/paket-edit', ['paket' => $paket, 'mobil' => $mobil]);
     }

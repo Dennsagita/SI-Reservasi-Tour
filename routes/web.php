@@ -14,6 +14,7 @@ use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\PengemudiController;
+use App\Models\Pemesanan;
 use App\Models\Pengemudi;
 use App\Models\User;
 
@@ -64,24 +65,22 @@ Route::post('/login', [AuthController::class, 'processLogin'])->name('processlog
 });
 
 
-Route::middleware('auth:admin,pengemudi')->group(function () {
+Route::middleware('auth:admin')->group(function () {
     Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan');
+    Route::get('/pemesanan-selesai', [PemesananController::class, 'pemesananSelesai'])->name('pemesananSelesai');
     Route::get('/pemesanan-edit/{id}', [PemesananController::class, 'edit']);
     Route::put('/pemesanan/{id}', [PemesananController::class, 'update']);
+    Route::get('/pemesanan-detail/{id}', [PemesananController::class, 'detailPemesanan'])->name('detailPemesanan');
+    Route::post('/pemesanan-konfirmasi/{id}', [PemesananController::class, 'processKonfirmasiPesanan'])->name('processKonfirmasiPesanan');
+    Route::get('/pemesanan-batal', [PemesananController::class, 'pemesananBatal'])->name('pemesananBatal');
+    Route::get('/pemesanan-batal/{id}', [PemesananController::class, 'detailPemesananBatal'])->name('detailPemesananBatal');
+    Route::post('/pemesanan-batal/{id}', [PemesananController::class, 'processKonfirmasiBatalPesanan'])->name('processKonfirmasiBatalPesanan');
 
     Route::get('/pengemudi', [PengemudiController::class, 'index'])->name('pengemudi');
     Route::get('/pengemudi-add', [PengemudiController::class, 'create']);
     Route::post('/pengemudi-insert', [PengemudiController::class, 'store']);
     Route::get('/pengemudi-edit/{id}', [PengemudiController::class, 'edit']);
     Route::put('/pengemudi/{id}', [PengemudiController::class, 'update']);
-    Route::get('/profile-pengemudi', [PengemudiController::class, 'profiledetail'])->name('profilepengemudi');
-    Route::put('/profile-pengemudi', [PengemudiController::class, 'profile'])->name('profileUpdatePengemudi');
-    Route::get('/profile-editPengemudi', [PengemudiController::class, 'profileedit'])->name('profileEditPengemudi');
-    Route::get('/password-pengemudi', [PengemudiController::class, 'password'])->name('resetpasswordPengemudi');
-    Route::post('/password-resetPengemudi', [AuthController::class, 'password_action'])->name('processpasswordPengemudi');
-
-    Route::get('/pengemudi-paket', [PengemudiController::class, 'paketPengemudi'])->name('dashPengemudi');
-    Route::post('/pengemudi/paket/select', [PengemudiController::class, 'selectPaket'])->name('pilihPaket');
 
     Route::get('/mobil', [MobilController::class, 'index'])->name('mobil');
     Route::get('/mobil-add', [MobilController::class, 'create'])->name('mobil-add');
@@ -114,10 +113,27 @@ Route::middleware('auth:admin,pengemudi')->group(function () {
     Route::get('/profile-editadmin', [AdminController::class, 'profileedit'])->name('profileEditAdmin');
     Route::get('/password-admin', [AdminController::class, 'password'])->name('resetpasswordAdmin');
     Route::post('/password-resetadmin', [AuthController::class, 'password_action'])->name('processpasswordAdmin');
+
    
 
 });
 
+Route::middleware('auth:pengemudi')->group(function () {
+
+    Route::get('/dashboard-pengemudi', [PengemudiController::class, 'dashboardPengemudi'])->name('dashboardPengemudi');
+    Route::get('/pengemudi-pesanan', [PengemudiController::class, 'pesananPengemudi'])->name('pesananPengemudi');
+    Route::get('/detail-pengemudi-pesanan/{id}', [PengemudiController::class, 'detailPesananPengemudi'])->name('detailPesananPengemudi');
+    Route::post('/pemesanan-selesai-konfirmasi/{id}', [PengemudiController::class, 'processSelesaiPesanan'])->name('processSelesaiPesanan');
+    Route::post('/status-pengemudi/{id}', [PengemudiController::class, 'processStatus'])->name('processStatus');
+
+    Route::get('/profile-pengemudi', [PengemudiController::class, 'profiledetail'])->name('profilepengemudi');
+    Route::put('/profile-pengemudi', [PengemudiController::class, 'profile'])->name('profileUpdatePengemudi');
+    Route::get('/profile-editPengemudi', [PengemudiController::class, 'profileedit'])->name('profileEditPengemudi');
+    Route::get('/password-pengemudi', [PengemudiController::class, 'password'])->name('resetpasswordPengemudi');
+    Route::post('/password-resetPengemudi', [AuthController::class, 'password_action'])->name('processpasswordPengemudi');
+    Route::get('/pengemudi-paket', [PengemudiController::class, 'paketPengemudi'])->name('dashPengemudi');
+    Route::post('/pengemudi/paket/select', [PengemudiController::class, 'selectPaket'])->name('pilihPaket');
+});
 
 Route::middleware('auth:user')->group(function () {
         Route::get('/home', [ViewController::class, 'home'])->name('home');
@@ -131,6 +147,9 @@ Route::middleware('auth:user')->group(function () {
         Route::put('/profile', [UserController::class, 'profile'])->name('profileupdate');
         Route::get('/profile', [UserController::class, 'profiledetail'])->name('profile');
         Route::get('/detail-pesanan', [UserController::class, 'detailPesanan'])->name('detailPesanan');
+        Route::get('/detail-user-pesanan/{id}', [UserController::class, 'detailUserPesanan'])->name('detailUserPesanan');
+        Route::get('/pemesanan/{id}/ajukan-batal', [PemesananController::class, 'batalPesanan'])->name('batalPesanan');
+        Route::post('/pemesanan/{id}/ajukan-batal', [PemesananController::class, 'processBatalPesanan'])->name('processBatalPesanan');
        
 
 
