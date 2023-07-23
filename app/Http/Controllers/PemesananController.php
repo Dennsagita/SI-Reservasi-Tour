@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+// use PDF as Pdf;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Mobil;
 use App\Models\Paket;
@@ -10,13 +12,16 @@ use Twilio\Rest\Client;
 use App\Models\Pemesanan;
 use Illuminate\Http\Request;
 use App\Models\BatalPemesanan;
+use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Models\PemesananBatalPengemudi;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\PesananCreateRequest;
 
-class PemesananController extends Controller
+class PemesananController extends DomPDF
 {
     public function index()
     {
@@ -43,8 +48,6 @@ class PemesananController extends Controller
     
         return redirect()->back();
     }
-    
-
 
     public function pemesananSelesai()
     {
@@ -62,12 +65,82 @@ class PemesananController extends Controller
         return view('post_admin/pemesanan/pemesanan-selesai', ['pemesanan' => $pemesanan]);
     }
 
+    public function cetakPemesananSelesai($tahun, $bulan)
+    {
+        // Konversi tahun dan bulan menjadi format Carbon
+        $tanggal = Carbon::create($tahun, $bulan, 1);
+        $pemesanan = Pemesanan::with(['paket' => function ($query) {
+            $query->whereHas('paketMobil', function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            })->with(['paketMobil' => function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            }]);
+        }, 'user'])
+            ->where('status_pemesanan', 'selesai') // Tambahkan kondisi ini
+            ->orderBy('created_at', 'desc')
+            ->whereYear('created_at', $tanggal->year)
+            ->whereMonth('created_at', $tanggal->month)
+            ->get();
+
+        $pdf = DomPDF::loadView('post_admin.pemesanan.cetak-pemesanan-selesai', compact('pemesanan','tanggal'));
+        return $pdf->stream('laporan-pemesanan-selesai.pdf');
+    }
+
+    // public function cetakPemesananBatal()
+    // {
+    //     $pemesanan = BatalPemesanan::whereHas('pemesanan', function ($query) {
+    //         $query->where('status_pemesanan', 'batal')->whereHas('paket.paketMobil', function ($subquery) {
+    //             $subquery->where('konfirmasi', 1);
+    //         });
+    //     })->get();
+    //     $pdf = DomPDF::loadView('post_admin.pemesanan.cetak-pemesanan-batal', compact('pemesanan',));
+    //     return $pdf->stream('laporan-pemesanan-batal.pdf');
+    // }
+    public function cetakPemesananBatal($tahun, $bulan)
+    {
+        // Konversi tahun dan bulan menjadi format Carbon
+        $tanggal = Carbon::create($tahun, $bulan, 1);
+
+        $pemesanan = BatalPemesanan::with('pemesanan')->whereHas('pemesanan', function ($query) use ($tanggal) {
+            $query->where('status_pemesanan', 'batal')
+                ->whereHas('paket.paketMobil', function ($subquery) {
+                    $subquery->where('konfirmasi', 1);
+                })
+                ->whereYear('tgl_tour_mulai', $tanggal->year)
+                ->whereMonth('tgl_tour_mulai', $tanggal->month);
+        })->get();
+
+        $pdf = DomPDF::loadView('post_admin.pemesanan.cetak-pemesanan-batal', compact('pemesanan', 'tanggal'));
+        return $pdf->stream('laporan-pemesanan-batal.pdf');
+    }
+
+
 
     public function create()
     {
         $class = Paket::select('id', 'nama')->get();
         return view('post/reservasi', ['paket' => $class]);
     }
+    // Tambahkan method berikut di dalam controller
+    public function getPaketInfo($id)
+    {
+        try {
+            $paket = Paket::findOrFail($id);
+    
+            return response()->json([
+                'nama' => $paket->nama,
+                'destinasi' => $paket->destinasi,
+                'keterangan' => $paket->keterangan,
+                'harga' => number_format($paket->harga, 0, ',', '.')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil informasi paket.'], 500);
+        }
+    }
+    
+
+
+
     public function store(Request $request)
     {
         // $pemesanan = new pemesanan;
@@ -192,6 +265,27 @@ class PemesananController extends Controller
         return redirect()->route('pemesanan')->with('konfirmasi', 'Konfirmasi pesanan berhasil');
     }
 
+    public function processPengingatPesanan(Request $request, $id)
+    {
+        $pemesanan = Pemesanan::findOrFail($id);
+         // Kirim pesan WhatsApp
+         $recipientNumber = $request->recipient_number;
+         $message = $request->message;
+         
+         $sid = env('TWILIO_SID');
+         $token = env('TWILIO_AUTH_TOKEN');
+         $twilio = new Client($sid, $token);
+ 
+         $twilio->messages
+                ->create("whatsapp:$recipientNumber", // format nomor tujuan WhatsApp
+                         [
+                             'from' => "whatsapp:" . env('TWILIO_PHONE_NUMBER'), // format nomor Twilio yang digunakan
+                             'body' => $message
+                         ]
+                );
+        return redirect()->route('pemesanan')->with('konfirmasi', 'Konfirmasi pesanan berhasil');
+    }
+
     public function batalPesanan($id)
     {
         $user = Auth::guard('user')->user();
@@ -257,6 +351,12 @@ class PemesananController extends Controller
 
         // Redirect ke halaman pemesanan
         return redirect()->route('pemesananBatal')->with('status', 'Konfirmasi batal pesanan berhasil');
+    }
+
+    public function detailPemesananPengemudiBatal($id)
+    {
+        $batal = PemesananBatalPengemudi::with('pemesanan')->findOrFail($id);
+        return view('post_admin.pemesanan.detail-pemesanan-batal', compact('batal'));
     }
 
 

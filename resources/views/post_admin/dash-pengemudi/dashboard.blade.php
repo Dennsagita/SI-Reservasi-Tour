@@ -59,7 +59,6 @@
         </div>
         <div class="flex-auto px-0 pt-0 pb-2">
           <div class="p-0 overflow-x-auto">
-            
             <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
               <thead class="align-bottom">
                 <tr>
@@ -79,14 +78,13 @@
                 @php
                     $authenticatedPengemudiId = Auth::guard('pengemudi')->user()->id;
                 @endphp
-
                 @foreach ($item->paket->mobil1 as $mobil)
                     @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil && $mobil->pengemudi && $mobil->pengemudi->id == $authenticatedPengemudiId)
                         @if ($item->status_pemesanan === 'diterima')
                         <tr>
                             <!-- Tampilkan data pemesanan seperti biasa -->
                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                <h6 class="mb-0 leading-normal text-sm text-center">{{ $loop->iteration }}</h6>
+                                <h6 class="mb-0 leading-normal text-sm text-center">{{ $data + 1}}</h6>
                             </td> 
                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                 <h6 class="mb-0 leading-normal text-sm text-center"><h6 class="mb-0 leading-normal text-sm text-center">{{ sprintf('%06d', $item->id) }}</h6></h6>
@@ -177,6 +175,11 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Tampilkan pagination link -->
+    <div class="mt-4">
+        {{ $pemesanan->links() }}
     </div>
 
     <div class="flex-none w-full max-w-full px-3">

@@ -52,7 +52,7 @@
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Foto Paket</th>
                   {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi</th> --}}
-                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi | Mobil</th>
+                  {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pengemudi | Mobil</th> --}}
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                 </tr>
               </thead>
@@ -97,15 +97,15 @@
                       </p>
                   @endif
                   {{-- <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->mobil->pengemudi->nama }}</p> --}}
-              </td>
-              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+              {{-- </td> --}}
+              {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                 @foreach ($item->mobil1 as $data)
                 @if ($data->pivot->konfirmasi)
                 <h6 class="mb-0 leading-normal text-sm">- {{ $data->pengemudi->nama }}</h6>
                 <p class="mb-0 leading-tight text-xs text-slate-400">&nbsp;&nbsp;&nbsp;{{ $data->nama_mobil }}</p>
                 @endif
                 @endforeach
-              </td>
+              </td> --}}
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                             {{-- <a href="mobil-edit/{{ $item->id }}" class="px-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center"><i class="fa-solid fa-pen-to-square"></i></a> --}}
                             <button class=" text-white bg-slate-700 hover:bg-slate-900 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
@@ -154,7 +154,7 @@
         <div class="flex-none w-full max-w-full px-3">
             <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
               <div class="p-6 mt-4 pb-0 mb-2 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h6>Tabel Pemesanan</h6>
+                <h6>Tabel Paket Pilihan Pengemudi</h6>
               </div>
               <div class="flex-auto px-0 pt-0 pb-2">
                 <div class="p-0 overflow-x-auto">
@@ -168,29 +168,33 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach($belumKonfirmasiPaket as $paket)
-                          @foreach($paket->mobil1 as $mobil)
-                                  <tr>
-                                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                          <h6 class="mb-0 ml-10 leading-normal text-sm">{{ $paket->nama }}</h6>
-                                          <p class="mb-0 ml-10 leading-tight text-xs text-slate-400"></p>
-                                      </td>
-                                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                          <h6 class="mb-0 ml-10 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
-                                          <p class="mb-0 ml-10 leading-tight text-xs text-slate-400">{{ $mobil->nama_mobil }}</p>
-                                      </td>
-                                      <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
-                                          <form action="{{ route('confirmPaket') }}" method="post">
-                                              @csrf
-                                              <input type="hidden" name="id_paket" value="{{ $paket->id }}">
-                                              <input type="hidden" name="id_mobil" value="{{ $mobil->id }}">
-                                              <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">Konfirmasi</button>
-                                          </form>
-                                      </td>
-                                  </tr>
-
-                          @endforeach
-                      @endforeach
+                     <!-- View -->
+                    @foreach($belumKonfirmasiPaket as $paket)
+                    @foreach($paket->mobil1 as $mobil)
+                        <tr>
+                            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                <h6 class="mb-0 ml-10 leading-normal text-sm">{{ $paket->nama }}</h6>
+                                <p class="mb-0 ml-10 leading-tight text-xs text-slate-400">Destinasi {{ $paket->destinasi }}</p>
+                            </td>
+                            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                <h6 class="mb-0 ml-10 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
+                                <p class="mb-0 ml-10 leading-tight text-xs text-slate-400">{{ $mobil->merk }} {{ $mobil->nama_mobil }} ({{ $mobil->pengemudi->alamat }})</p>
+                            </td>
+                            <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
+                                <form action="{{ route('confirmPaket') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="id_paket" value="{{ $paket->id }}">
+                                    <input type="hidden" name="id_mobil" value="{{ $mobil->id }}">
+                                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">Konfirmasi</button>
+                                    @if ($mobil->pivot->konfirmasi === 0)
+                                        <!-- Ubah tombol hapus menjadi mengaktifkan modal -->
+                                        <button type="button" class="btn-hapus inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-red-700" onclick="showModal({{ $paket->id }}, {{ $mobil->id }})">Hapus</button>
+                                    @endif
+                                  </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    @endforeach
                   </tbody>
                   </table>
                 </div>

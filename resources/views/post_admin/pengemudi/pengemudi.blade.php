@@ -45,9 +45,16 @@
               <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
                 <a href="pengemudi-add">Tambah Data</a></button>
               </div>
+              {{-- Ambil nomor halaman saat ini --}}
+              @php
+                $currentPage = request()->get('page', 1);
+                $itemsPerPage = 5; // Jumlah item per halaman (sesuaikan dengan paginate() Anda)
+                $startNumber = ($currentPage - 1) * $itemsPerPage + 1;
+              @endphp
               <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
                 <thead class="align-bottom">
                   <tr>
+                    <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
                     <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama | Email</th>
                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Alamat</th>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nomor Telpon</th>
@@ -59,6 +66,9 @@
                 @foreach ($pengemudiList as $data)
                 <tbody>
                   <tr>
+                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                      <p class="mb-0 font-semibold leading-tight text-xs">{{ $startNumber + $loop->index }}</p>
+                  </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <div class="flex px-2 py-1">
                         <div>
@@ -126,6 +136,32 @@
             </div>
           </div>
         </div>
+        <!-- Tampilkan pagination link -->
+   <div class="mt-4">
+    <nav role="navigation" aria-label="Pagination Navigation" class="">
+        {{-- Tombol Previous --}}
+        @if ($pengemudiList->onFirstPage())
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                {!! __('pagination.previous') !!}
+            </span>
+        @else
+            <a href="{{ $pengemudiList->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.previous') }}">
+                {!! __('pagination.previous') !!}
+            </a>
+        @endif
+
+        {{-- Tombol Next --}}
+        @if ($pengemudiList->hasMorePages())
+            <a href="{{ $pengemudiList->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.next') }}">
+                {!! __('pagination.next') !!}
+            </a>
+        @else
+            <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                {!! __('pagination.next') !!}
+            </span>
+        @endif
+    </nav>
+</div>
       </div>
     </div>
 @endsection

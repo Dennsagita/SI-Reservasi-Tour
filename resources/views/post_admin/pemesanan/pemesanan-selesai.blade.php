@@ -40,10 +40,39 @@
         <div class="flex-auto px-0 pt-0 pb-2">
           <div class="p-0 overflow-x-auto">
             <div class="p-0 px-4 mb-4">
-                <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                  <a href="#">Cetak Data</a></button>
+              <form id="filterForm" class="flex gap-4">
+                <div class="flex flex-col">
+                  <label for="bulan" class="block mb-2 text-sm font-medium text-gray-900">Bulan:</label>
+                  <select name="bulan" id="bulan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+                </div>
+              
+                <div class="flex flex-col">
+                  <label for="tahun" class="block mb-2 text-sm font-medium text-gray-900">Tahun:</label>
+                  <input type="text" name="tahun" id="tahun" required pattern="[0-9]{4}" placeholder="(contoh: 2022)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5">
+                </div>
+                <div class="flex flex-col">
+                <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg mt-8 text-sm px-4 py-2.5 text-center inline-flex items-center" type="submit">
+                  Cetak Data
+                </button>
+                </div>
+              </form>
+                {{-- <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
+                  <a href="{{ route('cetakPemesananSelesai') }}">Cetak Data</a></button>
                   <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                    <a href="#">Simpan PDF</a></button>
+                    <a href="{{ route('cetakPemesananSelesai') }}">Simpan PDF</a></button> --}}
             </div>
             <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
               <thead class="align-bottom">
@@ -154,4 +183,27 @@
   <div>
     {{ $pemesanan->links() }}
   </div>
+    <!-- Tambahkan script JavaScript -->
+    <script>
+      // Tangkap elemen form
+      const filterForm = document.getElementById('filterForm');
+  
+      // Tangkap elemen select bulan dan tahun
+      const bulanSelect = document.getElementById('bulan');
+      const tahunInput = document.getElementById('tahun');
+  
+      // Tambahkan event listener untuk mengirimkan permintaan cetak laporan
+      filterForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+  
+          // Ambil nilai bulan dan tahun yang dipilih
+          const bulan = bulanSelect.value;
+          const tahun = tahunInput.value;
+  
+          // Kirim permintaan cetak laporan dengan parameter bulan dan tahun
+          window.location.href = '{{ route('cetakPemesananSelesai', ['tahun' => 'tahun_value', 'bulan' => 'bulan_value']) }}'
+              .replace('tahun_value', tahun)
+              .replace('bulan_value', bulan);
+      });
+  </script>
 @endsection

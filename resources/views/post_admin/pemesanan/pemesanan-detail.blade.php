@@ -114,6 +114,7 @@
                     @endif
                     </p>
                 </div>
+                @if ($pemesanan->status_pemesanan === 'baru' || $pemesanan->status_pemesanan === 'pergantian-pengemudi')
                 <div class="mt-6">
                     <form action="{{ route('processKonfirmasiPesanan', ['id' => $pemesanan->id]) }}" method="POST">
                         @csrf
@@ -146,8 +147,42 @@
                             <button type="submit" class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Konfirmasi Pesanan</button>
                         </div>
                     </form>
-                    
                 </div>
+                @else
+                <div class="mt-6">
+                    <form action="{{ route('processPengingatPesanan', ['id' => $pemesanan->id]) }}" method="POST">
+                        @csrf
+                        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 hidden">
+                            <div class="flex items-center">
+                                <input type="text" name="status_pemesanan" id="status_pemesanan" value="diterima" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
+                            </div>  
+                        </div>
+                        <div class="flex items-center hidden">
+                            <input type="text" value="+6281239286291" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                        </div>
+                        <div class="flex items-center hidden">
+                            <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                                    @foreach ($pemesanan->paket->mobil1 as $mobil)
+                                        @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
+                                            @if ($mobil->pengemudi)
+                                            Halo {{ $mobil->pengemudi->nama }}  , Ini notifikasi bali temple tour. Anda akan memulai tour pada tanggal {{ \Carbon\Carbon::parse($pemesanan->tgl_tour_mulai)->isoFormat('DD MMMM YYYY') }}, jam keberangkatan {{ \Carbon\Carbon::parse($pemesanan->jam_datang)->isoFormat('HH:mm') }} dan lokasi penjemputan di {{ $pemesanan->lokasi_penjemputan }}. Persiapkan diri anda dan tetap jaga kesehatan. Informasi lebih lanjut bisa buka website www.balitempletour.com Terima Kasih
+                                            @endif
+                                            {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </textarea>
+                        </div>
+                        <div class="flex items-center hidden">
+                            <input type="email" name="recipient_email" value="{{ $pemesanan->user->email }}" placeholder="Alamat Email Penerima" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                        </div>
+                        <div class="flex items-center">
+                            <button type="submit" class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Kirim Notifikasi Pengingat Pengemudi</button>
+                        </div>
+                    </form>
+                </div>
+                @endif
                 <!-- Tambahkan kode untuk atribut lainnya di sini -->
                 </div>
                 

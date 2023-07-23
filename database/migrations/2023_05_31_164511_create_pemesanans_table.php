@@ -21,7 +21,7 @@ return new class extends Migration
             $table->time('jam_datang');
             $table->string('lokasi_penjemputan');
             $table->binary('bukti_dp');
-            $table->enum('status_pemesanan', ['diterima', 'batal', 'baru', 'selesai']);
+            $table->enum('status_pemesanan', ['diterima', 'batal', 'baru', 'selesai', 'pergantian-pengemudi']);
             $table->timestamps();
         });
     }

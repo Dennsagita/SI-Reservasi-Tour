@@ -156,3 +156,61 @@ btnRight.addEventListener('click',function(){
         });
     });
 </script>
+
+<script>
+    tinymce.init({
+    selector: '#keterangan',
+    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+    toolbar_mode: 'floating',
+      // Konfigurasi lainnya (jika diperlukan)
+    });
+</script>
+
+<script>
+    let paketIdToDelete = null;
+    let mobilIdToDelete = null;
+  
+    // Fungsi untuk menampilkan modal
+    function showModal(paketId, mobilId) {
+      // Simpan data paket dan mobil yang ingin dihapus
+      paketIdToDelete = paketId;
+      mobilIdToDelete = mobilId;
+  
+      // Tampilkan modal
+      document.getElementById('modal-confirm').classList.remove('hidden');
+    }
+  
+    // Fungsi untuk menyembunyikan modal
+    function hideModal() {
+      document.getElementById('modal-confirm').classList.add('hidden');
+    }
+  
+    // Fungsi untuk menghapus data setelah konfirmasi
+    function hapusData() {
+      // Buat form tambahan untuk mengirim data penghapusan
+      let deleteForm = document.createElement('form');
+      deleteForm.action = "{{ route('hapusPaket') }}";
+      deleteForm.method = "post";
+      deleteForm.innerHTML = `
+          @csrf
+          <input type="hidden" name="id_paket" value="${paketIdToDelete}">
+          <input type="hidden" name="id_mobil" value="${mobilIdToDelete}">
+      `;
+      document.body.appendChild(deleteForm);
+      deleteForm.submit();
+  
+      // Sembunyikan modal setelah menghapus data
+      hideModal();
+    }
+  
+    // Fungsi untuk membatalkan penghapusan
+    function batalTolak() {
+      // Kosongkan data paket dan mobil yang ingin dihapus
+      paketIdToDelete = null;
+      mobilIdToDelete = null;
+  
+      // Sembunyikan modal
+      hideModal();
+    }
+  </script>
+  

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Paket;
+use App\Models\PemesananBatalPengemudi;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,9 +24,14 @@ class Pemesanan extends Model
     }
 
     public function batalPesanan()
-{
-    return $this->hasOne(BatalPesanan::class, 'id_pemesanan');
-}
+    {
+        return $this->hasOne(BatalPesanan::class, 'id_pemesanan');
+    }
+
+    public function pesananBatalPengemudi()
+    {
+        return $this->hasOne(PemesananBatalPengemudi::class, 'id_pemesanan');
+    }
 
     // public function mobil()
     // {

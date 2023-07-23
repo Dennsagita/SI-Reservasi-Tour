@@ -35,22 +35,22 @@
             <p class="text-gray-700 font-bold md:w-5">:</p>
             <p class="text-gray-900">Rp. {{ number_format($paket->harga, 0, ',', '.') }}</p>
           </div>
-
-          <div class="mb-4 ml-10 flex items-center">
-            <p class="text-gray-700 font-bold md:w-52">Keterangan</p>
-            <p class="text-gray-700 font-bold md:w-5">:</p>
-            <p class="text-gray-900 basis-full">{{ $paket->keterangan }}</p>
-          </div>
           <div class="mb-4 ml-10 flex items-center">
             <p class="text-gray-700 font-bold md:w-52">Pengemudi</p>
             <p class="text-gray-700 font-bold md:w-5">:</p>
             <p class="text-gray-900">
               @foreach ($paket->mobil1 as $data)
+                @if ($data->pivot->konfirmasi)
                   - {{ $data->pengemudi->nama }} <br>
-                  @endforeach
+                @endif
+              @endforeach
             </p>
           </div>
         </div>
+      </div>
+      <div class="text-gray-700 font-bold">
+        <p class="text-gray-700 font-bold">Keterangan :</p>
+        <p class="text-gray-700">{!! $paket->keterangan !!}</p>
       </div>
     </div>
   </div>

@@ -32,7 +32,10 @@
                     @csrf
                     @method('PUT')
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-
+                        <div class="w-full">
+                            <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Paket</label>
+                            <input type="text" name="nama" id="nama" value="{{ $paket->nama}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Destinasi">
+                        </div>
                         <div class="w-full">
                             <label for="destinasi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Destinasi</label>
                             <input type="text" name="destinasi" id="destinasi" value="{{ $paket->destinasi }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Destinasi">
@@ -41,22 +44,9 @@
                             <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
                             <textarea name="keterangan" id="keterangan" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  placeholder="Keterangan">{{ $paket->keterangan }}</textarea>
                         </div>
-                        <div class="w-full">
+                        <div class="sm:col-span-2">
                             <label for="harga" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga</label>
                             <input type="text" name="harga" id="harga" value="{{ $paket->harga }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nama Mobil">
-                        </div>
-                        <div>
-                            <label for="id_mobil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Pemilik</label>
-                            <select name="id_mobil" id="id_mobil" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" >
-                                <option value="@if($paket->mobil){{ $paket->mobil->id }} @else  @endif">@if($paket->mobil) {{ $paket->mobil->merk }} {{ $paket->mobil->nama_mobil }} @else  @endif</option>
-                                @foreach ($mobil as $item)
-                                <option value="@if($item){{ $item->id }} @else  @endif"> @if($item){{ $item->merk }} {{ $item->nama_mobil }} @else  @endif</option>
-                                @endforeach
-                                {{-- <option value="">Select Mobil</option>
-                                @foreach ($mobil as $item)
-                                <option value="{{ $item->id }}">{{ $item->merk }} {{ $item->nama_mobil }}</option>
-                                @endforeach --}}
-                            </select>
                         </div>
                     </div>
                     <div class="upload__box">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Mobil;
 use App\Models\Paket;
+use App\Models\PaketMobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\MobilCreateRequest;
@@ -31,19 +32,55 @@ class PaketController extends Controller
 
     public function confirmPaket(Request $request)
     {
-        // Mengkonfirmasi paket yang dipilih oleh pengemudi
         $paketId = $request->input('id_paket');
         $mobilId = $request->input('id_mobil');
-
-        // Mengupdate status konfirmasi pada pivot tabel
-        // Mengupdate status konfirmasi pada pivot tabel
+    
         $mobil = Mobil::find($mobilId);
         if (!$mobil) {
             return redirect()->route('managepaket')->with('error', 'Mobil tidak ditemukan.');
         }
-        $mobil->paket1()->updateExistingPivot($paketId, ['konfirmasi' => true]);
-        return redirect()->route('managepaket')->with('Berhasil Dikonfirmasi');
+    
+        // Cek apakah data sudah dikonfirmasi sebelumnya
+        $paketMobil = PaketMobil::where('id_paket', $paketId)->where('id_mobil', $mobilId)->first();
+        if ($paketMobil) {
+            if ($paketMobil->konfirmasi) {
+                // Jika data sudah dikonfirmasi, hapus data konfirmasi
+                return redirect()->route('managepaket')->with('success', 'Paket berhasil dibatalkan.');
+            } else {
+                // Jika data belum dikonfirmasi, lakukan update konfirmasi
+                $paketMobil->konfirmasi = true;
+                $paketMobil->save();
+                return redirect()->route('managepaket')->with('success', 'Paket berhasil dikonfirmasi.');
+            }
+        } else {
+            // Jika belum ada record, buat record baru dengan status konfirmasi
+            PaketMobil::create([
+                'id_paket' => $paketId,
+                'id_mobil' => $mobilId,
+                'konfirmasi' => true,
+            ]);
+    
+            return redirect()->route('managepaket')->with('success', 'Paket berhasil dikonfirmasi.');
+        }
+    }
+    
+    
+    public function hapusPaket(Request $request)
+    {
+        $paketId = $request->input('id_paket');
+        $mobilId = $request->input('id_mobil');
 
+        // Cari data pivot berdasarkan id paket dan id mobil
+        $paketMobil = PaketMobil::where('id_paket', $paketId)->where('id_mobil', $mobilId)->first();
+
+        if ($paketMobil) {
+            // Hapus data pivot
+            $paketMobil->delete();
+            return redirect()->route('managepaket')->with('success', 'Data berhasil dihapus.');
+        } else {
+            // Jika data pivot tidak ditemukan, kirimkan pesan error
+            return redirect()->route('managepaket')->with('error', 'Data tidak ditemukan atau sudah terhapus.');
+        }
     }
 
     public function create()
@@ -84,7 +121,15 @@ class PaketController extends Controller
     public function update(Request $request, $id)
     {
         $paket1 = paket::findOrfail($id);
-        $paket1->update($request->all());
+        // Ambil data dari request yang ingin diubah
+        $dataToUpdate = $request->only(['nama', 'destinasi', 'keterangan', 'harga']);
+
+        // Gunakan metode fill untuk mengisi data yang baru
+        $paket1->fill($dataToUpdate);
+
+        // Simpan perubahan dengan menggunakan metode save
+        $paket1->save();
+
         if ($paket1) {
         Session::flash('edit', 'success');
         Session::flash('textedit', 'Ubah Data paket Berhasil');

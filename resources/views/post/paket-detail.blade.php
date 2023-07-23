@@ -15,7 +15,7 @@
             <div class="w-full px-4 md:w-1/2 xl:w-6/12">
                 <div class="mb-12 max-w-[570px] lg:mb-0">
                     <div class="w-full duration-200 hover:scale-95">
-                        <div class="max-h-52 w-full overflow-hidden rounded-t-xl">
+                        <div class="max-h-120 w-full overflow-hidden rounded-t-xl">
                             <!-- Tampilkan gambar paket -->
                             @if ($paket->images->count() > 0)
                                 <img src="{{ asset('storage/'.$paket->images->first()->src) }}" alt="blog img" class="w-full">
@@ -37,11 +37,12 @@
                         </div>
                     </div>
 
-                    <h1 class="mb-3 mt-10 text-2xl font-bold text-slate-700 sm:text-3xl">Deskripsi</h1>
-                    <p class="text-slate-500 mb-8">{{ $paket->keterangan }}</p>
+                    <h1 class="mt-10 text-2xl font-bold text-slate-700 sm:text-3xl">Deskripsi</h1>
+                    <p class="text-gray-700 mb-8">{!! $paket->keterangan !!}</p>
+
 
                     <!-- Total Pembayaran -->
-                    <div class="mb-8 flex w-full max-w-[420px] items-center rounded-lg bg-white p-4 shadow-md shadow-blue-500/10">
+                    <div class="mb-8 mt-10 flex w-full max-w-[420px] items-center rounded-lg bg-white p-4 shadow-md shadow-blue-500/10">
                         <div class="mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded  bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
                             <img src="{{ asset('assets/LogoTittle.png') }}" class="text-3xl">
                         </div>

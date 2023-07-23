@@ -72,9 +72,14 @@ Route::middleware('auth:admin')->group(function () {
     Route::put('/pemesanan/{id}', [PemesananController::class, 'update']);
     Route::get('/pemesanan-detail/{id}', [PemesananController::class, 'detailPemesanan'])->name('detailPemesanan');
     Route::post('/pemesanan-konfirmasi/{id}', [PemesananController::class, 'processKonfirmasiPesanan'])->name('processKonfirmasiPesanan');
+    Route::post('/pengingat-pesanan/{id}', [PemesananController::class, 'processPengingatPesanan'])->name('processPengingatPesanan');
     Route::get('/pemesanan-batal', [PemesananController::class, 'pemesananBatal'])->name('pemesananBatal');
     Route::get('/pemesanan-batal/{id}', [PemesananController::class, 'detailPemesananBatal'])->name('detailPemesananBatal');
     Route::post('/pemesanan-batal/{id}', [PemesananController::class, 'processKonfirmasiBatalPesanan'])->name('processKonfirmasiBatalPesanan');
+
+    Route::get('cetak-pemesanan-selesai/{tahun}/{bulan}', [PemesananController::class, 'cetakPemesananSelesai'])->name('cetakPemesananSelesai');
+    Route::get('cetak-pemesanan-batal/{tahun}/{bulan}', [PemesananController::class, 'cetakPemesananBatal'])->name('cetakPemesananBatal');
+    // Route::get('/pemesanan-pengemudi-batal/{id}', [PemesananController::class, 'detailPemesananPengemudiBatal'])->name('detailPemesananPengemudiBatal');
 
     Route::get('/pengemudi', [PengemudiController::class, 'index'])->name('pengemudi');
     Route::get('/pengemudi-add', [PengemudiController::class, 'create']);
@@ -98,6 +103,8 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/paket-edit/{id}', [PaketController::class, 'edit'])->name('paket-edit');
     Route::put('/paket/{id}', [PaketController::class, 'update']);
     Route::delete('/paket-delete/{id}', [PaketController::class, 'delete']);
+    Route::post('/hapuspaket', [PaketController::class, 'hapusPaket'])->name('hapusPaket');
+
 
     Route::get('/pengguna', [UserController::class, 'index'])->name('pengguna');
     Route::get('/pengguna-add', [UserController::class, 'createData'])->name('pengguna-add');
@@ -126,12 +133,15 @@ Route::middleware('auth:pengemudi')->group(function () {
     Route::post('/pemesanan-selesai-konfirmasi/{id}', [PengemudiController::class, 'processSelesaiPesanan'])->name('processSelesaiPesanan');
     Route::post('/status-pengemudi/{id}', [PengemudiController::class, 'processStatus'])->name('processStatus');
 
+    // Route::get('/pengemudi/{id}/pesanan-batal', [PengemudiController::class, 'pengemudiBatalPesanan'])->name('pengemudiBatalPesanan');
+    Route::post('/pengemudi/{id}/pesanan-batal', [PengemudiController::class, 'processPengemudiBatalPesanan'])->name('processPengemudiBatalPesanan');
+
     Route::get('/profile-pengemudi', [PengemudiController::class, 'profiledetail'])->name('profilepengemudi');
     Route::put('/profile-pengemudi', [PengemudiController::class, 'profile'])->name('profileUpdatePengemudi');
     Route::get('/profile-editPengemudi', [PengemudiController::class, 'profileedit'])->name('profileEditPengemudi');
     Route::get('/password-pengemudi', [PengemudiController::class, 'password'])->name('resetpasswordPengemudi');
     Route::post('/password-resetPengemudi', [AuthController::class, 'password_action'])->name('processpasswordPengemudi');
-    Route::get('/pengemudi-paket', [PengemudiController::class, 'paketPengemudi'])->name('dashPengemudi');
+    Route::get('/pengemudi-paket', [PengemudiController::class, 'paketPengemudi'])->name('paketPengemudi');
     Route::post('/pengemudi/paket/select', [PengemudiController::class, 'selectPaket'])->name('pilihPaket');
 });
 
@@ -140,6 +150,9 @@ Route::middleware('auth:user')->group(function () {
         Route::get('/paket-detailhome/{id}', [ViewController::class, 'paketDetail'])->name('paketDetail');
         // Route::get('/profile', [ViewController::class, 'profile'])->name('profile');
         Route::get('/reservasi', [PemesananController::class, 'create'])->name('reservasi');
+        // Tambahkan rute berikut di dalam controller
+        Route::get('/get-paket-info/{id}', [PemesananController::class, 'getPaketInfo']);
+
         Route::post('/reservasi-insert', [PemesananController::class, 'store'])->name('reservasi-insert');
         Route::get('/profile-edit', [UserController::class, 'profileedit'])->name('profileedit');
         Route::get('/password', [AuthController::class, 'password'])->name('resetpassword');

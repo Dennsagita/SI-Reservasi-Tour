@@ -12,6 +12,10 @@
 <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
 <!-- Popper -->
 <script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="{{ asset('tinymce/js/tinymce/tinymce.min.js') }}"></script>
 <!-- Main Styling -->
 <link href="{{ asset('assets/css/soft-ui-dashboard-tailwind.css?v=1.0.4') }}" rel="stylesheet" /> 
+<!-- Gunakan skrip CDN TinyMCE -->
+
+
 @vite(['resources/css/app.css','resources/js/app.js'])  

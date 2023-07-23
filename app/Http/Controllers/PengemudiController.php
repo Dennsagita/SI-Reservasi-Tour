@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Mobil;
 use App\Models\Paket;
 use App\Models\Pemesanan;
+use App\Models\PemesananBatalPengemudi;
 use App\Models\Pengemudi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class PengemudiController extends Controller
 {
     public function index()
     {
-        $pengemudi = Pengemudi::all();
+        $pengemudi = Pengemudi::paginate(5);
         return view('post_admin/pengemudi/pengemudi', ['pengemudiList' => $pengemudi]);
     }
     public function create()
@@ -41,17 +42,21 @@ class PengemudiController extends Controller
     //     return redirect('/pengemudi');
     // }
 
-//     public function paketPengemudi()
-// {
-//     // Mendapatkan daftar mobil yang dimiliki oleh pengemudi
-//     $pengemudi = Pengemudi::find(auth()->user()->id);
-//     $mobils = $pengemudi->mobil;
-//     $paket = Paket::where('id', '!=', $mobils->pluck('id'))->get(['id', 'nama']);
-//     $pemesanan = Pemesanan::with('paket.mobil1')->whereIn('id_mobil', $mobils->pluck('id'))->get();
-    
-//     // Query berhasil, lanjutkan dengan operasi yang diperlukan    
-//     return view('post_admin.dash-pengemudi.dashboard', compact('mobils', 'paket'));
-// }
+    public function paketPengemudi()
+    {
+        // Mendapatkan daftar mobil yang dimiliki oleh pengemudi
+        $pengemudi = Pengemudi::find(auth()->user()->id);
+        $mobils = $pengemudi->mobil;
+        $paket = Paket::where('id', '!=', $mobils->pluck('id'))->get(['id', 'nama']);
+       
+        
+        // $mobil = Mobil::with('pengemudi')->findOrFail($id);
+        // $pengemudi = Pengemudi::where('id', '!=', $mobil)->get(['id', 'nama']);
+        // $paket = Paket::where('id', '!=', $mobil)->get(['id', 'nama']);
+        // return view('post_admin/mobil/mobil-edit', ['mobil' => $mobil, 'pengemudi' => $pengemudi, 'paket' => $paket]);
+        // Query berhasil, lanjutkan dengan operasi yang diperlukan    
+        return view('post_admin.dash-pengemudi.pengemudi-pesanan.pilihPaket', compact('mobils', 'paket'));
+    }
 
     public function dashboardPengemudi()
     {
@@ -77,8 +82,12 @@ class PengemudiController extends Controller
         $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
             $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
         })->get();
+         // Urutkan data pemesanan berdasarkan ID secara descending (terbaru di atas)
+         $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
+            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
+        })->orderBy('id', 'desc')->paginate(10);
 
-            return view('post_admin.dash-pengemudi.dashboard', compact('mobils', 'paket', 'pemesanan', 'pengemudi'));
+        return view('post_admin.dash-pengemudi.dashboard', compact('mobils', 'paket', 'pemesanan', 'pengemudi'));
     }
 
     public function pesananPengemudi()
@@ -106,7 +115,12 @@ class PengemudiController extends Controller
             $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
         })->get();
 
-            return view('post_admin.dash-pengemudi.pengemudi-pesanan.pesanan', compact('mobils', 'paket', 'pemesanan'));
+         // Urutkan data pemesanan berdasarkan ID secara descending (terbaru di atas)
+        $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
+            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
+        })->orderBy('id', 'desc')->paginate(10);
+
+        return view('post_admin.dash-pengemudi.pengemudi-pesanan.pesanan', compact('mobils', 'paket', 'pemesanan'));
     }
 
     public function detailPesananPengemudi($id)
@@ -150,14 +164,28 @@ class PengemudiController extends Controller
     public function selectPaket(Request $request)
     {
         // Mendapatkan data paket yang dipilih oleh pengemudi
-        $paketId = $request->input('id_paket');
+        // $paketId = $request->input('id_paket');
         $mobilId = $request->input('id_mobil');
 
         // Mendaftarkan paket ke mobil
         $mobil = Mobil::find($mobilId);
-        $mobil->paket1()->attach($paketId, ['konfirmasi' => false]);
+        $paketIds = $request->input('id_paket');
 
-        return redirect()->route('dashPengemudi')->with('success', 'Paket berhasil dipilih.');
+        if ($paketIds) {
+            // Jika ada checkbox yang dipilih
+            $mobil->paket1()->sync($paketIds);
+        } 
+        // else {
+        //     // Jika semua checkbox dikosongkan
+        //     $mobil->paket1()->detach();
+        // }
+        $mobil->update($request->all());
+        if ([$mobil]) {
+        Session::flash('edit', 'success');
+        Session::flash('textedit', 'Ubah Data Mobil Berhasil');
+        }
+
+        return redirect()->route('pesananPengemudi')->with('success', 'Paket berhasil dipilih.');
     }
 
     public function edit(Request $request, $id)
@@ -329,5 +357,33 @@ class PengemudiController extends Controller
         return redirect()->route('dashboardPengemudi')->with('selesai', 'Status  Tour Berhasil diubah');
     }
 
+    public function pengemudiBatalPesanan(Request $request, $id)
+    {
+        $pemesanan = Pemesanan::findOrFail($id);
+        return view('post_admin.dash-pengemudi.pengemudi-pesanan.batal-pesanan-pengemudi', compact('pemesanan'));
+    }
+
+    public function processPengemudiBatalPesanan(Request $request, $id)
+    {
+        $pemesanan = Pemesanan::findOrFail($id);
+        // // Validasi input form ajukan batal pesanan
+        // $request->validate([
+        //     'keterangan' => 'required'
+        // ]);
+        
+        // // Simpan ajukan batal pesanan ke dalam tabel "ajukan_batal_pesanan"
+        // $BatalPesanan = new PemesananBatalPengemudi();
+        // $BatalPesanan->id_pemesanan = $pemesanan->id;
+        // $BatalPesanan->keterangan = $request->keterangan;
+        // $BatalPesanan->save();
+        
+        // Ubah status pemesanan pada batal pesanan itu sendiri
+        $pemesanan->status_pemesanan = $request->status_pemesanan;
+        $pemesanan->save();
+
+        return redirect()->route('dashboardPengemudi')->with('batal', 'Pesanan Berhasil Dibatalkan');
+    }
+
+    
 
 }

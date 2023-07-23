@@ -1,3 +1,5 @@
+/* Import Flowbite CSS di atas aturan Tailwind CSS */
+@import 'flowbite/dist/flowbite.css';
 @tailwind base;
 @tailwind components;
 .font-mulish{

@@ -3,92 +3,155 @@
 @section('title', 'Reservasi')
 
 @section('content')
-<div class="max-w-full py-30" style="background-image: linear-gradient(115deg, #a8b8d8, #f8fafc)">
-    <div class="container mx-auto">
-        @if(Session::has('status'))
-        <div id="toast-success" class="flex items-center w-full p-4 mb-4 text-gray-500 bg-white rounded-lg shadow" role="alert">
-         <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
-             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-             <span class="sr-only">Check icon</span>
-         </div>
-         <div class="ml-3 text-sm font-normal">{{ Session::get('message') }}</div>
-         <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8" data-dismiss-target="#toast-success" aria-label="Close">
-             <span class="sr-only">Close</span>
-             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-         </button>
-         </div>
-       @endif
-      <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
-        <div class="w-full lg:w-1/2 flex flex-col items-center justify-center p-12 bg-no-repeat bg-cover bg-center" style="background-image: url('../assets/pura.jpg')">
-          <h1 class="text-white text-3xl mb-3">Welcome</h1>
-          <div>
-            <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean suspendisse aliquam varius rutrum purus maecenas ac <a href="#" class="text-purple-500 font-semibold">Learn more</a></p>
-          </div>
-        </div>
-        <div class="w-full lg:w-1/2 py-16 px-12">
-          <h2  class="text-3xl mb-4">Reservasi Sekarang</h2>
-          <form action="{{ route('reservasi-insert') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                <div class="sm:col-span-2 hidden">
-                    <label for="id_user" class="block mb-2 text-sm font-medium text-gray-900">Id User</label>
-                    <input type="text" name="id_user" id="id_user" value="{{ Auth::guard('user')->user()->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Id User" required="">
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="id_paket" class="block mb-2 text-sm font-medium text-gray-900">Pilih Paket</label>
-                    <select name="id_paket" id="id_paket" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                        <option value="">Select Paket</option>
-                        @foreach ($paket as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="w-full">
-                    <label for="tgl_tour_mulai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Mulai Tour</label>
-                    <input type="date" name="tgl_tour_mulai" id="tgl_tour_mulai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="pilih tanggal" required="">
-                </div>
-                <div class="w-full">
-                    <label for="tgl_tour_selesai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Selesai Tour</label>
-                    <input type="date" name="tgl_tour_selesai" id="tgl_tour_selesai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
-                </div>
-                <div class="w-full">
-                    <label for="tgl_berangkat" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Berangkat</label>
-                    <input type="date" name="tgl_berangkat" id="tgl_berangkat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
-                </div>
-                <div class="w-full">
-                    <label for="jam_datang" class="block mb-2 text-sm font-medium text-gray-900">Jam Berangkat</label>
-                    <input type="time" name="jam_datang" id="jam_datang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="lokasi_penjemputan" class="block mb-2 text-sm font-medium text-gray-900">Lokasi Penjemputan</label>
-                    <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="(Contoh: Lobby Hotel A)" required="">
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="nominal_dp" class="block mb-2 text-sm font-medium text-gray-900">Nominal DP</label>
-                    <input type="text" name="nominal_dp" id="nominal_dp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
-                </div>
-                <div class="sm:col-span-2">
-                    <label class="block mb-2 text-sm font-medium text-gray-90" for="file_input">Upload Bukti DP</label>
-                    <input type="file" name="images[]" multiple data-max_length="20" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" aria-describedby="file_input_help">
-                    <p class="mt-1 text-sm text-gray-500" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
-                </div>
-                <div class="sm:col-span-2 hidden">
-                    <label for="status_pemesanan" class="block mb-2 text-sm font-medium text-gray-900">Status Pemesanan</label>
-                    <input type="text" name="status_pemesanan" id="status_pemesanan" value="baru" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
+
+
+<section class="relative overflow-hidden py-16 bg-gray-DEFAULT-100">
+    <img src="{{ ('assets/images/effect.png') }}" alt="effect" class="absolute bottom-[-400px] -z-10 w-full opacity-[0.2]">
+    <div id="selectedPaketInfo" class="mx-auto max-w-7xl px-8 md:px-6">
+        <div class="-mx-4 flex flex-wrap lg:justify-between mt-20">
+
+            <!-- left info-->
+            <div class="w-full px-4 md:w-1/2 xl:w-6/12">
+                <div class="mb-12 max-w-[570px] lg:mb-0">
+                    <div class="w-full duration-200 hover:scale-95">
+                        <div class="max-h-120 w-full overflow-hidden rounded-t-xl">
+                            <img src="{{ ('assets/pura.jpg') }}" alt="blog img" class="w-full">
+                        </div>
+                        <div class="rounded-b-xl px-5 pb-5 pt-3 shadow-md shadow-blue-500/10 bg-white">
+                            <div class="">
+                                    <a class="mr-2 rounded-md bg-blue-50 px-3 py-1 text-sm text-slate-600" id="selectedPaketDestinasi"></a>
+                            </div>
+                            <hr class="my-4 border-slate-100">
+                            {{-- <a href="{{ route('paketDetail', ['id' => $paket->id]) }}"> --}}
+                            <div class="flex">
+                                <!-- Tampilkan informasi pengguna -->
+                                <p class="text-sm font-semibold capitalize text-slate-600" id="selectedPaketNama" ><span class="block text-xs text-slate-400"></span></p>
+                            </div>
+                        </a>
+                        </div>
+                    </div>
+
+                    <h1 class="mt-10 text-2xl font-bold text-slate-700 sm:text-3xl">Deskripsi</h1>
+                    <p class="text-gray-700 mb-8" id="selectedPaketKeterangan"></p>
+
+
+                    <!-- Total Pembayaran -->
+                    <div class="mb-8 mt-10 flex w-full max-w-[420px] items-center rounded-lg bg-white p-4 shadow-md shadow-blue-500/10">
+                        <div class="mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded  bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
+                            <img src="{{ asset('assets/LogoTittle.png') }}" class="text-3xl">
+                        </div>
+                        <div class="w-full">
+                            <h4 class="mb-1 text-xl font-bold text-slate-700"">Harga Paket</h4>
+                            <p id="selectedPaketHarga" class="text-base text-slate-400" id="selectedPaketHarga"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="w-full">
-                <h4 class="mb-1 text-xl font-bold text-slate-700">Total Pembayaran</h4>
-                @foreach ($paket as $item)
-                <p id="total_pembayaran" class="text-base text-slate-400">Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
-                @endforeach
+
+            
+            <!-- right contact-->
+            <div class="w-full px-4 md:w-1/2 xl:w-5/12">
+                <div class="relative rounded-lg bg-white p-8 shadow-lg shadow-blue-500/10 sm:p-12">
+                    <h2  class="text-3xl mb-4">Reservasi Sekarang</h2>
+                    <form action="{{ route('reservasi-insert') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                            <div class="sm:col-span-2 hidden">
+                                <label for="id_user" class="block mb-2 text-sm font-medium text-gray-900">Id User</label>
+                                <input type="text" name="id_user" id="id_user" value="{{ Auth::guard('user')->user()->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Id User" required="">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="id_paket" class="block mb-2 text-sm font-medium text-gray-900">Pilih Paket</label>
+                                <select name="id_paket" id="id_paket" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                    <option value="">Select Paket</option>
+                                    @foreach ($paket as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="w-full">
+                                <label for="tgl_tour_mulai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Mulai Tour</label>
+                                <input type="date" name="tgl_tour_mulai" id="tgl_tour_mulai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="pilih tanggal" required="">
+                            </div>
+                            <div class="w-full">
+                                <label for="tgl_tour_selesai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Selesai Tour</label>
+                                <input type="date" name="tgl_tour_selesai" id="tgl_tour_selesai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
+                            </div>
+                            <div class="w-full">
+                                <label for="tgl_berangkat" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Berangkat</label>
+                                <input type="date" name="tgl_berangkat" id="tgl_berangkat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
+                            </div>
+                            <div class="w-full">
+                                <label for="jam_datang" class="block mb-2 text-sm font-medium text-gray-900">Jam Berangkat</label>
+                                <input type="time" name="jam_datang" id="jam_datang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="lokasi_penjemputan" class="block mb-2 text-sm font-medium text-gray-900">Lokasi Penjemputan</label>
+                                <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="(Contoh: Lobby Hotel A)" required="">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="nominal_dp" class="block mb-2 text-sm font-medium text-gray-900">Nominal DP</label>
+                                <input type="text" name="nominal_dp" id="nominal_dp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-90" for="file_input">Upload Bukti DP</label>
+                                <input type="file" name="images[]" multiple data-max_length="20" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" aria-describedby="file_input_help" required>
+                                <p class="mt-1 text-sm text-gray-500" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+                            </div>
+                            <div class="sm:col-span-2 hidden">
+                                <label for="status_pemesanan" class="block mb-2 text-sm font-medium text-gray-900">Status Pemesanan</label>
+                                <input type="text" name="status_pemesanan" id="status_pemesanan" value="baru" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
+                            </div>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-slate-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800">
+                            Reservasi
+                        </button>
+                    </form>
+                </div>
             </div>
-            <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-slate-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800">
-                Reservasi
-            </button>
-        </form>
+
+
         </div>
-      </div>
     </div>
-  </div>
+</section>
+
+  <!-- Letakkan tag skrip ini di akhir berkas view Anda, sebelum penutup tag </body> -->
+  <script>
+    // Tambahkan event listener ke select dengan ID "id_paket"
+    $("#id_paket").change(function() {
+        viewPaket();
+    });
+
+    // Fungsi untuk mengambil dan menampilkan informasi paket yang dipilih
+    function viewPaket() {
+        var selectedPaketId = $("#id_paket").val();
+        if (selectedPaketId) {
+            // Kirim permintaan AJAX untuk mengambil detail paket
+            $.ajax({
+                url: "/get-paket-info/" + selectedPaketId,
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    // Update div "selectedPaketInfo" dengan informasi paket yang diperoleh dari server
+                    $("#selectedPaketNama").text(response.nama);
+                    $("#selectedPaketDestinasi").text(response.destinasi);
+                    $("#selectedPaketKeterangan").html(response.keterangan);
+                    $("#selectedPaketHarga").text("Rp. " + response.harga);
+                },
+                error: function() {
+                    alert("Gagal mengambil informasi paket.");
+                }
+            });
+        } else {
+            // Jika pengguna belum memilih paket, tampilkan pesan
+            $("#selectedPaketNama").text("");
+            $("#selectedPaketDestinasi").text("Tidak ada paket yang dipilih");
+            $("#selectedPaketKeterangan").text("");
+            $("#selectedPaketHarga").text("");
+        }
+    }
+</script>
+
+
+
   @endsection
