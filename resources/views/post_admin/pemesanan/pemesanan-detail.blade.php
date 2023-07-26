@@ -9,7 +9,7 @@
     <div class="container mx-auto p-4">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <div class="px-6 py-4 mt-10">
-            <h2 class="text-2xl font-bold mb-2">Detail Pengajuan Batal Pesanan</h2>
+            <h2 class="text-2xl font-bold mb-2">Detail Konfirmasi Pesanan</h2>
             <hr class="my-4">
             <div class="flex flex-col md:flex-row mx-auto">
                 <div class="w-full md:w-2/3">
@@ -56,7 +56,7 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                         @foreach ($pemesanan->paket->mobil1 as $mobil)
                             @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                 @if ($mobil->pengemudi)
@@ -70,7 +70,7 @@
                     <div class="mb-4 md:flex items-center">
                         <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
                         <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                             @foreach ($pemesanan->paket->mobil1 as $mobil)
                                 @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                     @if ($mobil->pengemudi)
@@ -128,7 +128,7 @@
                         </div>
                         <div class="flex items-center hidden">
                             <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                                     @foreach ($pemesanan->paket->mobil1 as $mobil)
                                         @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                             @if ($mobil->pengemudi)
@@ -162,7 +162,7 @@
                         </div>
                         <div class="flex items-center hidden">
                             <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                                     @foreach ($pemesanan->paket->mobil1 as $mobil)
                                         @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                             @if ($mobil->pengemudi)

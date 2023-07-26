@@ -51,17 +51,24 @@ return view('landingpage');
 // Route::get('/postlogin', 'LoginController@postlogin')->name('postlogin');
 Route::get('/', [ViewController::class, 'index2'])->name('index2');
 Route::get('/paket-home', [ViewController::class, 'paketHome'])->name('paketHome');
+Route::get('/detail-paket-home/{id}', [ViewController::class, 'paketDetailHome'])->name('paketDetailHome');
 Route::get('/about-home', [ViewController::class, 'aboutHome'])->name('aboutHome');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::middleware('guest')->group(function () {
-Route::get('/mobil-registrasi/registrasi/{id_pengemudi}', [MobilController::class, 'registrasi'])->name('registrasimobil');
-Route::post('/mobil-registrasi', [MobilController::class, 'processregistrasimobil'])->name('processregistrasimobil');
-Route::get('/registrasipengemudi', [AuthController::class, 'registerpengemudi'])->name('registrasipengemudi');
-Route::post('/registrasipengemudi', [AuthController::class, 'processregistrasipengemudi'])->name('processregistrasipengemudi');
-Route::get('/registrasi', [AuthController::class, 'register'])->name('registrasi');
-Route::post('/registrasi', [AuthController::class, 'processregistrasi'])->name('processregistrasi');
-Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/login', [AuthController::class, 'processLogin'])->name('processlogin');
+    Route::get('/mobil-registrasi/registrasi/{id_pengemudi}', [MobilController::class, 'registrasi'])->name('registrasimobil');
+    Route::post('/mobil-registrasi', [MobilController::class, 'processregistrasimobil'])->name('processregistrasimobil');
+    Route::get('/registrasipengemudi', [AuthController::class, 'registerpengemudi'])->name('registrasipengemudi');
+    Route::post('/registrasipengemudi', [AuthController::class, 'processregistrasipengemudi'])->name('processregistrasipengemudi');
+    Route::get('/registrasi', [AuthController::class, 'register'])->name('registrasi');
+    Route::post('/registrasi', [AuthController::class, 'processregistrasi'])->name('processregistrasi');
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'processLogin'])->name('processlogin');
+
+    Route::get('/lupa-password', [AuthController::class, 'lupaPassword'])->name('lupaPassword');
+    Route::post('/lupa-password', [AuthController::class, 'processLupaPassword'])->name('password.processLupaPassword');
+    Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'processResetPassword'])->name('processResetPassword');
 });
 
 
@@ -84,8 +91,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/pengemudi', [PengemudiController::class, 'index'])->name('pengemudi');
     Route::get('/pengemudi-add', [PengemudiController::class, 'create']);
     Route::post('/pengemudi-insert', [PengemudiController::class, 'store']);
-    Route::get('/pengemudi-edit/{id}', [PengemudiController::class, 'edit']);
+    Route::get('/pengemudi-edit/{id}', [PengemudiController::class, 'edit'])->name('editPengemudi');
     Route::put('/pengemudi/{id}', [PengemudiController::class, 'update']);
+    Route::delete('/pengemudi-delete/{id}', [PengemudiController::class, 'delete'])->name('hapusPengemudi');
 
     Route::get('/mobil', [MobilController::class, 'index'])->name('mobil');
     Route::get('/mobil-add', [MobilController::class, 'create'])->name('mobil-add');

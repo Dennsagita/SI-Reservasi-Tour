@@ -34,8 +34,18 @@
     @endif
     <div class="flex-none w-full max-w-full px-3">
       <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
-        <div class="p-6 mt-4 pb-0 mb-2 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
+        <div class="p-6 pb-0 mb-2 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
           <h6>Tabel Pemesanan</h6>
+          <div class="flex items-center md:ml-auto md:pr-4">
+            <form action="{{ route('pemesananSelesai') }}" method="get">
+            <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
+              <span class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
+                <button type="submit"><i class="fas fa-search"></i></button>
+              </span>
+              <input name="search" type="text" class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow" placeholder="Cari Data" />
+            </div>
+          </form>
+          </div>
         </div>
         <div class="flex-auto px-0 pt-0 pb-2">
           <div class="p-0 overflow-x-auto">
@@ -69,16 +79,18 @@
                 </button>
                 </div>
               </form>
-                {{-- <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                  <a href="{{ route('cetakPemesananSelesai') }}">Cetak Data</a></button>
-                  <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                    <a href="{{ route('cetakPemesananSelesai') }}">Simpan PDF</a></button> --}}
             </div>
+            @php
+                $currentPage = request()->get('page', 1);
+                $itemsPerPage = 5; // Jumlah item per halaman (sesuaikan dengan paginate() Anda)
+                $startNumber = ($currentPage - 1) * $itemsPerPage + 1;
+            @endphp
             <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
               <thead class="align-bottom">
                 <tr>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No Pesanan</th>
+                  <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Tanggal Reservasi</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Pemesan|No Telp</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Tanggal Mulai Tour</th>
@@ -95,10 +107,13 @@
               <tbody>
                 <tr>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $loop->iteration }}</h6>
+                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $startNumber + $loop->index }}</h6>
                 </td> 
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <h6 class="mb-0 leading-normal text-sm text-center"><h6 class="mb-0 leading-normal text-sm text-center">{{ sprintf('%06d', $item->id) }}</h6></h6>
+                </td> 
+                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                    <h6 class="mb-0 leading-normal text-sm text-center"><h6 class="mb-0 leading-normal text-sm text-center">{{ \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') }}</h6></h6>
                 </td> 
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <h6 class="mb-0 leading-normal text-sm">{{ $item->user->nama }}</h6>
@@ -138,33 +153,27 @@
                   <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->status_pemesanan }}</p>
                 </td>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                  {{-- <h6 class="mb-0 leading-normal text-sm">{{ $item->mobil->nama_mobil }}</h6>
-                  <p class="mb-0 leading-tight text-xs text-slate-400"></p> --}}
-                  {{-- @if ($item->paket && $item->paket->mobil && $item->paket->mobil->pengemudi) 
-                    <h6 class="mb-0 leading-normal text-sm">
-                      {{ $item->paket->mobil->pengemudi->nama }} 
+                      @if ($item->paket->mobil1 && $item->paket->mobil1->count() > 0)
+                          @foreach ($item->paket->mobil1 as $mobil)
+                              @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil)
+                                  @if ($mobil->pengemudi)
+                                      <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
+                                  @endif
+                                  <p class="mb-0 leading-tight text-xs text-slate-400">
+                                      {{ $mobil->merk }} {{ $mobil->nama_mobil }}
+                                  </p>
+                                  <br>
+                              @endif
+                          @endforeach
                       @else
-                      -
-                      @endif</h6>
-                    <p class="mb-0 leading-tight text-xs text-slate-400">
-                  @if($item->paket && $item->paket->mobil)
-                    {{ $item->paket->mobil->merk }} {{ $item->paket->mobil->nama_mobil }}
-                    @else
-                    -
-                    @endif</p> --}}
-                    @foreach ($item->paket->mobil1->random(1) as $mobil)
-                    @if ($mobil->pivot->konfirmasi)
-                        @if ($mobil->pengemudi)
-                            <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
-                        @endif
-                        <p class="mb-0 leading-tight text-xs text-slate-400">
-                            {{ $mobil->merk }} {{ $mobil->nama_mobil }}
-                        </p>
-                        <br>
-                    @endif
-                  @endforeach
-
-                </td>
+                      <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
+                      @endif
+                  @if ($id_mobil && count($id_mobil) > 0)
+                    @foreach ($id_mobil as $mobil)
+                        <a href="{{ route('pilihMobil', ['id_mobil' => $mobil->id]) }}">{{ $mobil->nama_mobil }}</a>
+                    @endforeach
+                  @endif
+                  </td>
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                             <button class=" text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-bg-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
                             onclick="window.location.href='#'">
@@ -177,6 +186,31 @@
             </table>
           </div>
         </div>
+      </div>
+      <div class="mt-4">
+        <nav role="navigation" aria-label="Pagination Navigation" class="">
+            {{-- Tombol Previous --}}
+            @if ($pemesanan->onFirstPage())
+                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                    {!! __('pagination.previous') !!}
+                </span>
+            @else
+                <a href="{{ $pemesanan->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.previous') }}">
+                    {!! __('pagination.previous') !!}
+                </a>
+            @endif
+  
+            {{-- Tombol Next --}}
+            @if ($pemesanan->hasMorePages())
+                <a href="{{ $pemesanan->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.next') }}">
+                    {!! __('pagination.next') !!}
+                </a>
+            @else
+                <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                    {!! __('pagination.next') !!}
+                </span>
+            @endif
+        </nav>
       </div>
     </div>
   </div>

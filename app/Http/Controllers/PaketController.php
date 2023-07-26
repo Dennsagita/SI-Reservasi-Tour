@@ -13,21 +13,32 @@ use App\Http\Requests\PaketCreateRequest;
 
 class PaketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
          // Mendapatkan daftar paket yang perlu dikonfirmasi
          $belumKonfirmasiPaket = Paket::with(['mobil1' => function ($query) {
             $query->wherePivot('konfirmasi', false);
-        }])->get();
-         // Mendapatkan daftar paket yang sudah dikonfirmasi
-            $sudahKonfirmasiPaket = Paket::with(['mobil1' => function ($query) {
-            $query->wherePivot('konfirmasi', true);
-        }])->get();
-        $paketList = Paket::with(['mobil1'])->paginate(10);
+        }])->paginate(5);
+        //  // Mendapatkan daftar paket yang sudah dikonfirmasi
+        //     $sudahKonfirmasiPaket = Paket::with(['mobil1' => function ($query) {
+        //     $query->wherePivot('konfirmasi', true);
+        // }])->get();
+        // $paketList = Paket::with(['mobil1'])->paginate(5);
         // $mobil = Mobil::with('paket1')->get();
         // $paket = Paket::with('mobil')->paginate(10);
-        return view('post_admin/paket/manage-paket', compact('paketList', 'belumKonfirmasiPaket', 'sudahKonfirmasiPaket'));
+         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pada tabel users
+         $keyword = @$request['search'];
+         $paketList = Paket::with(['mobil1']);
+         if (isset($request['search'])) {
+            $paketList = $paketList->where('nama', 'LIKE', "%$keyword%");
+            $paketList = $paketList->orWhere('destinasi', 'LIKE', "%$keyword%");
+            $paketList = $paketList->orWhere('harga', 'LIKE', "%$keyword%");
+        };
+         
+ 
+         $paketList = $paketList->paginate(5);
+        return view('post_admin/paket/manage-paket', compact('paketList', 'belumKonfirmasiPaket'));
     }
 
     public function confirmPaket(Request $request)
@@ -45,12 +56,12 @@ class PaketController extends Controller
         if ($paketMobil) {
             if ($paketMobil->konfirmasi) {
                 // Jika data sudah dikonfirmasi, hapus data konfirmasi
-                return redirect()->route('managepaket')->with('success', 'Paket berhasil dibatalkan.');
+                return redirect()->route('managepaket')->with('konfirmasi', 'Paket sudah terdaftar pada pengemudi');
             } else {
                 // Jika data belum dikonfirmasi, lakukan update konfirmasi
                 $paketMobil->konfirmasi = true;
                 $paketMobil->save();
-                return redirect()->route('managepaket')->with('success', 'Paket berhasil dikonfirmasi.');
+                return redirect()->route('managepaket')->with('konfirmasi', 'Paket berhasil dikonfirmasi');
             }
         } else {
             // Jika belum ada record, buat record baru dengan status konfirmasi
@@ -60,7 +71,7 @@ class PaketController extends Controller
                 'konfirmasi' => true,
             ]);
     
-            return redirect()->route('managepaket')->with('success', 'Paket berhasil dikonfirmasi.');
+            return redirect()->route('managepaket')->with('konfirmasi', 'Paket berhasil dikonfirmasi.');
         }
     }
     
@@ -76,7 +87,7 @@ class PaketController extends Controller
         if ($paketMobil) {
             // Hapus data pivot
             $paketMobil->delete();
-            return redirect()->route('managepaket')->with('success', 'Data berhasil dihapus.');
+            return redirect()->route('managepaket')->with('tolak', 'Berhasil menolak paket yang dipilih pengemudi');
         } else {
             // Jika data pivot tidak ditemukan, kirimkan pesan error
             return redirect()->route('managepaket')->with('error', 'Data tidak ditemukan atau sudah terhapus.');
@@ -142,6 +153,6 @@ class PaketController extends Controller
         $deletedpaket = paket::findOrfail($id);
         $deletedpaket->delete();
         
-        return redirect('/paket');
+        return redirect()->route('managepaket')->with('hapus', 'Paket Berhasil Dihapus');
     }
 }

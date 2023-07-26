@@ -32,13 +32,13 @@
                                 <div class="">
                                     <!-- Tampilkan kategori atau label -->
                                    
-                                        <a href="{{ route('paketDetail', ['id' => $paket->id]) }}" class="mr-2 rounded-md bg-blue-50 px-3 py-1 text-sm text-slate-600">Reservasi Sekarang</a>
+                                        <a href="{{ route('paketDetailHome', ['id' => $paket->id]) }}" class="mr-2 rounded-md bg-blue-50 px-3 py-1 text-sm text-slate-600">Reservasi Sekarang</a>
                                  
                                     <!-- Tampilkan nama paket -->
-                                    <a href="{{ route('paketDetail', ['id' => $paket->id]) }}" class="block pt-4 font-medium capitalize text-slate-800 hover:text-blue-500">Destinasi {{ $paket->destinasi }}</a>
+                                    <a href="{{ route('paketDetailHome', ['id' => $paket->id]) }}" class="block pt-4 font-medium capitalize text-slate-800 hover:text-blue-500">Destinasi {{ $paket->destinasi }}</a>
                                 </div>
                                 <hr class="my-4 border-slate-100">
-                                <a href="{{ route('paketDetail', ['id' => $paket->id]) }}">
+                                <a href="{{ route('paketDetailHome', ['id' => $paket->id]) }}">
                                 <div class="flex">
                                     <!-- Tampilkan informasi pengguna -->
                                     <img src="{{ asset('assets/LogoTittle.png') }}" alt="user img" class="mr-3 h-10 w-10 rounded-full object-cover">

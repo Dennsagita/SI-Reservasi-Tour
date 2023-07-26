@@ -39,15 +39,33 @@
           <div class="p-6 mt-4 pb-0 mb-2 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
             <h6>Table Pengguna</h6>
           </div>
+         
           <div class="flex-auto px-0 pt-0 pb-2">
             <div class="p-0 overflow-x-auto">
-              <div class="p-0 px-4 mb-4">
-              <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                <a href="{{ route('pengguna-add') }}">Tambah Data</a></button>
-              </div>
-              <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
+            <div class="p-0 overflow-x-auto flex items-center justify-between">
+                <div class="ml-5">
+                    <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
+                        <a href="{{ route('pengguna-add') }}">Tambah Data</a>
+                    </button>
+                </div>
+        
+                <form action="{{ route('pengguna') }}" method="get" class="relative mr-6 flex flex-wrap items-stretch transition-all rounded-lg ease-soft">
+                    <span class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </span>
+                    <input name="search" type="text" class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow" placeholder="Cari Data" />
+                </form>
+            </div>
+        
+              @php
+              $currentPage = request()->get('page', 1);
+              $itemsPerPage = 5; // Jumlah item per halaman (sesuaikan dengan paginate() Anda)
+              $startNumber = ($currentPage - 1) * $itemsPerPage + 1;
+              @endphp
+              <table class="items-center w-full mt-5 mb-0 align-top border-gray-200 text-slate-500">    
                 <thead class="align-bottom">
                   <tr>
+                    <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
                     <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama | Email</th>
                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Alamat</th>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nomor Telpon</th>
@@ -57,6 +75,9 @@
                 @forelse ($userList as $data=>$item)
                 <tbody>
                   <tr>
+                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                      <p class="mb-0 font-semibold leading-tight text-xs">{{ $startNumber + $loop->index }}</p>
+                    </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <div class="flex px-2 py-1">
                         <div>
@@ -120,7 +141,34 @@
               </table>
             </div>
           </div>
+          </div>
         </div>
+           <!-- Tampilkan pagination link -->
+   <div class="mt-4">
+    <nav role="navigation" aria-label="Pagination Navigation" class="">
+        {{-- Tombol Previous --}}
+        @if ($userList->onFirstPage())
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                {!! __('pagination.previous') !!}
+            </span>
+        @else
+            <a href="{{ $userList->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.previous') }}">
+                {!! __('pagination.previous') !!}
+            </a>
+        @endif
+
+        {{-- Tombol Next --}}
+        @if ($userList->hasMorePages())
+            <a href="{{ $userList->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.next') }}">
+                {!! __('pagination.next') !!}
+            </a>
+        @else
+            <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                {!! __('pagination.next') !!}
+            </span>
+        @endif
+    </nav>
+</div>
       </div>
     </div>
     {{-- <div>

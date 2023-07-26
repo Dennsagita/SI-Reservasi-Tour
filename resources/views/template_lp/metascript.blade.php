@@ -48,6 +48,89 @@
     });
 </script>
 
+ <!-- Javascript untuk berhasil registrasi popup  -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen modal
+        const modal = document.getElementById('registrasiBerhasil');
+        
+        // Periksa apakah login berhasil (Anda dapat mengatur nilai ini di controller login)
+        const loginBerhasil = {{ session('registrasiBerhasil') ? 'true' : 'false' }};
+        
+        // Periksa apakah login berhasil dan tampilkan modal
+        if (loginBerhasil) {
+            modal.classList.remove('hidden');
+        }
+        
+        // Fungsi untuk menyembunyikan modal
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+        
+        // Tambahkan event listener ke tombol OK pada modal
+        const closeButton = modal.querySelector('[data-modal-hide="registrasiBerhasil"]');
+        closeButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.querySelector('body').classList.remove('overflow-hidden'); // Mengaktifkan scroll pada body
+        });
+    });
+</script>
+
+ <!-- Javascript untuk berhasil memesan pada pelanggan popup  -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen modal
+        const modal = document.getElementById('pesananBerhasil');
+        
+        // Periksa apakah login berhasil (Anda dapat mengatur nilai ini di controller login)
+        const loginBerhasil = {{ session('pesananBerhasil') ? 'true' : 'false' }};
+        
+        // Periksa apakah login berhasil dan tampilkan modal
+        if (loginBerhasil) {
+            modal.classList.remove('hidden');
+        }
+        
+        // Fungsi untuk menyembunyikan modal
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+        
+        // Tambahkan event listener ke tombol OK pada modal
+        const closeButton = modal.querySelector('[data-modal-hide="pesananBerhasil"]');
+        closeButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.querySelector('body').classList.remove('overflow-hidden'); // Mengaktifkan scroll pada body
+        });
+    });
+</script>
+ <!-- Javascript untuk batal memesan pada pelanggan popup  -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen modal
+        const modal = document.getElementById('batalPesanan');
+        
+        // Periksa apakah login berhasil (Anda dapat mengatur nilai ini di controller login)
+        const loginBerhasil = {{ session('batalPesanan') ? 'true' : 'false' }};
+        
+        // Periksa apakah login berhasil dan tampilkan modal
+        if (loginBerhasil) {
+            modal.classList.remove('hidden');
+        }
+        
+        // Fungsi untuk menyembunyikan modal
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+        
+        // Tambahkan event listener ke tombol OK pada modal
+        const closeButton = modal.querySelector('[data-modal-hide="batalPesanan"]');
+        closeButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.querySelector('body').classList.remove('overflow-hidden'); // Mengaktifkan scroll pada body
+        });
+    });
+</script>
+
 
   
   

@@ -15,11 +15,26 @@ use App\Http\Requests\MobilCreateRequest;
 
 class MobilController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pada tabel users
+        $keyword = @$request['search'];
+        $mobilList = new Mobil();
+        if (isset($request['search'])) {
+            $mobilList = $mobilList->whereIn('id_pengemudi', function ($query) use ($keyword) {
+                $query->select('id')
+                    ->from('pengemudis')
+                    ->where('nama', 'LIKE', "%$keyword%");
+            });
+             // Pencarian berdasarkan merk mobil
+        $mobilList = $mobilList->orWhere('merk', 'LIKE', "%$keyword%");
+        $mobilList = $mobilList->orWhere('no_plat_mobil', 'LIKE', "%$keyword%");
+        }
+
+        $mobilList = $mobilList->paginate(5);
         // $paket = Mobil::with('paket1')->get();
-        $mobil = Mobil::with('pengemudi','paket1')->paginate(10);
-        return view('post_admin/mobil/mobil', ['mobilList' => $mobil]);
+        // $mobil = Mobil::with('pengemudi','paket1')->paginate(5);
+        return view('post_admin/mobil/mobil', compact('mobilList', 'keyword'));
     }
     public function registrasi($id_pengemudi)
     {

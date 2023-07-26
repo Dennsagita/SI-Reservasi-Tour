@@ -56,7 +56,7 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($batal->pemesanan->paket->mobil1 && $batal->pemesanan->paket->mobil1->count() > 1)
+                    @if ($batal->pemesanan->paket->mobil1 && $batal->pemesanan->paket->mobil1->count() > 0)
                         @foreach ($batal->pemesanan->paket->mobil1 as $mobil)
                             @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $batal->pemesanan->paket->id_mobil)
                                 @if ($mobil->pengemudi)
@@ -70,7 +70,7 @@
                     <div class="mb-4 md:flex items-center">
                         <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
                         <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($batal->pemesanan->paket->mobil1 && $batal->pemesanan->paket->mobil1->count() > 1)
+                        @if ($batal->pemesanan->paket->mobil1 && $batal->pemesanan->paket->mobil1->count() > 0)
                             @foreach ($batal->pemesanan->paket->mobil1 as $mobil)
                                 @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $batal->pemesanan->paket->id_mobil)
                                     @if ($mobil->pengemudi)
@@ -121,16 +121,15 @@
                 <div class="mt-6">
                     <form action="{{ route('processKonfirmasiBatalPesanan', ['id' => $batal->id_pemesanan]) }}" method="POST">
                         @csrf
-                        <label for="status_pemesanan" class="block font-bold mb-2 text-sm text-gray-900">Konfirmasi Pengajuan Batal Pesanan</label>
+                        <label for="status_pemesanan" class="block font-bold mb-2 text-sm text-gray-900"></label>
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                            <div class="flex items-center">
+                            <div class="flex items-center hidden">
                                 <select name="status_pemesanan" id="status_pemesanan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" required>
                                     <option value="batal">Terima</option>
-                                    <option value="baru">Tolak</option>
                                 </select>
                             </div>
                             <div class="flex items-center">
-                                <button type="submit" class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Simpan</button>
+                                <button type="submit" class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Konfirmasi Batal Pesanan</button>
                             </div>
                         </div>
                     </form>

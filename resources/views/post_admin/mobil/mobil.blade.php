@@ -41,11 +41,26 @@
           </div>
           <div class="flex-auto px-0 pt-0 pb-2">
             <div class="p-0 overflow-x-auto">
-              <div class="p-0 px-4 mb-4">
-              <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                <a href="{{ route('mobil-add') }}">Tambah Data</a></button>
+              <div class="p-0 overflow-x-auto flex items-center justify-between">
+              <div class="ml-5">
+                  <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
+                      <a href="{{ route('pengguna-add') }}">Tambah Data</a>
+                  </button>
               </div>
-              <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
+      
+              <form action="{{ route('mobil') }}" method="get" class="relative mr-6 flex flex-wrap items-stretch transition-all rounded-lg ease-soft">
+                  <span class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
+                      <button type="submit"><i class="fas fa-search"></i></button>
+                  </span>
+                  <input name="search" type="text" class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow" placeholder="Cari Data" />
+              </form>
+              </div>
+              @php
+                $currentPage = request()->get('page', 1);
+                $itemsPerPage = 5; // Jumlah item per halaman (sesuaikan dengan paginate() Anda)
+                $startNumber = ($currentPage - 1) * $itemsPerPage + 1;
+              @endphp
+              <table class="items-center mt-10 w-full mb-0 align-top border-gray-200 text-slate-500">    
                 <thead class="align-bottom">
                   <tr>
                     <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
@@ -60,9 +75,9 @@
                 @forelse ($mobilList as $data=>$item)
                 <tbody>
                   <tr>
-                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                      <h6 class="mb-0 leading-normal text-sm text-center">{{ $loop->iteration }}</h6>
-                  </td>
+                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                      <p class="mb-0 font-semibold leading-tight text-xs">{{ $startNumber + $loop->index }}</p>
+                    </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                           <h6 class="mb-0 leading-normal text-sm">{{ $item->pengemudi->nama }}</h6>
                     </td>
@@ -74,7 +89,7 @@
                         <p class="mb-0 leading-tight text-xs text-slate-400">{{ $item->nama_mobil }}</p>
                     </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                      <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->keterangan }}</p>
+                      <p class="mb-0 font-semibold leading-tight text-xs">{!! $item->keterangan !!}</p>
                     </td>
                     <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                       <div>
@@ -123,37 +138,33 @@
                 </tbody>
               </table>
             </div>
-          </div>
+            </div>
         </div>
+        <div class="mt-4">
+          <nav role="navigation" aria-label="Pagination Navigation" class="">
+              {{-- Tombol Previous --}}
+              @if ($mobilList->onFirstPage())
+                  <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                      {!! __('pagination.previous') !!}
+                  </span>
+              @else
+                  <a href="{{ $mobilList->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.previous') }}">
+                      {!! __('pagination.previous') !!}
+                  </a>
+              @endif
+
+              {{-- Tombol Next --}}
+              @if ($mobilList->hasMorePages())
+                  <a href="{{ $mobilList->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.next') }}">
+                      {!! __('pagination.next') !!}
+                  </a>
+              @else
+                  <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                      {!! __('pagination.next') !!}
+                  </span>
+              @endif
+          </nav>
+      </div>
       </div>
     </div>
-    <div>
-      {{ $mobilList->links() }}
-    </div>
-    
-    {{-- <nav aria-label="Page navigation example">
-      <ul class="inline-flex -space-x-px">
-        <li>
-          <a href="#" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-        </li>
-        <li>
-          <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-        </li>
-        <li>
-          <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-        </li>
-        <li>
-          <a href="#" aria-current="page" class="px-3 py-2 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-        </li>
-        <li>
-          <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-        </li>
-        <li>
-          <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-        </li>
-        <li>
-          <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-        </li>
-      </ul>
-    </nav> --}}
 @endsection

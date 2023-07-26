@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {  
-    public function index()
+    public function index(Request $request)
     {
         $tanggalHariIni = Carbon::now()->format('Y-m-d');
         $totalPesanan = Pemesanan::whereDate('created_at', $tanggalHariIni)->count();
@@ -26,8 +26,49 @@ class AdminController extends Controller
         $mobil = Mobil::count();
         $paket = Paket::count();
         $pengemudi = Pengemudi::count();
-        $pemesanan = Pemesanan::with('paket.mobil1','user')->orderBy('created_at', 'desc')->paginate(10);
-        return view('post_admin/dashboard', compact('pemesanan','pengemudi','paket','mobil','pengguna', 'pemesanan1', 'totalPesanan'));
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
+        $keyword = @$request['search'];
+        $pemesanan = Pemesanan::with(['paket' => function ($query) {
+            $query->whereHas('paketMobil', function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            })->with(['paketMobil' => function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            }]);
+        }, 'user'])
+        ->where(function ($query) {
+            // Kondisi untuk status "baru" dan "pergantian-pengemudi"
+            $query->whereIn('status_pemesanan', ['baru', 'pergantian-pengemudi']);
+        })
+        ->orderBy('created_at', 'desc');
+        if (isset($request['search'])) {
+            $pemesanan = $pemesanan->whereIn('id_user', function ($query) use ($keyword) {
+                $query->select('id')
+                    ->from('users')
+                    ->where('nama', 'LIKE', "%$keyword%");
+            });
+        }
+        $pemesanan = $pemesanan->paginate(5);
+
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
+        $keyword = @$request['search2'];
+        $pemesanan2 = Pemesanan::with(['paket' => function ($query) {
+            $query->whereHas('paketMobil', function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            })->with(['paketMobil' => function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            }]);
+        }, 'user'])
+            ->where('status_pemesanan', 'diterima') // Tambahkan kondisi ini
+            ->orderBy('created_at', 'desc');
+        if (isset($request['search2'])) {
+            $pemesanan2 = $pemesanan2->whereIn('id_user', function ($query) use ($keyword) {
+                $query->select('id')
+                    ->from('users')
+                    ->where('nama', 'LIKE', "%$keyword%");
+            });
+        }
+        $pemesanan2 = $pemesanan2->paginate(5);
+        return view('post_admin/dashboard', compact('pemesanan','pemesanan2', 'pengemudi','paket','mobil','pengguna', 'pemesanan1', 'totalPesanan'));
     }
 
     public function pageProfile(Admin $admin)

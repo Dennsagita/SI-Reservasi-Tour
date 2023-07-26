@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Models\Mobil;
-use Iluminate\Contrsct\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Iluminate\Notifications\Notifiable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Iluminate\Contrsct\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Pengemudi extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
 
     public function mobil()
     {

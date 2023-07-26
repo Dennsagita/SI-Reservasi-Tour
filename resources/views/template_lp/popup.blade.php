@@ -33,7 +33,23 @@
     </div>
 </div>
 
-{{-- Berhasil Login --}}
+    <!-- Berhasil Registrasi -->
+    <div id="registrasiBerhasil" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50"></div> <!-- Latar belakang semi-transparan -->
+        <div class="relative w-full max-w-md">
+            <div class="relative bg-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <i class="mb-8 fa-solid fa-circle-check fa-bounce fa-2xl" style="color: #49ab07;"></i>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Anda berhasil registrasi, silakan melakukan login</h3>
+                    <button type="button" class="text-white bg-slate-700 hover:bg-slate-400 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" data-modal-hide="registrasiBerhasil">
+                        OK
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
     <!-- Berhasil Login -->
     <div id="berhasilLogin" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="fixed inset-0 bg-gray-900 bg-opacity-50"></div> <!-- Latar belakang semi-transparan -->
@@ -43,6 +59,39 @@
                     <i class="mb-8 fa-solid fa-circle-check fa-bounce fa-2xl" style="color: #49ab07;"></i>
                     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Anda berhasil login!</h3>
                     <button type="button" class="text-white bg-slate-700 hover:bg-slate-400 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" data-modal-hide="berhasilLogin">
+                        OK
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Pemesanan Berhasil-->
+    <div id="pesananBerhasil" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50"></div> <!-- Latar belakang semi-transparan -->
+        <div class="relative w-full max-w-md">
+            <div class="relative bg-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <i class="mb-8 fa-solid fa-circle-check fa-bounce fa-2xl" style="color: #49ab07;"></i>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Pesanan berhasil dikirim, Cek berskala email anda untuk mendapatkan notifikasi, lihat status pemesanan pada profil anda</h3>
+                    <button type="button" class="text-white bg-slate-700 hover:bg-slate-400 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" data-modal-hide="pesananBerhasil">
+                        OK
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Pemesanan Batal-->
+    <div id="batalPesanan" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50"></div> <!-- Latar belakang semi-transparan -->
+        <div class="relative w-full max-w-md">
+            <div class="relative bg-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <i class="mb-8 fa-solid fa-circle-check fa-bounce fa-2xl" style="color: #49ab07;"></i>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Pengajuan Pesanan berhasil dikirim, harap cek sesaat status pesanan anda!</h3>
+                    <button type="button" class="text-white bg-slate-700 hover:bg-slate-400 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" data-modal-hide="batalPesanan">
                         OK
                     </button>
                 </div>

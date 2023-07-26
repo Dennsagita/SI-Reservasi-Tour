@@ -42,11 +42,6 @@
             <p class="text-gray-900">{{ $mobil->nama_mobil }}</p>
           </div>
           <div class="mb-4 ml-10 flex items-center">
-            <p class="text-gray-700 font-bold md:w-52">Keterangan</p>
-            <p class="text-gray-700 font-bold md:w-5">:</p>
-            <p class="text-gray-900">{{ $mobil->keterangan }}</p>
-          </div>
-          <div class="mb-4 ml-10 flex items-center">
             <p class="text-gray-700 font-bold md:w-52">Paket Diikuti</p>
             <p class="text-gray-700 font-bold md:w-5">:</p>
             <p class="text-gray-900">
@@ -57,6 +52,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="text-gray-700 ml-10 font-bold">
+      <p class="text-gray-700 font-bold">Keterangan :</p>
+      <p class="text-gray-700">{!! $mobil->keterangan !!}</p>
     </div>
   </div>
 </div>

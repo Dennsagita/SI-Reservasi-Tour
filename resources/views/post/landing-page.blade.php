@@ -18,10 +18,10 @@
      </button>
      </div>
    @endif --}}
-    <div class="mx-auto max-w-7xl px-8 md:px-6 z-50">
+    <div class="mx-auto max-w-7xl mt-32 px-8 md:px-8 z-50">
         <div class="flex flex-wrap">
             <div class="w-full lg:w-5/12">
-                <h1 class="text-redText mb-6 mt-10 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">Destinasi Terbaik di Bali <span class="text-purpleText"><br>& Temukan Keajaiban Bali
+                <h1 class="text-redText mb-6 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">Destinasi Terbaik di Bali <span class="text-purpleText"><br>& Temukan Keajaiban Bali
                     Yang Tak Terlupakan</span></h1>
                 <p class="text-slate-500 mb-8 max-w-[480px] text-base"> Jelajahi pengalaman yang luar biasa untuk mengeksplorasi keindahan pulau Bali . Tour ini akan membawa Anda ke destinasi wisata populer di Bali
                 </p>

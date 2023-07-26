@@ -75,7 +75,7 @@
                   <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                         @foreach ($pemesanan->paket->mobil1 as $mobil)
                             @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                 @if ($mobil->pengemudi)
@@ -89,7 +89,7 @@
                     <div class="mb-4 md:flex items-center">
                         <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
                         <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                             @foreach ($pemesanan->paket->mobil1 as $mobil)
                                 @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                     @if ($mobil->pengemudi)
@@ -117,8 +117,10 @@
                   <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Status Pesanan</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->status_pemesanan == 'diterima' || $pemesanan->status_pemesanan == 'batal')
+                        @if ($pemesanan->status_pemesanan == 'diterima' || $pemesanan->status_pemesanan == 'batal' || $pemesanan->status_pemesanan == 'selesai')
                         <p class="text-gray-900 md:w-8/12">{{ $pemesanan->status_pemesanan }}</p>
+                        @elseif ($pemesanan->status_pemesanan == 'pergantian-pengemudi')
+                        <p class="text-gray-900 md:w-8/12">diterima</p>
                         @else
                         <p class="text-gray-900 md:w-8/12">Menunggu Konfirmasi</p>
                         @endif</p>
@@ -135,7 +137,7 @@
                   </div>
                   @if($pemesanan->status_pemesanan != 'batal' && $pemesanan->status_pemesanan != 'selesai')
                       <div class="mt-6">
-                          <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
+                          <button class="text-white font-semibold bg-gradient-to-tl from-red-900 to-red-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
                               <a href="{{ route('batalPesanan', ['id' => $pemesanan->id]) }}">Ajukan Pembatalan Pesanan</a>
                           </button>
                       </div>

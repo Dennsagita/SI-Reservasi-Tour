@@ -13,9 +13,18 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::all();
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pada tabel users
+        $keyword = @$request['search'];
+        $user = new User();
+        if (isset($request['search'])) {
+            $user = $user
+                    ->where('nama', 'LIKE', "%$keyword%");
+            };
+        
+
+        $user = $user->paginate(5);
         return view('post_admin/pengguna/pengguna', ['userList' => $user]);
     }
 
@@ -156,7 +165,6 @@ class UserController extends Controller
     {
         $deletedpaket = User::findOrfail($id);
         $deletedpaket->delete();
-        
         return redirect('/paket');
     }
 

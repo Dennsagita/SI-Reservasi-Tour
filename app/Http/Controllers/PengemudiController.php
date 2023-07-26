@@ -16,9 +16,16 @@ use Illuminate\Support\Facades\Storage;
 
 class PengemudiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengemudi = Pengemudi::paginate(5);
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pada tabel users
+        $keyword = @$request['search'];
+        $pengemudi = new Pengemudi();
+        if (isset($request['search'])) {
+            $pengemudi = $pengemudi->where('nama', 'LIKE', "%$keyword%");
+            $pengemudi = $pengemudi->orWhere('alamat', 'LIKE', "%$keyword%");
+            };         
+        $pengemudi = $pengemudi->paginate(5);
         return view('post_admin/pengemudi/pengemudi', ['pengemudiList' => $pengemudi]);
     }
     public function create()
@@ -202,7 +209,7 @@ class PengemudiController extends Controller
         Session::flash('edit', 'success');
         Session::flash('textedit', 'Ubah Data Mobil Berhasil');
         }
-        return redirect('/pengemudi');
+        return redirect()->route('pengemudi');
     }
    
     public function createData()
@@ -234,7 +241,7 @@ class PengemudiController extends Controller
             Session::flash('status', 'success');
             Session::flash('message', 'Tambah Data user Berhasil');
         }
-        return redirect()->route('pengguna');
+        return redirect()->route('pengemudi');
     }
 
     public function showData(Request $request, $id)
@@ -325,7 +332,7 @@ class PengemudiController extends Controller
         $deletedpaket = Pengemudi::findOrfail($id);
         $deletedpaket->delete();
         
-        return redirect('/pengemudi');
+        return redirect()->route('pengemudi')->with('hapus', 'Pengemudi berhasil dihapus');
     }
 
     public function processStatus(Request $request, $id)

@@ -46,6 +46,12 @@ class ViewController extends Controller
         return view('post/paket-detail', compact('paket'));
     }
 
+    public function paketDetailHome($id)
+    {
+        $paket = Paket::findOrFail($id);
+        return view('post/paket-detailHome', compact('paket'));
+    }
+
     public function aboutHome()
     {
         return view('post/about');

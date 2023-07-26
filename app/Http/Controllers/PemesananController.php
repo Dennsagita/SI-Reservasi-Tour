@@ -23,24 +23,58 @@ use App\Http\Requests\PesananCreateRequest;
 
 class PemesananController extends DomPDF
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemesanan = Pemesanan::with(['paket' => function ($query) {
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
+        $keyword = @$request['search'];
+        $pemesananList = Pemesanan::with(['paket' => function ($query) {
             $query->whereHas('paketMobil', function ($subquery) {
                 $subquery->where('konfirmasi', 1);
             })->with(['paketMobil' => function ($subquery) {
                 $subquery->where('konfirmasi', 1);
             }]);
         }, 'user'])
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
-    
-        // Mengambil ID mobil yang tersimpan dalam sesi
+        ->where(function ($query) {
+            // Kondisi untuk status "baru" dan "pergantian-pengemudi"
+            $query->whereIn('status_pemesanan', ['baru', 'pergantian-pengemudi']);
+        })
+        ->orderBy('created_at', 'desc');
+
+        if (isset($request['search'])) {
+            $pemesananList = $pemesananList->whereIn('id_user', function ($query) use ($keyword) {
+                $query->select('id')
+                    ->from('users')
+                    ->where('nama', 'LIKE', "%$keyword%");
+            });
+        }
+        $pemesananList = $pemesananList->paginate(5);
+
+
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
+        $keyword = @$request['search2'];
+        $pemesanan2 = Pemesanan::with(['paket' => function ($query) {
+            $query->whereHas('paketMobil', function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            })->with(['paketMobil' => function ($subquery) {
+                $subquery->where('konfirmasi', 1);
+            }]);
+        }, 'user'])
+            ->where('status_pemesanan', 'diterima') // Tambahkan kondisi ini
+            ->orderBy('created_at', 'desc');
+
+        if (isset($request['search2'])) {
+            $pemesanan2 = $pemesanan2->whereIn('id_user', function ($query) use ($keyword) {
+                $query->select('id')
+                    ->from('users')
+                    ->where('nama', 'LIKE', "%$keyword%");
+            });
+        }
+        $pemesanan2 = $pemesanan2->paginate(5);
+
         $id_mobil = Session::get('id_mobil');
-    
-        return view('post_admin/pemesanan/pemesanan', ['pemesananList' => $pemesanan, 'id_mobil' => $id_mobil]);
+        return view('post_admin/pemesanan/pemesanan', compact('pemesananList', 'id_mobil', 'pemesanan2', 'keyword'));
     }
-    
+
     public function selectDriver($id_mobil)
     {
         // Menyimpan ID mobil yang dipilih dalam sesi
@@ -49,8 +83,10 @@ class PemesananController extends DomPDF
         return redirect()->back();
     }
 
-    public function pemesananSelesai()
+    public function pemesananSelesai(Request $request)
     {
+        // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
+        $keyword = @$request['search'];
         $pemesanan = Pemesanan::with(['paket' => function ($query) {
             $query->whereHas('paketMobil', function ($subquery) {
                 $subquery->where('konfirmasi', 1);
@@ -59,10 +95,19 @@ class PemesananController extends DomPDF
             }]);
         }, 'user'])
             ->where('status_pemesanan', 'selesai') // Tambahkan kondisi ini
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-    
-        return view('post_admin/pemesanan/pemesanan-selesai', ['pemesanan' => $pemesanan]);
+            ->orderBy('created_at', 'desc');
+
+        if (isset($request['search'])) {
+            $pemesanan = $pemesanan->whereIn('id_user', function ($query) use ($keyword) {
+                $query->select('id')
+                    ->from('users')
+                    ->where('nama', 'LIKE', "%$keyword%");
+            });
+        }
+
+        $pemesanan = $pemesanan->paginate(5);
+        $id_mobil = Session::get('id_mobil');
+        return view('post_admin/pemesanan/pemesanan-selesai', compact('pemesanan', 'id_mobil'));
     }
 
     public function cetakPemesananSelesai($tahun, $bulan)
@@ -86,16 +131,6 @@ class PemesananController extends DomPDF
         return $pdf->stream('laporan-pemesanan-selesai.pdf');
     }
 
-    // public function cetakPemesananBatal()
-    // {
-    //     $pemesanan = BatalPemesanan::whereHas('pemesanan', function ($query) {
-    //         $query->where('status_pemesanan', 'batal')->whereHas('paket.paketMobil', function ($subquery) {
-    //             $subquery->where('konfirmasi', 1);
-    //         });
-    //     })->get();
-    //     $pdf = DomPDF::loadView('post_admin.pemesanan.cetak-pemesanan-batal', compact('pemesanan',));
-    //     return $pdf->stream('laporan-pemesanan-batal.pdf');
-    // }
     public function cetakPemesananBatal($tahun, $bulan)
     {
         // Konversi tahun dan bulan menjadi format Carbon
@@ -114,14 +149,12 @@ class PemesananController extends DomPDF
         return $pdf->stream('laporan-pemesanan-batal.pdf');
     }
 
-
-
     public function create()
     {
         $class = Paket::select('id', 'nama')->get();
         return view('post/reservasi', ['paket' => $class]);
     }
-    // Tambahkan method berikut di dalam controller
+    // method ini berfungtsi untuk mengam masing" ppaket pada halaman reservasi pelanggan
     public function getPaketInfo($id)
     {
         try {
@@ -138,25 +171,10 @@ class PemesananController extends DomPDF
         }
     }
     
-
-
-
     public function store(Request $request)
     {
-        // $pemesanan = new pemesanan;
-        // $pemesanan->id_paket = $request->id_paket;
-        // $pemesanan->merk = $request->merk;
-        // $pemesanan->nama_pemesanan = $request->nama_pemesanan;
-        // $pemesanan->status_tour = $request->status_tour;
-        // $pemesanan->keterangan = $request->keterangan;
-        // $pemesanan->save();
-        
-        $pemesanan = Pemesanan::create($request->all());
-        if ($pemesanan) {
-            Session::flash('status', 'success');
-            Session::flash('message', 'Data berhasil dikirim, lihat status pemesanan pada profil anda');
-        }
-        return redirect()->route('index2');
+        Pemesanan::create($request->all());
+        return redirect()->route('index2')->with('pesananBerhasil', true);
     }
     public function edit(Request $request, $id)
     {
@@ -191,19 +209,9 @@ class PemesananController extends DomPDF
 
         if ($pemesanan) {
             Session::flash('edit', 'success');
-            Session::flash('textedit', 'Ubah Data pemesanan Berhasil');
+            Session::flash('textedit', 'Ubah Data pemesanan berhasil');
         }
-
         return redirect()->route('pemesanan');
-    }
-    
-
-    public function delete($id)
-    {
-        $deletedpemesanan = Pemesanan::findOrfail($id);
-        $deletedpemesanan->delete();
-        
-        return redirect('/pesanan');
     }
 
     public function detailPemesanan($id)
@@ -238,19 +246,19 @@ class PemesananController extends DomPDF
         $konfirmasiPesanan->save();
 
          // Kirim pesan WhatsApp
-         $recipientNumber = $request->recipient_number;
-         $message = $request->message;
+        $recipientNumber = $request->recipient_number;
+        $message = $request->message;
          
-         $sid = env('TWILIO_SID');
-         $token = env('TWILIO_AUTH_TOKEN');
-         $twilio = new Client($sid, $token);
+        $sid = env('TWILIO_SID');
+        $token = env('TWILIO_AUTH_TOKEN');
+        $twilio = new Client($sid, $token);
  
-         $twilio->messages
+        $twilio->messages
                 ->create("whatsapp:$recipientNumber", // format nomor tujuan WhatsApp
-                         [
-                             'from' => "whatsapp:" . env('TWILIO_PHONE_NUMBER'), // format nomor Twilio yang digunakan
-                             'body' => $message
-                         ]
+                        [
+                            'from' => "whatsapp:" . env('TWILIO_PHONE_NUMBER'), // format nomor Twilio yang digunakan
+                            'body' => $message
+                        ]
                 );
         
          // Kirim email konfirmasi
@@ -269,21 +277,21 @@ class PemesananController extends DomPDF
     {
         $pemesanan = Pemesanan::findOrFail($id);
          // Kirim pesan WhatsApp
-         $recipientNumber = $request->recipient_number;
-         $message = $request->message;
-         
-         $sid = env('TWILIO_SID');
-         $token = env('TWILIO_AUTH_TOKEN');
-         $twilio = new Client($sid, $token);
- 
-         $twilio->messages
+        $recipientNumber = $request->recipient_number;
+        $message = $request->message;
+        
+        $sid = env('TWILIO_SID');
+        $token = env('TWILIO_AUTH_TOKEN');
+        $twilio = new Client($sid, $token);
+
+        $twilio->messages
                 ->create("whatsapp:$recipientNumber", // format nomor tujuan WhatsApp
-                         [
-                             'from' => "whatsapp:" . env('TWILIO_PHONE_NUMBER'), // format nomor Twilio yang digunakan
-                             'body' => $message
-                         ]
+                        [
+                            'from' => "whatsapp:" . env('TWILIO_PHONE_NUMBER'), // format nomor Twilio yang digunakan
+                            'body' => $message
+                        ]
                 );
-        return redirect()->route('pemesanan')->with('konfirmasi', 'Konfirmasi pesanan berhasil');
+        return redirect()->route('pemesanan')->with('konfirmasi', 'Berhasil mengirimkan notifikasi pengingat pengemudi');
     }
 
     public function batalPesanan($id)
@@ -313,12 +321,23 @@ class PemesananController extends DomPDF
         $pemesanan->save();
         
         // Redirect ke halaman pemesanan
-        return redirect()->route('detailPesanan')->with('status', 'Pengajuan Pesanan berhasil berhasil dikirim, harap cek sesaat status pesanan anda!');
+        return redirect()->route('profile')->with('batalPesanan', true);
     }
     
-    public function pemesananBatal()
+    public function pemesananBatal(Request $request)
     {
-        $pemesanan = BatalPemesanan::with('pemesanan')->get();
+         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
+         $keyword = @$request['search'];
+         $pemesanan = BatalPemesanan::with('pemesanan.user') // Tambahkan kondisi ini
+             ->orderBy('created_at', 'desc');
+ 
+        if ($keyword) {
+            $pemesanan = $pemesanan->whereHas('pemesanan.user', function ($query) use ($keyword) {
+                $query->where('nama', 'LIKE', "%$keyword%");
+            });
+        }
+ 
+         $pemesanan = $pemesanan->paginate(5);
         return view('post_admin.pemesanan.pemesanan-batal', compact('pemesanan'));
     }
 
@@ -359,9 +378,12 @@ class PemesananController extends DomPDF
         return view('post_admin.pemesanan.detail-pemesanan-batal', compact('batal'));
     }
 
-
-
-
-
-
+        
+    // public function delete($id)
+    // {
+    //     $deletedpemesanan = Pemesanan::findOrfail($id);
+    //     $deletedpemesanan->delete();
+        
+    //     return redirect('/pesanan');
+    // }
 }

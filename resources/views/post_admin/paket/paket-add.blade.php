@@ -44,26 +44,9 @@
                             <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
                             <textarea name="keterangan" id="keterangan" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  placeholder="Keterangan"></textarea>
                         </div>
-                        <div class="w-full">
+                        <div class="sm:col-span-2">
                             <label for="harga" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga</label>
-                            <input type="text" name="harga" id="harga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nama Mobil">
-                        </div>
-                        <div>
-                            <label for="id_mobil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Pemilik</label>
-                            <select name="id_mobil" id="id_mobil" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" >
-                                <option value="">Select Mobil</option>
-                                @foreach ($mobil as $item)
-                                <option value="{{ $item->id }}">{{ $item->merk }} {{ $item->nama_mobil }}</option>
-                                @endforeach
-                            </select>
-                            {{-- <div class="sm:col-span-2">
-                                @foreach ($paket as $paket)
-                                    <div>
-                                        <input type="checkbox" name="paket_ids[]" value="{{ $paket->id }}" {{ in_array($paket->nama, $mobil->paket1->pluck('nama')->toArray()) ? 'checked' : '' }}>
-                                        <label>{{ $paket->nama }}</label>
-                                    </div>
-                                @endforeach
-                            </div> --}}
+                            <input type="text" name="harga" id="harga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="0000">
                         </div>
                     </div>
                     <div class="upload__box">

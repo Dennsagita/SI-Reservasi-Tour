@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 
 class AuthController extends Controller
 {
@@ -43,8 +46,7 @@ class AuthController extends Controller
         ]);
 
         $user->save();
-
-        return redirect('/login')->with('success', 'Registration success. Please login!');
+        return redirect()->route('login')->with('registrasiBerhasil', true);
     }
 
     public function registerpengemudi()
@@ -142,6 +144,67 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
+    }
+
+    public function lupaPassword()
+    {
+        return view('post.lupa-password');
+    }
+
+    public function processLupaPassword(Request $request)
+    {
+        $request->validate(['email' => ' required|email']);
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function resetPassword($token)
+    {
+        return view('post.reset-password', ['token' => $token]);
+    }
+
+    public function processResetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:3|confirmed',
+        ]);
+    
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (Model $model, string $password) {
+                // Lakukan pengecekan tipe model dan sesuaikan tindakan reset password
+                if ($model instanceof User) {
+                    // Jika model adalah User
+                    $model->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
+                } elseif ($model instanceof Pengemudi) {
+                    // Jika model adalah Pengemudi
+                    $model->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
+                } elseif ($model instanceof Admin) {
+                    // Jika model adalah Admin
+                    $model->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
+                }
+    
+                $model->save();
+    
+                event(new PasswordReset($model));
+            }
+        );
+    
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 
     public function logout(Request $request)

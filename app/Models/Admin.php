@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Models\Paket;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
-use Iluminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable;
 use Iluminate\Contrsct\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
     protected $table = "admins";
     protected $primaryKey = "id";
     protected $fillable = [

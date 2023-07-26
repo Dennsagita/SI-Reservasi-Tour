@@ -68,16 +68,6 @@
                                 <label for="lokasi_penjemputan" class="block mb-2 text-sm font-medium text-gray-900">Lokasi Penjemputan</label>
                                 <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" value="{{ $pemesanan->lokasi_penjemputan }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="(Contoh: Lobby Hotel A)" required="">
                             </div>
-                            <div class="sm:col-span-2">
-                                <label for="status_pemesanan" class="block mb-2 text-sm font-medium text-gray-900">Status Pemesanan</label>
-                                <select name="status_pemesanan" id="status_pemesanan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                                <option value="{{ $pemesanan->status_pemesanan }}">{{ $pemesanan->status_pemesanan }}</option>
-                                <option value="diterima">Diterima</option>
-                                <option value="batal">Batal</option>
-                                <option value="baru">Baru</option>
-                                <option value="selesai">Selesai</option>
-                            </select>
-                            </div>
                         </div>
                         <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-slate-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800">
                             Ubah Data Reservasi
