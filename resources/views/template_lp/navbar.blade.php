@@ -29,20 +29,23 @@
                 </li>
                 @else
                 <li>
-                  <a class="hidden block px-4 py-2 mr-2 font-normal transition-all lg-max:opacity-0 duration-250 ease-soft-in-out text-sm text-slate-700 {{ request()->segment(1) == '' ? 'leading-pro hover:scale-102 hover:shadow-soft-xs active:opacity-85 ease-soft-in text-xs tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 rounded-3.5xl mb-0 mr-1 inline-block cursor-pointer border-0 bg-transparent px-6 py-3 text-center align-middle font-bold uppercase text-white transition-all' : '' }}" href="/">
+                  <a class="hidden block px-4 py-2 mr-2 font-normal transition-all lg-max:opacity-0 duration-250 ease-soft-in-out text-sm text-slate-700 
+                  {{ request()->segment(1) == '' ? 'leading-pro hover:scale-102 hover:shadow-soft-xs active:opacity-85 ease-soft-in text-xs tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 rounded-3.5xl mb-0 mr-1 inline-block cursor-pointer border-0 bg-transparent px-6 py-3 text-center align-middle font-bold uppercase text-white transition-all' : '' }}" href="/">
                     <i class="fa-solid fa-pencil opacity-60"></i> &nbsp;
                     Reservasi
                   </a>
                 </li>
                 @endif
                 <li>
-                  <a class="block px-4 py-2 mr-2 font-normal transition-all lg-max:opacity-0 duration-250 ease-soft-in-out text-sm text-slate-700  {{ request()->segment(1) == 'paket' ? 'leading-pro hover:scale-102 hover:shadow-soft-xs active:opacity-85 ease-soft-in text-xs tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 rounded-3.5xl mb-0 mr-1 inline-block cursor-pointer border-0 bg-transparent px-6 py-3 text-center align-middle font-bold uppercase text-white transition-all' : '' }}" href="{{ route('paketHome') }}">
+                  <a class="block px-4 py-2 mr-2 font-normal transition-all lg-max:opacity-0 duration-250 ease-soft-in-out text-sm text-slate-700  
+                  {{ request()->segment(1) == 'paket-home' ? 'leading-pro hover:scale-102 hover:shadow-soft-xs active:opacity-85 ease-soft-in text-xs tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 rounded-3.5xl mb-0 mr-1 inline-block cursor-pointer border-0 bg-transparent px-6 py-3 text-center align-middle font-bold uppercase text-white transition-all' : '' }}" href="{{ route('paketHome') }}">
                     <i class="mr-1 fa fa-user opacity-60"></i>
                     Paket
                   </a>
                 </li>
                 <li>
-                  <a class="block px-4 py-2 mr-2 font-normal transition-all lg-max:opacity-0 duration-250 ease-soft-in-out text-sm text-slate-700 {{ request()->segment(1) == 'about' ? 'leading-pro hover:scale-102 hover:shadow-soft-xs active:opacity-85 ease-soft-in text-xs tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 rounded-3.5xl mb-0 mr-1 inline-block cursor-pointer border-0 bg-transparent px-6 py-3 text-center align-middle font-bold uppercase text-white transition-all' : '' }} " href="{{ route('aboutHome') }}">
+                  <a class="block px-4 py-2 mr-2 font-normal transition-all lg-max:opacity-0 duration-250 ease-soft-in-out text-sm text-slate-700 
+                  {{ request()->segment(1) == 'about-home' ? 'leading-pro hover:scale-102 hover:shadow-soft-xs active:opacity-85 ease-soft-in text-xs tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 rounded-3.5xl mb-0 mr-1 inline-block cursor-pointer border-0 bg-transparent px-6 py-3 text-center align-middle font-bold uppercase text-white transition-all' : '' }} " href="{{ route('aboutHome') }}">
                     <i class="mr-1 fas fa-user-circle opacity-60"></i>
                     About
                   </a>

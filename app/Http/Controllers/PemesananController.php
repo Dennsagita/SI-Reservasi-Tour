@@ -122,7 +122,7 @@ class PemesananController extends DomPDF
             }]);
         }, 'user'])
             ->where('status_pemesanan', 'selesai') // Tambahkan kondisi ini
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->whereYear('created_at', $tanggal->year)
             ->whereMonth('created_at', $tanggal->month)
             ->get();
@@ -179,7 +179,7 @@ class PemesananController extends DomPDF
     public function edit(Request $request, $id)
     {
         $pesanan = Pemesanan::findOrFail($id);
-        $pemesanan = Pemesanan::with('paket')->findOrFail($id);
+        $pemesanan = Pemesanan::with('paket.mobil1')->findOrFail($id);
         $paket = Paket::where('id', '!=', $pemesanan)->get(['id', 'nama']);
         $pakets = $pesanan->paket;
 
@@ -291,6 +291,14 @@ class PemesananController extends DomPDF
                             'body' => $message
                         ]
                 );
+        
+        // $twilio->messages
+        //      ->create($recipientNumber, // nomor tujuan SMS
+        //          [
+        //              'from' => env('TWILIO_PHONE_NUMBER'), // format nomor Twilio yang digunakan untuk SMS
+        //              'body' => $smsMessage
+        //          ]
+        //      );
         return redirect()->route('pemesanan')->with('konfirmasi', 'Berhasil mengirimkan notifikasi pengingat pengemudi');
     }
 

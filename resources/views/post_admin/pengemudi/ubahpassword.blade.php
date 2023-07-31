@@ -11,8 +11,8 @@
         <div class="container z-10">
           <div class="flex flex-wrap justify-center -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0 text-center lg:flex-0 shrink-0 lg:w-5/12">
-              <h1 class="mt-12 mb-2 text-white">Welcome!</h1>
-              <p class="text-white">Use these awesome forms to login or create new account in your project for free.</p>
+              <h1 class="mt-12 mb-2 text-white">Amankan Akun Anda</h1>
+              <p class="text-white">Ubah password anda secara berskala</p>
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
           <div class="w-full max-w-full px-3 mx-auto mt-0 md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
             <div class="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
               <div class="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
-                <h5 class="font-bold">Change Password</h5>
+                <h5 class="font-bold">Ganti Password</h5>
               </div>
               @if ($errors->any())
               <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-white dark:text-red-400" role="alert">

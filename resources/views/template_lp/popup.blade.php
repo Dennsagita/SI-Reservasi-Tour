@@ -15,14 +15,16 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <!-- Modal body -->
+           <!-- Modal body -->
             <div class="p-6 space-y-6">
-                <p class="text-base leading-relaxed text-gray-500">
-                    With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-                </p>
-                <p class="text-base leading-relaxed text-gray-500">
-                    The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
-                </p>
+                <h2 class="text-xl font-bold text-gray-800">Syarat dan Ketentuan Bergabung sebagai Pengemudi di Bali Temple Tour</h2>
+                <ol class="list-decimal list-inside text-base leading-relaxed text-gray-500">
+                    <li>Kami mengharapkan pengemudi yang bergabung dengan Bali Temple Tour memiliki pengalaman yang memadai dalam mengemudikan kendaraan mobil dan memiliki pengetahuan yang baik tentang tempat wisata di Bali. Pengemudi harus dapat memberikan informasi yang relevan tentang tempat-tempat yang dikunjungi kepada tamu dengan ramah dan profesional.</li>
+                    <li>Setiap pengemudi diwajibkan memiliki lisensi mengemudi yang sah dan dokumen kendaraan yang lengkap dan berlaku untuk setiap tur yang dilakukan. Pengemudi harus mematuhi peraturan lalu lintas dan persyaratan hukum lainnya yang berlaku di Bali.</li>
+                    <li>Pengemudi harus dapat menghadiri dan memenuhi jadwal tur dengan tepat waktu. Kehandalan dan ketepatan waktu sangat penting bagi pengalaman wisata yang baik. Pengemudi juga diharapkan bersikap profesional dalam berinteraksi dengan tamu, menjaga sopan santun, dan memberikan pelayanan terbaik kepada pelanggan.</li>
+                    <li>Sebagai pengemudi, Anda setuju dengan kebijakan kami yang mengenakan potongan 20% dari harga paket tour untuk biaya bersih mengemudi Anda. Potongan ini akan dihitung dari harga paket tour yang dijual kepada tamu. Sebagai contoh, jika harga paket tour adalah Rp 1.000.000, biaya bersih Anda setelah potongan akan menjadi Rp 800.000 (Rp 1.000.000 - 20%).</li>
+                    <li>Sebelum bergabung sebagai pengemudi, Anda akan diminta untuk menandatangani perjanjian kerjasama yang berisi detail tentang syarat dan ketentuan ini, kewajiban dan hak Anda sebagai pengemudi, serta peraturan lain yang berlaku di Bali Temple Tour.</li>
+                </ol>
             </div>
             <!-- Modal footer -->
             <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
@@ -92,6 +94,22 @@
                     <i class="mb-8 fa-solid fa-circle-check fa-bounce fa-2xl" style="color: #49ab07;"></i>
                     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Pengajuan Pesanan berhasil dikirim, harap cek sesaat status pesanan anda!</h3>
                     <button type="button" class="text-white bg-slate-700 hover:bg-slate-400 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" data-modal-hide="batalPesanan">
+                        OK
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Ubah Password-->
+    <div id="ubahPassword" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50"></div> <!-- Latar belakang semi-transparan -->
+        <div class="relative w-full max-w-md">
+            <div class="relative bg-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <i class="mb-8 fa-solid fa-circle-check fa-bounce fa-2xl" style="color: #49ab07;"></i>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{{ Session::get('ubahPassword') }}</h3>
+                    <button type="button" class="text-white bg-slate-700 hover:bg-slate-400 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" data-modal-hide="ubahPassword">
                         OK
                     </button>
                 </div>

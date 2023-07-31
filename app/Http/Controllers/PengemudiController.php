@@ -232,6 +232,7 @@ class PengemudiController extends Controller
             'no_telp' => $request->no_telp,
             'alamat' => $request->alamat,
             'email' => $request->email,
+            'status' => $request->status,
             'password' => Hash::make($request->password),
         ]);
 
@@ -239,7 +240,7 @@ class PengemudiController extends Controller
         
         if ($user) {
             Session::flash('status', 'success');
-            Session::flash('message', 'Tambah Data user Berhasil');
+            Session::flash('message', 'Tambah Data Pengemudi Berhasil');
         }
         return redirect()->route('pengemudi');
     }
@@ -268,8 +269,11 @@ class PengemudiController extends Controller
     //ubah profile
     public function profiledetail(Pengemudi $pengemudi)
     {
-        $data = ['pengemudi' => $pengemudi->where('id', auth()->user()->id)->first()] ;
-        return view('post_admin/pengemudi/profile', $data);
+        // $mobil = Mobil::findOrFail($pengemudi);
+        // $pengemudis = ['pengemudi' => $pengemudi->where('id', auth()->user()->id)->first(), 'mobil'] ;
+        $pengemudi = Pengemudi::find(auth()->user()->id);
+        $mobils = $pengemudi->mobil;
+        return view('post_admin/pengemudi/profile', compact('pengemudi', 'mobils'));
     }
     public function profile(Request $request)
     {
@@ -327,11 +331,28 @@ class PengemudiController extends Controller
         return view('post_admin/pengemudi/ubahpassword');
     }
 
-    public function delete($id)
+    public function show($id)
     {
-        $deletedpaket = Pengemudi::findOrfail($id);
-        $deletedpaket->delete();
         
+        $pengemudi = Pengemudi::findOrFail($id);
+        // $deletedpaket->delete();
+        return view('post_admin/pengemudi/pengemudi-detail', compact('pengemudi'));
+    }
+    public function deletePengemudi($id)
+    {
+        // $deletedpaket = Pengemudi::findOrFail($id);
+        // $deletedpaket->delete();
+        
+        // $deletedPengemudi = Pengemudi::findOrFail($id);
+        // dd($deletedPengemudi);
+        // // $deletedPengemudi->delete();
+        
+        // return redirect()->route('pengemudi')->with('hapus', 'Pengemudi berhasil dihapus');
+        $pengemudi = Pengemudi::findOrfail($id);
+        if (!$pengemudi) {
+            return redirect()->route('pengemudi')->with('hapus', 'Pengemudi tidak ditemukan');
+        }
+        $pengemudi->delete();
         return redirect()->route('pengemudi')->with('hapus', 'Pengemudi berhasil dihapus');
     }
 

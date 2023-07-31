@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-  </div>
+</div>
 
      <!-- Berhasil Login -->
   <div id="berhasilLogin" class="fixed inset-0 flex items-center justify-center z-50 hidden">

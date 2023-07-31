@@ -12,7 +12,7 @@
       <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
         <div class="p-6 mt-6 pb-0 mb-6 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
         <section class="bg-white dark:bg-gray-900">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Form Tambah Data Mobil</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Form Tambah Data Paket</h2>
 
                 @if ($errors->any())
                 <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">

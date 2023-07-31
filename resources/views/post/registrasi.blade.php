@@ -23,7 +23,7 @@
               <div class="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
                 <h5>Registrasi</h5>
               </div>
-              @if ($errors->any())
+              {{-- @if ($errors->any())
               <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-white dark:text-red-400" role="alert">
                   <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                   <span class="sr-only">Danger</span>
@@ -36,35 +36,53 @@
                       </ul>
                   </div>
               </div>
-              @endif
+              @endif --}}
               <div class="flex-auto p-6">
                 <form action="{{ route('processregistrasi') }}" method="post">
                   {{ csrf_field() }}
                   <label class="mb-2 ml-1 cursor-pointer select-none text-sm font-bold text-slate-700" for="nama"> Masukan Data Diri</label>
                   <div class="mb-4">
                     <input type="text" id="nama" name="nama" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Nama" aria-label="Nama" aria-describedby="email-addon" />
+                    @error('nama')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
                   </div>
                   <div class="mb-4">
                     <input type="text" id="no_telp" name="no_telp" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="No Telpon (08123345)" aria-label="No Telp" aria-describedby="email-addon" />
+                    @error('no_telp')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
                   </div>
                   <div class="mb-4">
                     <input type="text" id="alamat" name="alamat" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Alamat" aria-label="Alamat" aria-describedby="password-addon" />
+                    @error('alamat')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
                   </div>
                   
                   <label class="mb-2 ml-1 cursor-pointer select-none text-sm font-bold text-slate-700" for="nama"> Konfirmasi Akun</label>
                   <div class="mb-4">
                     <input type="email" id="email" name="email" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Email" aria-label="Email" aria-describedby="email-addon" />
+                    @error('email')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
                   </div>
                   <div class="mb-4">
                     <input type="password" id="password" name="password" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Password" aria-label="Password" aria-describedby="password-addon" />
+                    @error('password')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
                   </div>
                   <div class="mb-4">
                     <input type="password" id="password_confirm" name="password_confirm" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Konfirmasi Password" aria-label="Password" aria-describedby="password-addon" />
+                    @error('password_confirm')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
                   </div>
-                  <div class="min-h-6 pl-6.92 mb-0.5 block">
+                  {{-- <div class="min-h-6 pl-6.92 mb-0.5 block">
                     <input id="terms" class="w-4.92 h-4.92 ease-soft -ml-6.92 rounded-1.4 checked:bg-gradient-to-tl checked:from-gray-900 checked:to-slate-800 after:text-xxs after:font-awesome after:duration-250 after:ease-soft-in-out duration-250 relative float-left mt-1 cursor-pointer appearance-none border border-solid border-slate-200 bg-white bg-contain bg-center bg-no-repeat align-top transition-all after:absolute after:flex after:h-full after:w-full after:items-center after:justify-center after:text-white after:opacity-0 after:transition-all after:content-['\f00c'] checked:border-0 checked:border-transparent checked:bg-transparent checked:after:opacity-100" type="checkbox" value="" checked />
                     <label class="mb-2 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700" for="terms"> I agree the <a href="javascript:;" class="font-bold text-slate-700">Terms and Conditions</a> </label>
-                  </div>
+                  </div> --}}
                   <div class="text-center">
                     <button type="submit" class="inline-block w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white">Registrasi</button>
                   </div>

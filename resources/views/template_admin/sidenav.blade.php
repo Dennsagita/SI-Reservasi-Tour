@@ -38,7 +38,9 @@
 
        <li class="mt-0.5 w-full">
          <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors
-         {{ request()->segment(1) == 'pemesanan' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}"
+         {{ request()->segment(1) == 'pemesanan' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+         {{ request()->segment(1) == 'pemesanan-edit' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+         {{ request()->segment(1) == 'pemesanan-detail' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}"
           href="{{ route('pemesanan') }}">
            <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center fill-current stroke-0 text-center xl:p-2.5">
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
@@ -114,7 +116,9 @@
        <li class="mt-0.5 w-full">
         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors 
         {{ request()->segment(1) == 'pengemudi' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }} 
-        {{ request()->segment(1) == 'pengemudi-add' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
+        {{ request()->segment(1) == 'pengemudi-add' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+        {{ request()->segment(1) == 'pengemudi-edit' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+        {{ request()->segment(1) == 'pengemudi-detail' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
         href="{{ route('pengemudi') }}">
            <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
              <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -306,7 +310,9 @@
       <li class="mt-0.5 w-full">
         @if (Str::length(Auth::guard('pengemudi')->user()) > 0)
         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors
-        {{ request()->segment(1) == 'profile-pengemudi' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
+        {{ request()->segment(1) == 'profile-pengemudi' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }} 
+        {{ request()->segment(1) == 'password-pengemudi' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}
+        {{ request()->segment(1) == 'profile-editPengemudi' ? 'shadow-soft-xl rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 font-semibold text-white' : '' }}" 
         href="{{ route('profilepengemudi') }}">
           <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">

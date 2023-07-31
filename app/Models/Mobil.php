@@ -37,7 +37,7 @@ class Mobil extends Model
         'keterangan',
     ];
 
-     //relation
+      //relation
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
@@ -59,7 +59,7 @@ class Mobil extends Model
                     'src' => 'images/' . $uploaded['src']->basename,
                     'alt' => Image::getAlt($image),
                     'imageable_id' => $mobil->id,
-                    'imageable_type' => "App\Models\Mobil"
+                    'imageable_type' => "App\Models\mobil"
                 ]);
             }
         });
@@ -85,7 +85,7 @@ class Mobil extends Model
                     'src' => 'images/' . $uploaded['src']->basename,
                     'alt' => Image::getAlt($image),
                     'imageable_id' => $mobil->id,
-                    'imageable_type' => "App\Models\Mobil"
+                    'imageable_type' => "App\Models\mobil"
                 ]);
             }
         });
@@ -102,10 +102,6 @@ class Mobil extends Model
 
         self::deleted(function ($mobil) {
         });
-
-        // self::deleted(function ($model) {
-        //     Paket::whereIn('id', $model->paket->map(fn ($item) => $item->id))->update(['id_mobil', NULL]);
-        // });
     }
     
 }

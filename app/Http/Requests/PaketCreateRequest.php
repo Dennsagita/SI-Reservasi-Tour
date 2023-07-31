@@ -26,14 +26,15 @@ class PaketCreateRequest extends FormRequest
         return [
             'nama' => 'required',
             'destinasi' => 'required',
-            'id_mobil' => 'required',
+            'keterangan' => 'required',
+            'harga' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'id_mobil' => 'mobil',
+            // 'id_mobil' => 'mobil',
         ];
     }
 

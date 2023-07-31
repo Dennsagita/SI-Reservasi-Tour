@@ -50,15 +50,24 @@
                         </div>
                     </div>
                     <div class="upload__box">
+                        @error('images[]')
+                        <small class="text-xs text-red-500 ml-1">{{ '*' . $message }}</small>
+                        @enderror
                         <div class="upload__btn-box">
                             <label class="upload__btn btn btn-primary">
-                                <p class="">Unggah Gambar  
-                                </p>
-                                <input type="file" name="images[]"  multiple data-max_length="20"
-                                    class="upload__inputfile">
+                                <p>Choose An Image</p>
+                                <input type="file" name="image" accept="image/*" multiple data-max_length="20" class="upload__inputfile">
                             </label>
                         </div>
-                        <div class="upload__img-wrap"></div>
+                        <div class="upload__img-wrap">
+                            @foreach ($paket->images as $item => $image)
+                            <div class='upload__img-box'>
+                                <div style='background-image: url({{ asset('storage/' . $image->src) }})' data-number='{{ $paket }}' data-id="{{ $image->id }}" data-file='{{ 'storage/' . $image->src }}' class='img-bg'>
+                                    <div class='upload__img-close'></div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
                     <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                         Ubah Data Paket

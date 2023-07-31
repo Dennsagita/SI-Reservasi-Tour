@@ -83,7 +83,7 @@
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Jam Berangkat</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Bukti DP</th>
-                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Pemesanan</th>
+                  {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Pemesanan</th> --}}
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pengemudi|Mobil</th>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                 </tr>
@@ -139,10 +139,10 @@
                   @endif
                 </td>
               
-                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     @if ($item->paket->mobil1 && $item->paket->mobil1->count() > 0)
                         @foreach ($item->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil)
+                            @if ($mobil->pivot->konfirmasi && $mobil->id == $item->paket->id_mobil)
                                 @if ($mobil->pengemudi)
                                     <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
                                 @endif
@@ -160,7 +160,7 @@
                       <a href="{{ route('pilihMobil', ['id_mobil' => $mobil->id]) }}">{{ $mobil->nama_mobil }}</a>
                   @endforeach
                 @endif
-                </td>
+                </td> --}}
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                            
                             <button class=" text-white bg-slate-700 hover:bg-slate-900 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
@@ -220,7 +220,7 @@
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Bukti DP</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Pemesanan</th>
-                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pengemudi|Mobil</th>
+                  {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pengemudi|Mobil</th> --}}
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                 </tr>
               </thead>
@@ -275,7 +275,7 @@
                   @endif
                 </td>
               
-                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent"> --}}
                   {{-- <h6 class="mb-0 leading-normal text-sm">{{ $item2->mobil->nama_mobil }}</h6>
                   <p class="mb-0 leading-tight text-xs text-slate-400"></p> --}}
                   {{-- @if ($item2->paket && $item2->paket->mobil && $item2->paket->mobil->pengemudi) 
@@ -290,7 +290,7 @@
                     @else
                     -
                     @endif</p> --}}
-                    @if ($item2->paket->mobil1 && $item2->paket->mobil1->count() > 0)
+                    {{-- @if ($item2->paket->mobil1 && $item2->paket->mobil1->count() > 0)
                         @foreach ($item2->paket->mobil1 as $mobil)
                             @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item2->paket->id_mobil)
                                 @if ($mobil->pengemudi)
@@ -304,13 +304,13 @@
                         @endforeach
                     @else
                     <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
-                    @endif
-                @if ($id_mobil && count($id_mobil) > 1)
+                    @endif --}}
+                {{-- @if ($id_mobil && count($id_mobil) > 0)
                   @foreach ($id_mobil as $mobil)
                       <a href="{{ route('pilihMobil', ['id_mobil' => $mobil->id]) }}">{{ $mobil->nama_mobil }}</a>
                   @endforeach
-                @endif
-                </td>
+                @endif 
+                </td>--}}
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                   {{-- <button class=" text-white bg-slate-700 hover:bg-slate-900 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
                     onclick="window.location.href='pemesanan-edit/{{ $item2->id }}'">

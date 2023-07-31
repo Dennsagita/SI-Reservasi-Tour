@@ -3,13 +3,19 @@
 namespace App\Models;
 
 use App\Models\Mobil;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Iluminate\Contrsct\Auth\MustVerifyEmail;
+// use Illuminate\Auth\Passwords\CanResetPassword;
+// use Laravel\Sanctum\HasApiTokens;
+// use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Notifications\Notifiable;
+// use Iluminate\Contrsct\Auth\MustVerifyEmail;
+// use Illuminate\Database\Eloquent\Factories\HasFactory;
+// use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Image;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Pengemudi extends Authenticatable
 {
@@ -91,7 +97,7 @@ class Pengemudi extends Authenticatable
                 'src' => 'images/' . $uploaded['src']->basename,
                 'alt' => Image::getAlt($image),
                 'imageable_id' => $pengemudi->id,
-                'imageable_type' => "App\Models\pengemudi",
+                'imageable_type' => "App\Models\Pengemudi",
             ]);
         }
         });

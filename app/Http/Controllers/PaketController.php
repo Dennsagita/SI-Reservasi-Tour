@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Image;
 use App\Models\Mobil;
 use App\Models\Paket;
 use App\Models\PaketMobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\MobilCreateRequest;
 use App\Http\Requests\PaketCreateRequest;
 
@@ -144,6 +146,36 @@ class PaketController extends Controller
         if ($paket1) {
         Session::flash('edit', 'success');
         Session::flash('textedit', 'Ubah Data paket Berhasil');
+        }
+
+        $paketimage = Paket::findOrfail($id);
+
+        // Hapus gambar lama hanya jika ada gambar baru yang diunggah
+    if ($request->hasFile('image')) {
+        $paketimage = Paket::findOrFail($id);
+
+        // Hapus gambar lama jika ada
+        if ($paketimage->images->isNotEmpty()) {
+            foreach ($paketimage->images as $image) {
+                // Hapus gambar dari penyimpanan
+                Storage::delete($image);
+                // Hapus record gambar dari database
+                $image->delete();
+            }
+        }
+
+        // Upload dan simpan gambar baru jika ada
+        $imagePath = $request->file('image')->store('images', 'public');
+        $image = Image::create([
+            'path' => $imagePath,
+            'src' => $imagePath, // Berikan nilai 'src' sesuai dengan 'path'
+            'thumb' => $imagePath,
+            'alt' => $imagePath,
+            'imageable_id' => $paket1->id, // Berikan nilai 'imageable_id'
+            'imageable_type' => 'App\Models\paket', // Sesuaikan dengan tipe model yang berelasi
+        ]);
+        // Asosiasikan gambar dengan entitas menggunakan relasi polimorfik
+        $paket1->images()->saveMany([$image]);
         }
         return redirect('/paket');
     }

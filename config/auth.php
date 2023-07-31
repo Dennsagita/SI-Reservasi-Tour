@@ -118,6 +118,18 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'pengemudi' => [
+            'provider' => 'pengemudis',
+            'table' => 'password_resets_pengemudis',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admin' => [
+            'provider' => 'admins',
+            'table' => 'password_resets_admins',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     /*

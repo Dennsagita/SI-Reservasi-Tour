@@ -89,19 +89,20 @@ Route::middleware('auth:admin')->group(function () {
     // Route::get('/pemesanan-pengemudi-batal/{id}', [PemesananController::class, 'detailPemesananPengemudiBatal'])->name('detailPemesananPengemudiBatal');
 
     Route::get('/pengemudi', [PengemudiController::class, 'index'])->name('pengemudi');
-    Route::get('/pengemudi-add', [PengemudiController::class, 'create']);
-    Route::post('/pengemudi-insert', [PengemudiController::class, 'store']);
+    Route::get('/pengemudi-add', [PengemudiController::class, 'create'])->name('add-pengemudi');
+    Route::post('/pengemudi-insert', [PengemudiController::class, 'store'])->name('insert-pengemudi');
     Route::get('/pengemudi-edit/{id}', [PengemudiController::class, 'edit'])->name('editPengemudi');
     Route::put('/pengemudi/{id}', [PengemudiController::class, 'update']);
-    Route::delete('/pengemudi-delete/{id}', [PengemudiController::class, 'delete'])->name('hapusPengemudi');
+    Route::delete('/pengemudi-delete/{id}', [PengemudiController::class, 'deletePengemudi'])->name('hapusPengemudi');
+    Route::get('/pengemudi-detail/{id}', [PengemudiController::class, 'show'])->name('detailPengemudi');
 
     Route::get('/mobil', [MobilController::class, 'index'])->name('mobil');
     Route::get('/mobil-add', [MobilController::class, 'create'])->name('mobil-add');
-    Route::post('/mobil-insert', [MobilController::class, 'store']);
+    Route::post('/mobil-insert', [MobilController::class, 'store'])->name('tambahMobil');
     Route::get('/mobil-detail/{id}', [MobilController::class, 'show']);
     Route::get('/mobil-edit/{id}', [MobilController::class, 'edit']);
     Route::put('/mobil/{id}', [MobilController::class, 'update']);
-    Route::delete('/mobil-delete/{id}', [MobilController::class, 'delete']);
+    Route::delete('/mobil-delete/{id}', [MobilController::class, 'delete'])->name('hapusMobil');
 
     Route::get('/paket', [PaketController::class, 'index'])->name('managepaket');
     Route::post('/paket-konfirmasi', [PaketController::class, 'confirmPaket'])->name('confirmPaket');
@@ -110,7 +111,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/paket-detail/{id}', [PaketController::class, 'show'])->name('paket-detail');
     Route::get('/paket-edit/{id}', [PaketController::class, 'edit'])->name('paket-edit');
     Route::put('/paket/{id}', [PaketController::class, 'update']);
-    Route::delete('/paket-delete/{id}', [PaketController::class, 'delete']);
+    Route::delete('/paket-delete/{id}', [PaketController::class, 'delete'])->name('hapus-paket');
     Route::post('/hapuspaket', [PaketController::class, 'hapusPaket'])->name('hapusPaket');
 
 

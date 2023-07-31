@@ -12,7 +12,7 @@
         <div class="flex flex-wrap -mx-3">
         <div class="flex-none w-auto max-w-full px-3">
             <div class="text-base ease-soft-in-out h-18.5 w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200">
-                <img src="{{  asset($pengemudi->images->count() ? 'storage/' . $pengemudi->images->first()->src : 'assets/images/blog/user-1.png') }}" alt="" class="w-full shadow-soft-sm rounded-xl" />
+                <img src="{{  asset($pengemudi->images->count() ? 'storage/' . $pengemudi->images->first()->src : 'assets/images/blog/profilnone.png') }}" alt="" class="w-full shadow-soft-sm rounded-xl" />
             </div>
         </div>
         <div class="flex-none w-auto max-w-full px-3 my-auto">
@@ -32,15 +32,19 @@
           <div class="border-black/12.5 shadow-soft-xl relative flex h-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
               <div class="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0">
               <h6><i class="fa-solid fa-user"></i>  Profil Akun</h6>
-              <div class="flex-auto p-4">
+            <div class="flex-auto p-4">
                 <div class="before:border-r-solid relative before:absolute before:top-0 before:left-4 before:h-full before:border-r-2 before:border-r-slate-100 before:content-[''] before:lg:-ml-px">
                   <ul class="flex flex-col pl-0 mb-0 rounded-lg">
+                    @foreach($mobils as $mobil)
                     <li class="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong class="text-slate-700">Nama :</strong> &nbsp; {{ Auth::guard('pengemudi')->user()->nama }}</li>
                     <li class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong class="text-slate-700">No Telphone :</strong> &nbsp; {{ Auth::guard('pengemudi')->user()->no_telp }}</li>
                     <li class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong class="text-slate-700">Email :</strong> &nbsp; {{ Auth::guard('pengemudi')->user()->email }}</li>
                     <li class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong class="text-slate-700">Alamat :</strong> &nbsp; {{ Auth::guard('pengemudi')->user()->alamat }}</li>
+                    <li class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong class="text-slate-700">No Plat :</strong> &nbsp;{{ $mobil->no_plat_mobil }}</li>
+                    <li class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong class="text-slate-700">Nama Mobil :</strong> &nbsp; {{ $mobil->merk }} {{ $mobil->nama_mobil }}</li>
                     <li class="relative block px-4 py-2 pb-0 pl-0 bg-white border-0 border-t-0 rounded-b-lg text-inherit">
                     </li>
+                    @endforeach
                   </ul>
                 </div>
                 <button class="w-full rounded-md bg-blue-500 px-8 py-2.5 font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 duration-200 sm:w-auto"><a href="{{ route('profileEditPengemudi') }}">Ubah Profil</a></button>
@@ -49,13 +53,14 @@
             </div>
         </div>
         
+        
         <!-- card 1 -->
 
         <div class="w-full max-w-full px-3 mt-0 mb- md:mb-6 md:w-1/2 md:flex-none lg:w-2/3 lg:flex-none mb-mobile:mb-6">
-            
-        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8">
-            <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Work fast from anywhere</h5>
-            <p class="mb-5 text-base text-gray-500 sm:text-lg">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
+        <div class="w-full mt-5 p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8">
+            <div class="before:border-r-solid relative before:absolute before:top-0 before:left-4 before:h-full  before:lg:-ml-px">
+            <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Amankan Akun Anda</h5>
+            <p class="mb-5 text-base text-gray-500 sm:text-lg">Ubah password anda secara berskala</p>
             <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
                 <a href="{{ route('resetpasswordPengemudi') }}" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                     <div class="text-left">

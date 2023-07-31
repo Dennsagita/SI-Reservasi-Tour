@@ -47,7 +47,7 @@ class MobilController extends Controller
             Session::flash('status', 'success');
             Session::flash('message', 'Tambah Data Mobil Berhasil');
         }
-        return redirect('/login');
+        return redirect()->route('login')->with('registrasiBerhasil', true);
     }
     public function create()
     {
@@ -67,8 +67,10 @@ class MobilController extends Controller
         if ($mobil) {
             Session::flash('status', 'success');
             Session::flash('message', 'Tambah Data Mobil Berhasil');
+            return redirect()->route('mobil');
+        } else {
+            return redirect()->back()->withErrors(['Gagal menambahkan data mobil.']);
         }
-        return redirect()->route('mobil');
     }
 
     public function show(Request $request, $id)
@@ -89,7 +91,7 @@ class MobilController extends Controller
 
     public function update(Request $request, $id)
     {
-        $mobil1 = Mobil::findOrfail($id);
+        // $mobil1 = Mobil::findOrfail($id);
         $mobil = Mobil::findOrFail($id);
         $paketIds = $request->input('paket_ids');
 
@@ -100,17 +102,17 @@ class MobilController extends Controller
             // Jika semua checkbox dikosongkan
             $mobil->paket1()->detach();
         }
-        $mobil1->update($request->all());
-        if ([$mobil1,$mobil]) {
+        $mobil->update($request->all());
+        if ($mobil) {
         Session::flash('edit', 'success');
         Session::flash('textedit', 'Ubah Data Mobil Berhasil');
         }
 
-        $mobilimage = Mobil::findOrfail($id);
+        $mobilimage = mobil::findOrfail($id);
 
         // Hapus gambar lama hanya jika ada gambar baru yang diunggah
     if ($request->hasFile('image')) {
-        $mobilimage = Mobil::findOrFail($id);
+        $mobilimage = mobil::findOrFail($id);
 
         // Hapus gambar lama jika ada
         if ($mobilimage->images->isNotEmpty()) {
@@ -130,7 +132,7 @@ class MobilController extends Controller
             'thumb' => $imagePath,
             'alt' => $imagePath,
             'imageable_id' => $mobil->id, // Berikan nilai 'imageable_id'
-            'imageable_type' => 'App\Models\Mobil', // Sesuaikan dengan tipe model yang berelasi
+            'imageable_type' => 'App\Models\mobil', // Sesuaikan dengan tipe model yang berelasi
         ]);
         // Asosiasikan gambar dengan entitas menggunakan relasi polimorfik
         $mobil->images()->saveMany([$image]);

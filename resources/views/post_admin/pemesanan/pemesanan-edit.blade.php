@@ -43,7 +43,7 @@
                                 <select name="id_mobil" id="id_mobil" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
                                     @foreach ($mobils as $mobil)
                                         <option value="{{ $mobil->id }}" {{ $mobil->id == $pesanan->paket->id_mobil ? 'selected' : '' }}>
-                                            {{ $mobil->merk}} {{ $mobil->nama_mobil}}
+                                            {{ $mobil->pengemudi->nama }} ({{ $mobil->merk}} {{ $mobil->nama_mobil}})
                                         </option>
                                     @endforeach
                                 </select>

@@ -11,6 +11,11 @@ class PaketMobil extends Model
 {
     use HasFactory;
     protected $table = 'paket_mobil';
+    protected $fillable = [
+        'id_paket',
+        'id_mobil',
+        'konfirmasi',
+    ];
 
     public function paket1()
     {

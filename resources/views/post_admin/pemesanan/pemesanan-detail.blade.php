@@ -98,7 +98,7 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Status Pesanan</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->status_pemesanan == 'diterima' || $pemesanan->status_pemesanan == 'batal')
+                        @if ($pemesanan->status_pemesanan == 'diterima' || $pemesanan->status_pemesanan == 'batal' || $pemesanan->status_pemesanan == 'selesai')
                         <p class="text-gray-900 md:w-8/12">{{ $pemesanan->status_pemesanan }}</p>
                         @else
                         <p class="text-gray-900 md:w-8/12">Menunggu Konfirmasi</p>
@@ -124,7 +124,16 @@
                             </div>  
                         </div>
                         <div class="flex items-center hidden">
-                            <input type="text" value="+6281239286291" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                            @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
+                            @foreach ($pemesanan->paket->mobil1 as $mobil)
+                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
+                                    @if ($mobil->pengemudi)
+                                    <input type="text" value="{{ $mobil->pengemudi->no_telp }}" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                    @endif
+                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
+                                @endif
+                            @endforeach
+                            @endif
                         </div>
                         <div class="flex items-center hidden">
                             <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
@@ -148,6 +157,8 @@
                         </div>
                     </form>
                 </div>
+                @elseif ($pemesanan->status_pemesanan === 'selesai')
+
                 @else
                 <div class="mt-6">
                     <form action="{{ route('processPengingatPesanan', ['id' => $pemesanan->id]) }}" method="POST">
@@ -158,7 +169,16 @@
                             </div>  
                         </div>
                         <div class="flex items-center hidden">
-                            <input type="text" value="+6281239286291" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                            @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
+                            @foreach ($pemesanan->paket->mobil1 as $mobil)
+                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
+                                    @if ($mobil->pengemudi)
+                                    <input type="text" value="{{ $mobil->pengemudi->no_telp }}" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                    @endif
+                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
+                                @endif
+                            @endforeach
+                            @endif
                         </div>
                         <div class="flex items-center hidden">
                             <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">

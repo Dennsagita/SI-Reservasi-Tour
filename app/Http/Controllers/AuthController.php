@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegistrasiPengemudiRequest;
+use App\Http\Requests\RegistrasiRequest;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Pengemudi;
@@ -26,16 +28,16 @@ class AuthController extends Controller
         return view('post/registrasi', $data);
     }
 
-    public function processregistrasi(Request $request)
+    public function processregistrasi(RegistrasiRequest $request)
     {
-        $request->validate([
-            'nama' => 'required',
-            'no_telp' => 'required|numeric',
-            'alamat' => 'required',
-            'email' => 'required|unique:users',
-            'password' => 'required',
-            'password_confirm' => 'required|same:password',
-        ]);
+        // $request->validate([
+        //     'nama' => 'required',
+        //     'no_telp' => 'required|numeric',
+        //     'alamat' => 'required',
+        //     'email' => 'required|unique:users',
+        //     'password' => 'required',
+        //     'password_confirm' => 'required|same:password',
+        // ]);
 
         $user = new User([
             'nama' => $request->nama,
@@ -55,16 +57,16 @@ class AuthController extends Controller
         return view('post/registrasi-pengemudi', $data);
     }
 
-    public function processregistrasipengemudi(Request $request)
+    public function processregistrasipengemudi(RegistrasiPengemudiRequest $request)
     {
-        $request->validate([
-            'nama' => 'required',
-            'no_telp' => 'required|numeric',
-            'alamat' => 'required',
-            'email' => 'required|unique:users',
-            'password' => 'required',
-            'password_confirm' => 'required|same:password',
-        ]);
+        // $request->validate([
+        //     'nama' => 'required',
+        //     'no_telp' => 'required|numeric',
+        //     'alamat' => 'required',
+        //     'email' => 'required|unique:users',
+        //     'password' => 'required',
+        //     'password_confirm' => 'required|same:password',
+        // ]);
 
         $pengemudi = new Pengemudi([
             'nama' => $request->nama,
@@ -129,8 +131,10 @@ class AuthController extends Controller
             $user = User::find(Auth::id());
             $user->password = Hash::make($request->new_password);
             $user->save();
+             // Logout pengguna setelah berhasil update password
+            Auth::guard('user')->logout();
             $request->session()->regenerate();
-            return redirect()->intended('/home');
+            return redirect()->intended(route('login'))->with('ubahPassword', 'Password Berhasil Diubah');
         }elseif(Str::length(Auth::guard('admin')->user()) > 0){
             $admin = Admin::find(Auth::id());
             $admin->password = Hash::make($request->new_password);
@@ -151,12 +155,53 @@ class AuthController extends Controller
         return view('post.lupa-password');
     }
 
+    // public function processLupaPassword(Request $request)
+    // {
+    //     $request->validate(['email' => ' required|email']);
+    //     $status = Password::sendResetLink(
+    //         $request->only('email')
+    //     );
+    //     return $status === Password::RESET_LINK_SENT
+    //         ? back()->with(['status' => __($status)])
+    //         : back()->withErrors(['email' => __($status)]);
+    // }
     public function processLupaPassword(Request $request)
     {
-        $request->validate(['email' => ' required|email']);
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $request->validate(['email' => 'required|email']);
+    
+        // Cek apakah email ada pada tabel User
+        $user = User::where('email', $request->email)->first();
+    
+        // Cek apakah email ada pada tabel Pengemudi jika belum ada di tabel User
+        if (!$user) {
+            $pengemudi = Pengemudi::where('email', $request->email)->first();
+        }
+    
+        // Cek apakah email ada pada tabel Admin jika belum ada di tabel User atau Pengemudi
+        if (!$user && !$pengemudi) {
+            $admin = Admin::where('email', $request->email)->first();
+        }
+    
+        // Jika email ada pada tabel User, gunakan metode sendResetLink untuk tabel User
+        if ($user) {
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
+        } elseif ($pengemudi) {
+            // Jika email ada pada tabel Pengemudi, gunakan metode sendResetLink untuk tabel Pengemudi
+            $status = Password::broker('pengemudi')->sendResetLink(
+                $request->only('email')
+            );
+        } elseif ($admin) {
+            // Jika email ada pada tabel Admin, gunakan metode sendResetLink untuk tabel Admin
+            $status = Password::broker('admin')->sendResetLink(
+                $request->only('email')
+            );
+        } else {
+            // Jika email tidak ada di semua tabel, kembalikan dengan pesan error
+            return back()->withErrors(['email' => 'Email tidak ditemukan']);
+        }
+    
         return $status === Password::RESET_LINK_SENT
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
@@ -174,39 +219,59 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:3|confirmed',
         ]);
-    
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (Model $model, string $password) {
-                // Lakukan pengecekan tipe model dan sesuaikan tindakan reset password
-                if ($model instanceof User) {
-                    // Jika model adalah User
-                    $model->forceFill([
+
+        $user = User::where('email', $request->email)->first();
+        $pengemudi = Pengemudi::where('email', $request->email)->first();
+        $admin = Admin::where('email', $request->email)->first();
+
+        if ($user) {
+            $status = Password::broker('users')->reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user, $password) {
+                    $user->forceFill([
                         'password' => Hash::make($password)
                     ])->setRememberToken(Str::random(60));
-                } elseif ($model instanceof Pengemudi) {
-                    // Jika model adalah Pengemudi
-                    $model->forceFill([
-                        'password' => Hash::make($password)
-                    ])->setRememberToken(Str::random(60));
-                } elseif ($model instanceof Admin) {
-                    // Jika model adalah Admin
-                    $model->forceFill([
-                        'password' => Hash::make($password)
-                    ])->setRememberToken(Str::random(60));
+
+                    $user->save();
+
+                    event(new \Illuminate\Auth\Events\PasswordReset($user));
                 }
-    
-                $model->save();
-    
-                event(new PasswordReset($model));
-            }
-        );
-    
+            );
+        } elseif ($pengemudi) {
+            $status = Password::broker('pengemudi')->reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($pengemudi, $password) {
+                    $pengemudi->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
+
+                    $pengemudi->save();
+
+                    event(new \Illuminate\Auth\Events\PasswordReset($pengemudi));
+                }
+            );
+        } elseif ($admin) {
+            $status = Password::broker('admin')->reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($admin, $password) {
+                    $admin->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
+
+                    $admin->save();
+
+                    event(new \Illuminate\Auth\Events\PasswordReset($admin));
+                }
+            );
+        } else {
+            // Jika email tidak ditemukan dalam ketiga tabel, tampilkan pesan error
+            return back()->withErrors(['email' => 'Email not found']);
+        }
+
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }
-
     public function logout(Request $request)
     {
         Auth::logout();

@@ -33,7 +33,7 @@ class UserController extends Controller
     //     $data = ['user' => $user] ;
     //     return view('post/profile', $data);
     // }
-
+    // tampil profile detail
     public function profiledetail(User $user)
     {
         $data = ['user' => $user->where('id', auth()->user()->id)->first()] ;
@@ -67,7 +67,7 @@ class UserController extends Controller
         
         if ($user) {
             Session::flash('status', 'success');
-            Session::flash('message', 'Tambah Data user Berhasil');
+            Session::flash('message', 'Tambah Data Pengguna Berhasil');
         }
         return redirect()->route('pengguna');
     }
@@ -93,7 +93,8 @@ class UserController extends Controller
         }
         return redirect()->route('pengguna');
     }
-    //ubah profile
+
+    //proses ubah profile
     public function profile(Request $request)
     {
         $user = User::find(Auth::id());
@@ -101,7 +102,7 @@ class UserController extends Controller
         if ($user) {
         Session::flash('edit', 'success');
         Session::flash('textedit', 'Ubah Data Mobil Berhasil');
-        }
+    }
         // Validasi input jika diperlukan
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',

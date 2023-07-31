@@ -44,7 +44,7 @@
               <div class="p-0 overflow-x-auto flex items-center justify-between">
               <div class="ml-5">
                   <button class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">
-                      <a href="{{ route('pengguna-add') }}">Tambah Data</a>
+                      <a href="{{ route('mobil-add') }}">Tambah Data</a>
                   </button>
               </div>
       
@@ -102,7 +102,7 @@
                               onclick="window.location.href='mobil-edit/{{ $item->id }}'">
                               <i class="fa-solid fa-pen-to-square"></i>
                               </button>
-                              <button data-modal-target="popup-modal-2" data-modal-toggle="popup-modal-2" class=" text-white bg-pink-800 hover:bg-pink-900 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                              {{-- <button data-modal-target="popup-modal-2" data-modal-toggle="popup-modal-2" class=" text-white bg-pink-800 hover:bg-pink-900 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                 <i class="fa-solid fa-trash"></i>
                               </button>
 
@@ -116,7 +116,7 @@
                                           <div class="p-6 text-center">
                                               <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                               <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Yakin Ingin Menghapus Data Mobil Ini?</h3>
-                                              <form action="mobil-delete/{{ $item->id }}" method="POST">
+                                              <form action="{{ route('hapusMobil', $item->id) }}" method="POST">
                                               @csrf
                                               @method('delete')
                                               <button data-modal-hide="popup-modal-2" type="submit" class="text-white bg-pink-800 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
@@ -127,7 +127,7 @@
                                           </div>
                                       </div>
                                   </div>
-                              </div>
+                              </div> --}}
                               <button class=" text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-bg-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
                               onclick="window.location.href='mobil-detail/{{ $item->id }}'">
                                 <i class="fa-solid fa-circle-info"></i>

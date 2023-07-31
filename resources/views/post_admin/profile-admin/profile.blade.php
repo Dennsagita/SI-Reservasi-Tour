@@ -54,8 +54,8 @@
         <div class="w-full max-w-full px-3 mt-0 mb-2 md:mb-6 md:w-1/2 md:flex-none lg:w-2/3 lg:flex-none mb-mobile:mb-6 sm:b-15">
             
         <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-10">
-            <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Work fast from anywhere</h5>
-            <p class="mb-5 text-base text-gray-500 sm:text-lg">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
+            <h5 class="mb-2 text-3xl font-bold text-gray-900 ">Amankan Akun Anda</h5>
+            <p class="mb-5 text-base text-gray-500 sm:text-lg">Ubah password anda secara berskala</p>
             <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
                 <a href="{{ route('resetpasswordAdmin') }}" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                     <div class="text-left">

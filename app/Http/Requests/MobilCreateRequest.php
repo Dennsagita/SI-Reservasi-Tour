@@ -24,26 +24,31 @@ class MobilCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'no_plat_mobil' => 'unique:mobils|max:11',
-            'id_pengemudi' => 'unique:mobils',
+            'no_plat_mobil' => 'required|unique:mobils|max:11',
+            'id_pengemudi' => 'required|unique:mobils',
             'merk' => 'required',
             'nama_mobil' => 'required|max:80',
-            'paket' => 'unique:mobils',
+            // 'paket' => 'required|unique:mobils',
         ];
     }
 
     public function attributes()
     {
         return [
-            'id_pengemudi' => 'pemilik',
+            'no_plat_mobil' => 'Nomor Plat Mobil',
+            'id_pengemudi' => 'Pengemudi',
+            'merk' => 'Merk Mobil',
+            'nama_mobil' => 'Nama Mobil',
         ];
     }
 
     public function messages()
     {
         return [
-            'id_pengemudi' => 'Pemilik Sudah Terdaftar Mempunyai Mobil',
-            'no_plat_mobil' => 'No Plat Mobil maksimal :max karakter'
+            // 'paket' => 'Paket',
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute sudah terdaftar.',
+            'max' => ':attribute maksimal :max karakter.',
         ];
         
     }

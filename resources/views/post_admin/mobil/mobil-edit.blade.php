@@ -84,7 +84,7 @@
                             <div class="upload__img-wrap">
                                 @foreach ($mobil->images as $item => $image)
                                 <div class='upload__img-box'>
-                                    <div style='background-image: url({{ asset('storage/' . $image->src) }})' data-number='{{ $item }}' data-id="{{ $image->id }}" data-file='{{ 'storage/' . $image->src }}' class='img-bg'>
+                                    <div style='background-image: url({{ asset('storage/' . $image->src) }})' data-number='{{ $mobil }}' data-id="{{ $image->id }}" data-file='{{ 'storage/' . $image->src }}' class='img-bg'>
                                         <div class='upload__img-close'></div>
                                     </div>
                                 </div>

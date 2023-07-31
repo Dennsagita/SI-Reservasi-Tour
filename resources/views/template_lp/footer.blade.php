@@ -10,19 +10,13 @@
       </div>
       <div class="flex-shrink-0 w-full max-w-full mx-auto mt-2 mb-6 text-center lg:flex-0 lg:w-8/12">
         <a href="javascript:;" target="_blank" class="mr-6 text-white">
-          <span class="text-lg fab fa-dribbble"></span>
-        </a>
-        <a href="javascript:;" target="_blank" class="mr-6 text-white">
-          <span class="text-lg fab fa-twitter"></span>
+          <span class="text-lg fab fa-facebook"></span>
         </a>
         <a href="javascript:;" target="_blank" class="mr-6 text-white">
           <span class="text-lg fab fa-instagram"></span>
         </a>
         <a href="javascript:;" target="_blank" class="mr-6 text-white">
-          <span class="text-lg fab fa-pinterest"></span>
-        </a>
-        <a href="javascript:;" target="_blank" class="mr-6 text-white">
-          <span class="text-lg fab fa-github"></span>
+          <span class="text-lg fab fa-whatsapp"></span>
         </a>
       </div>
     </div>
