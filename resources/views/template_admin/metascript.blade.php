@@ -157,6 +157,34 @@ btnRight.addEventListener('click',function(){
     });
 </script>
 
+{{-- <!-- Javascript untuk ubah password popup  -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen modal
+        const modal = document.getElementById('ubahPassword');
+        
+        // Periksa apakah login berhasil (Anda dapat mengatur nilai ini di controller login)
+        const loginBerhasil = {{ session('ubahPassword') ? 'true' : 'false' }};
+        
+        // Periksa apakah login berhasil dan tampilkan modal
+        if (loginBerhasil) {
+            modal.classList.remove('hidden');
+        }
+        
+        // Fungsi untuk menyembunyikan modal
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+        
+        // Tambahkan event listener ke tombol OK pada modal
+        const closeButton = modal.querySelector('[data-modal-hide="ubahPassword"]');
+        closeButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.querySelector('body').classList.remove('overflow-hidden'); // Mengaktifkan scroll pada body
+        });
+    });
+</script> --}}
+
 <script>
     tinymce.init({
     selector: '#keterangan',

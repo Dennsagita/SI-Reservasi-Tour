@@ -56,7 +56,7 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                         @foreach ($pemesanan->paket->mobil1 as $mobil)
                             @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                 @if ($mobil->pengemudi)
@@ -70,7 +70,7 @@
                     <div class="mb-4 md:flex items-center">
                         <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
                         <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 1)
+                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
                             @foreach ($pemesanan->paket->mobil1 as $mobil)
                                 @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
                                     @if ($mobil->pengemudi)

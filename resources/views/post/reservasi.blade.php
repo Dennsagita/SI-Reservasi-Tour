@@ -58,7 +58,7 @@
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                             <div class="sm:col-span-2 hidden">
                                 <label for="id_user" class="block mb-2 text-sm font-medium text-gray-900">Id User</label>
-                                <input type="text" name="id_user" id="id_user" value="{{ Auth::guard('user')->user()->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Id User" required="">
+                                <input type="text" name="id_user" id="id_user" value="{{ Auth::guard('user')->user()->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Id User">
                             </div>
                             <div class="sm:col-span-2">
                                 <label for="id_paket" class="block mb-2 text-sm font-medium text-gray-900">Pilih Paket</label>
@@ -68,39 +68,63 @@
                                     <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                     @endforeach
                                 </select>
+                                @error('id_paket')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full">
                                 <label for="tgl_tour_mulai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Mulai Tour</label>
-                                <input type="date" name="tgl_tour_mulai" id="tgl_tour_mulai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="pilih tanggal" required="">
+                                <input type="date" name="tgl_tour_mulai" id="tgl_tour_mulai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="pilih tanggal">
+                                @error('tgl_tour_mulai')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full">
                                 <label for="tgl_tour_selesai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Selesai Tour</label>
-                                <input type="date" name="tgl_tour_selesai" id="tgl_tour_selesai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
+                                <input type="date" name="tgl_tour_selesai" id="tgl_tour_selesai" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999">
+                                @error('tgl_tour_selesai')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full">
                                 <label for="tgl_berangkat" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Berangkat</label>
-                                <input type="date" name="tgl_berangkat" id="tgl_berangkat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
+                                <input type="date" name="tgl_berangkat" id="tgl_berangkat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999">
+                                @error('tgl_berangkat')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full">
                                 <label for="jam_datang" class="block mb-2 text-sm font-medium text-gray-900">Jam Berangkat</label>
-                                <input type="time" name="jam_datang" id="jam_datang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999" required="">
+                                <input type="time" name="jam_datang" id="jam_datang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999">
+                                @error('jam_datang')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="sm:col-span-2">
                                 <label for="lokasi_penjemputan" class="block mb-2 text-sm font-medium text-gray-900">Lokasi Penjemputan</label>
-                                <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="(Contoh: Lobby Hotel A)" required="">
+                                <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="(Contoh: Lobby Hotel A)">
+                                @error('lokasi_penjemputan')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="sm:col-span-2">
                                 <label for="nominal_dp" class="block mb-2 text-sm font-medium text-gray-900">Nominal DP</label>
-                                <input type="text" name="nominal_dp" id="nominal_dp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
+                                <input type="text" name="nominal_dp" id="nominal_dp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000">
+                                @error('nominal_dp')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="sm:col-span-2">
-                                <label class="block mb-2 text-sm font-medium text-gray-90" for="file_input">Upload Bukti DP</label>
+                                <label class="block mb-2 text-sm font-medium text-gray-90" for="images[]">Upload Bukti DP (Transfer Bank BNI 1728388385)</label>
                                 <input type="file" name="images[]" multiple data-max_length="20" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" aria-describedby="file_input_help" required>
-                                <p class="mt-1 text-sm text-gray-500" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+                                <p class="mt-1 text-sm text-gray-500" id="file_input_help">(MAX. 1 MB).</p>
+                                {{-- @error('images[]')
+                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror --}}
                             </div>
                             <div class="sm:col-span-2 hidden">
                                 <label for="status_pemesanan" class="block mb-2 text-sm font-medium text-gray-900">Status Pemesanan</label>
-                                <input type="text" name="status_pemesanan" id="status_pemesanan" value="baru" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000" required="">
+                                <input type="text" name="status_pemesanan" id="status_pemesanan" value="baru" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="100000">
                             </div>
                         </div>
                         <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-slate-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800">

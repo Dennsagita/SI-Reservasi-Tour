@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegistrasiPengemudiRequest;
-use App\Http\Requests\RegistrasiRequest;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Pengemudi;
@@ -12,8 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\RegistrasiRequest;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use App\Http\Requests\RegistrasiPengemudiRequest;
 
 class AuthController extends Controller
 {
@@ -139,14 +140,18 @@ class AuthController extends Controller
             $admin = Admin::find(Auth::id());
             $admin->password = Hash::make($request->new_password);
             $admin->save();
+             // Logout pengguna setelah berhasil update password
+            //  Auth::guard('admin')->logout();
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('dashboard'))->with('ubahPassword', 'Password Berhasil Diubah');
         }elseif(Str::length(Auth::guard('pengemudi')->user()) > 0){
             $pengemudi = Pengemudi::find(Auth::id());
             $pengemudi->password = Hash::make($request->new_password);
             $pengemudi->save();
+            // Logout pengguna setelah berhasil update password
+            // Auth::guard('pengemudi')->logout();
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('dashboardPengemudi'))->with('ubahPassword', 'Password Berhasil Diubah');
         }
     }
 
@@ -201,7 +206,10 @@ class AuthController extends Controller
             // Jika email tidak ada di semua tabel, kembalikan dengan pesan error
             return back()->withErrors(['email' => 'Email tidak ditemukan']);
         }
-    
+        
+        if ($status) {
+            Session::flash('reset', 'Berhasil melakukan reset password, cek email anda untuk melakukan proses selanjutnya');
+        }
         return $status === Password::RESET_LINK_SENT
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
@@ -277,7 +285,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerate();
-        return redirect('/login');
+        return redirect()->route('login')->with('logout','Berhasil Logout');
 
     
     }

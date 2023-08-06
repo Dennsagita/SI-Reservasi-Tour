@@ -238,7 +238,7 @@
                       @endif
                     </td>
                   
-                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                    {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                         @if ($item->paket->mobil1 && $item->paket->mobil1->count() > 0)
                             @foreach ($item->paket->mobil1 as $mobil)
                                 @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil)
@@ -251,10 +251,10 @@
                                     <br>
                                 @endif
                             @endforeach
-                        @else
-                        <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
+                        @elseif ($item->paket->mobil1 && $item->paket->mobil1->count() === 0)
+                          <h6 class="mb-0 leading-normal text-sm">-</h6>
                         @endif
-                    </td>
+                    </td> --}}
                     </tr>
                     @endforeach
                   </tbody>

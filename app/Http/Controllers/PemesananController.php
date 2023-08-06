@@ -15,6 +15,7 @@ use App\Models\BatalPemesanan;
 use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PemesananRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\PemesananBatalPengemudi;
@@ -171,7 +172,7 @@ class PemesananController extends DomPDF
         }
     }
     
-    public function store(Request $request)
+    public function store(PemesananRequest $request)
     {
         Pemesanan::create($request->all());
         return redirect()->route('index2')->with('pesananBerhasil', true);

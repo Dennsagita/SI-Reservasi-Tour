@@ -19,7 +19,17 @@
                   <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4">
                       {{ $errors->first('gagal-login') }}
                   </div>
-              @endif
+                  @endif
+                  @if(Session::has('logout'))
+                  <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md mb-4">
+                    {{ Session::get('logout') }}
+                  </div>
+                  @endif
+                  @if (session('ubahPassword'))
+                  <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md mb-4">
+                    {{ session('ubahPassword') }}
+                  </div>
+                  @endif
                   <form action="{{route('processlogin')}}" method="post">
                     {{ csrf_field() }}
                     <label for="email" class="mb-2 ml-1 font-bold text-xs text-slate-700">Email</label>

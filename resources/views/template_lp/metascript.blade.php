@@ -130,7 +130,7 @@
         });
     });
 </script>
- <!-- Javascript untuk batal memesan pada pelanggan popup  -->
+ <!-- Javascript untuk ubah password popup  -->
  <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Ambil elemen modal
@@ -151,6 +151,33 @@
         
         // Tambahkan event listener ke tombol OK pada modal
         const closeButton = modal.querySelector('[data-modal-hide="ubahPassword"]');
+        closeButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.querySelector('body').classList.remove('overflow-hidden'); // Mengaktifkan scroll pada body
+        });
+    });
+</script>
+ <!-- Javascript untuk reset password popup  -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen modal
+        const modal = document.getElementById('reset');
+        
+        // Periksa apakah login berhasil (Anda dapat mengatur nilai ini di controller login)
+        const loginBerhasil = {{ session('reset') ? 'true' : 'false' }};
+        
+        // Periksa apakah login berhasil dan tampilkan modal
+        if (loginBerhasil) {
+            modal.classList.remove('hidden');
+        }
+        
+        // Fungsi untuk menyembunyikan modal
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+        
+        // Tambahkan event listener ke tombol OK pada modal
+        const closeButton = modal.querySelector('[data-modal-hide="reset"]');
         closeButton.addEventListener('click', function() {
             modal.classList.add('hidden');
             document.querySelector('body').classList.remove('overflow-hidden'); // Mengaktifkan scroll pada body
