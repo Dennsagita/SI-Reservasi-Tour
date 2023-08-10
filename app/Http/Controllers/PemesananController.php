@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 // use PDF as Pdf;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Image;
 use App\Models\Mobil;
 use App\Models\Paket;
 use App\Mail\SendEmail;
@@ -15,11 +16,12 @@ use App\Models\BatalPemesanan;
 use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PemesananRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\PemesananRequest;
 use App\Models\PemesananBatalPengemudi;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\PesananCreateRequest;
 
 class PemesananController extends DomPDF
@@ -28,13 +30,7 @@ class PemesananController extends DomPDF
     {
         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
         $keyword = @$request['search'];
-        $pemesananList = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])
+        $pemesananList = Pemesanan::with(['paket','user', 'mobil'])
         ->where(function ($query) {
             // Kondisi untuk status "baru" dan "pergantian-pengemudi"
             $query->whereIn('status_pemesanan', ['baru', 'pergantian-pengemudi']);
@@ -53,13 +49,7 @@ class PemesananController extends DomPDF
 
         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
         $keyword = @$request['search2'];
-        $pemesanan2 = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])
+        $pemesanan2 = Pemesanan::with(['paket','user','mobil'])
             ->where('status_pemesanan', 'diterima') // Tambahkan kondisi ini
             ->orderBy('created_at', 'desc');
 
@@ -88,13 +78,7 @@ class PemesananController extends DomPDF
     {
         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
         $keyword = @$request['search'];
-        $pemesanan = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])
+        $pemesanan = Pemesanan::with(['paket', 'user','mobil'])
             ->where('status_pemesanan', 'selesai') // Tambahkan kondisi ini
             ->orderBy('created_at', 'desc');
 
@@ -115,13 +99,7 @@ class PemesananController extends DomPDF
     {
         // Konversi tahun dan bulan menjadi format Carbon
         $tanggal = Carbon::create($tahun, $bulan, 1);
-        $pemesanan = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])
+        $pemesanan = Pemesanan::with(['paket','user','mobil'])
             ->where('status_pemesanan', 'selesai') // Tambahkan kondisi ini
             ->orderBy('created_at', 'asc')
             ->whereYear('created_at', $tanggal->year)
@@ -160,16 +138,31 @@ class PemesananController extends DomPDF
     {
         try {
             $paket = Paket::findOrFail($id);
-    
+            $gambar = $paket->images()->first();
+            $gambarPath = asset('storage/'. $gambar->src);
             return response()->json([
                 'nama' => $paket->nama,
                 'destinasi' => $paket->destinasi,
                 'keterangan' => $paket->keterangan,
-                'harga' => number_format($paket->harga, 0, ',', '.')
+                'harga' => number_format($paket->harga, 0, ',', '.'),
+                'gambar' => $gambarPath,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan saat mengambil informasi paket.'], 500);
         }
+    }
+
+    public function getGambar($id)
+    {
+        $paket = Paket::where('id', $id)->first();
+        if ($paket) {
+            $gambar = $paket->images()->first(); // Menggunakan relasi images
+            if ($gambar) {
+                $gambarPath = asset('storage/' . $gambar->src); // Path gambar
+                return response()->json(['gambar' => $gambarPath]);
+            }
+        }
+        return response()->json(['gambar' => null]);
     }
     
     public function store(PemesananRequest $request)
@@ -198,12 +191,12 @@ class PemesananController extends DomPDF
         ]);
 
         $pemesanan = Pemesanan::findOrFail($id);
-        $paket = $pemesanan->paket;
+        // $paket = $pemesanan->paket;
 
         // Update ID mobil pada model paket
-        $paket->update([
-            'id_mobil' => $request->input('id_mobil'),
-        ]);
+        // $paket->update([
+        //     'id_mobil' => $request->input('id_mobil'),
+        // ]);
 
         // Update data lainnya pada pemesanan jika perlu
         $pemesanan->update($request->all());
@@ -217,13 +210,7 @@ class PemesananController extends DomPDF
 
     public function detailPemesanan($id)
     {
-        $pemesanan = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])->findOrFail($id);
+        $pemesanan = Pemesanan::with(['paket','user','mobil'])->findOrFail($id);
         return view('post_admin.pemesanan.pemesanan-detail', compact('pemesanan'));
     }
 
@@ -328,7 +315,6 @@ class PemesananController extends DomPDF
         // Ubah status pemesanan menjadi "Menunggu Konfirmasi"
         $pemesanan->status_pemesanan = 'baru';
         $pemesanan->save();
-        
         // Redirect ke halaman pemesanan
         return redirect()->route('profile')->with('batalPesanan', true);
     }
@@ -352,39 +338,97 @@ class PemesananController extends DomPDF
 
     public function detailPemesananBatal($id)
     {
+
+        $batalPemesanan = BatalPemesanan::findOrFail($id);
         $batal = BatalPemesanan::with('pemesanan')->findOrFail($id);
-        return view('post_admin.pemesanan.detail-pemesanan-batal', compact('batal'));
+        return view('post_admin.pemesanan.detail-pemesanan-batal', compact('batal','batalPemesanan'));
     }
 
     public function processKonfirmasiBatalPesanan(Request $request, $id)
     {
-        $batalPesanan = Pemesanan::findOrFail($id);
-
+        $batalPesanan = BatalPemesanan::findOrFail($id);
+        $pemesanan = $batalPesanan->pemesanan;
+    
         // Validasi input form konfirmasi batal pesanan
         $request->validate([
             'status_pemesanan' => 'required'
         ]);
+    
+        // Update status pemesanan
+        $pemesanan->update([
+            'status_pemesanan' => $request->input('status_pemesanan'),
+        ]);
+        $pemesanan->update($request->all());
+    
+        $batalPemesananImage = BatalPemesanan::findOrfail($id);
 
-            // Ubah status pemesanan pada pemesanan yang terkait
-        if ($request->status_pemesanan == 'batal') {
-            $batalPesanan->status_pemesanan = 'batal';
-        } else {
-            $batalPesanan->status_pemesanan = 'baru';
+        // Hapus gambar lama hanya jika ada gambar baru yang diunggah
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($batalPemesananImage->images && $batalPemesananImage->images->isNotEmpty()) {
+                foreach ($batalPemesananImage->images as $image) {
+                    // Hapus gambar dari penyimpanan
+                    Storage::delete($image->src); // Pastikan Anda menggunakan properti src
+                    // Hapus record gambar dari database
+                    $image->delete();
+                }
+            }
+
+            // Upload dan simpan gambar baru jika ada
+            $imagePath = $request->file('image')->store('images', 'public');
+            $image = Image::create([
+                'path' => $imagePath,
+                'src' => $imagePath,
+                'thumb' => $imagePath,
+                'alt' => $imagePath,
+                'imageable_id' => $batalPemesananImage->id,
+                'imageable_type' => 'App\Models\BatalPemesanan',
+            ]);
+            // Asosiasikan gambar dengan entitas menggunakan relasi polimorfik
+            $batalPemesananImage->images()->saveMany([$image]);
         }
-        $batalPesanan->save();
 
-        // Ubah status pemesanan pada batal pesanan itu sendiri
-        $batalPesanan->status_pemesanan = $request->status_pemesanan;
-        $batalPesanan->save();
-
-        // Redirect ke halaman pemesanan
-        return redirect()->route('pemesananBatal')->with('status', 'Konfirmasi batal pesanan berhasil');
+          // Redirect ke halaman pemesanan
+          return redirect()->route('pemesananBatal')->with('status', 'Konfirmasi batal pesanan berhasil');
     }
+
 
     public function detailPemesananPengemudiBatal($id)
     {
         $batal = PemesananBatalPengemudi::with('pemesanan')->findOrFail($id);
         return view('post_admin.pemesanan.detail-pemesanan-batal', compact('batal'));
+    }
+
+    //menampilkan informasi mobil, pengemudi pada form ubah pesanan
+    public function apiGetMobil($id)
+    {
+        $mobil = Mobil::findOrFail($id);
+
+        $pemesanans = Pemesanan::where('id_mobil', $mobil->id)
+        ->where(function($query) {
+            $query->where('status_pemesanan', 'diterima')
+                  ->orWhere('status_pemesanan', 'baru')
+                  ->orWhere('status_pemesanan', 'pergantian-pengemudi');
+        })
+        ->get();
+
+        $pengemudi = $mobil->pengemudi->nama;
+
+        $content = '<ul>';
+        foreach ($pemesanans as $pemesanan) {
+            $content .= '<li>' . $pemesanan->tgl_tour_mulai . ' - ' . $pemesanan->tgl_tour_selesai . ' ' . '('. $pemesanan->status_pemesanan. ')' . '</li>';
+        }
+        $content .= '</ul>';
+
+        $response = [
+            'merk' => $mobil->merk,
+            'nama_mobil' => $mobil->nama_mobil,
+            'pemesanan' => $content,
+            'pengemudi' => $pengemudi,
+            // ... tambahkan informasi lainnya yang diperlukan
+        ];
+
+        return response()->json($response);
     }
 
         

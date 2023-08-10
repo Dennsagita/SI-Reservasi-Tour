@@ -17,7 +17,10 @@ class Mobil extends Model
     {
         return $this->BelongsTo(Pengemudi::class, 'id_pengemudi');
     }
-
+    public function pemesanan()
+    {
+        return $this->hasMany(Pemesanan::class, 'id_mobil', 'id');
+    }
     // public function paket()
     // {
     //     return $this->hasMany(Paket::class, 'id_mobil', 'id');

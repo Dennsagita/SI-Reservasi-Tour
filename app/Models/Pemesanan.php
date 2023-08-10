@@ -22,7 +22,10 @@ class Pemesanan extends Model
     {
         return $this->BelongsTo(User::class, 'id_user');
     }
-
+    public function mobil()
+    {
+        return $this->BelongsTo(Mobil::class, 'id_mobil');
+    }
     public function batalPesanan()
     {
         return $this->hasOne(BatalPesanan::class, 'id_pemesanan');
@@ -40,6 +43,7 @@ class Pemesanan extends Model
     protected $fillable = [
         'id_user',
         'id_paket',
+        "id_mobil",
         'tgl_tour_mulai',
         'tgl_tour_selesai',
         'tgl_berangkat',

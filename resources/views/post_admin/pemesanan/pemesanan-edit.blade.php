@@ -41,12 +41,27 @@
                             <div class="sm:col-span-2">
                                 <label for="id_mobil" class="block mb-2 text-sm font-medium text-gray-900">Pilih Mobil</label>
                                 <select name="id_mobil" id="id_mobil" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                    {{-- <option value="{{ $pesanan->mobil->id }}"{{ $pesanan->mobil->id == $pesanan->id_mobil ? ' selected' : '' }}>
+                                        {{ optional($pesanan->mobil)->pengemudi->nama ?? '-' }} {{ $pesanan->mobil->nama_mobil }}
+                                    </option> --}}
                                     @foreach ($mobils as $mobil)
-                                        <option value="{{ $mobil->id }}" {{ $mobil->id == $pesanan->paket->id_mobil ? 'selected' : '' }}>
-                                            {{ $mobil->pengemudi->nama }} ({{ $mobil->merk}} {{ $mobil->nama_mobil}})
+                                        <option value="{{ $mobil->id }}"{{ $mobil->id == $pesanan->id_mobil ? ' selected' : '' }}>
+                                            {{ $mobil->pengemudi->nama }} ({{ $mobil->merk }} {{ $mobil->nama_mobil }})
                                         </option>
                                     @endforeach
                                 </select>
+                                <!-- Elemen Popup -->
+                                <div id="popup-info" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+                                    <div class="bg-gray-100 dark:bg-gray-900 w-1/2 md:w-1/3 lg:w-1/4 p-6 rounded-lg shadow-lg">
+                                        <span class="absolute top-3 right-3 cursor-pointer">
+                                            <svg id="close-popup" class="w-6 h-6 text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </span>
+                                        <div id="popup-content-inner"></div>
+                                        <button id="close-popup-button" type="button" class="mt-4 w-full py-2 text-center bg-gray-300 text-gray-800 hover:bg-gray-400 rounded-lg focus:outline-none focus:ring focus:ring-gray-400">Tutup</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="w-full">
                                 <label for="tgl_tour_mulai" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Mulai Tour</label>
@@ -79,4 +94,47 @@
         </div>
     </div>
     </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectMobil = document.getElementById("id_mobil");
+        const popup = document.getElementById("popup-info");
+        const popupContent = document.getElementById("popup-content-inner");
+        const closePopup = document.getElementById("close-popup");
+        const closePopupButton = document.getElementById("close-popup-button");
+
+        selectMobil.addEventListener("change", async function() {
+            const selectedOption = selectMobil.options[selectMobil.selectedIndex];
+            const mobilId = selectedOption.value;
+
+            try {
+                const response = await axios.get(`/api/get-mobil/${mobilId}`);
+                const data = response.data;
+
+                const content = `
+                    <h2 class="text-xl font-semibold mb-3">${data.merk} ${data.nama_mobil}</h2>
+                    <p class="mb-2 font-semibold">Nama Pengemudi: ${data.pengemudi}</p>
+                    <p class="mb-4">Tanggal Tour: ${data.pemesanan}</p>
+                    <!-- Tambahkan informasi lainnya yang diperlukan -->
+                `;
+
+                popupContent.innerHTML = content;
+                popup.classList.remove("hidden"); // Tampilkan modal
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+
+        closePopup.addEventListener("click", function() {
+            popup.classList.add("hidden"); // Sembunyikan modal saat tombol "Tutup" diklik
+        });
+
+        closePopupButton.addEventListener("click", function() {
+            popup.classList.add("hidden"); // Sembunyikan modal saat tombol "Tutup" di dalam modal diklik
+        });
+    });
+</script>
+ 
 @endsection

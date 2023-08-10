@@ -56,31 +56,13 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                        @foreach ($pemesanan->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                @if ($mobil->pengemudi)
-                                    <p class="text-gray-900 md:w-8/12">{{ $mobil->pengemudi->nama }}</p>
-                                @endif
-                                {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                            @endif
-                        @endforeach
-                    @endif
-                    </div>
-                    <div class="mb-4 md:flex items-center">
-                        <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
-                        <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                            @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                    @if ($mobil->pengemudi)
-                                        <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }} ({{ $mobil->no_plat_mobil }})</p>
-                                    @endif
-                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                @endif
-                            @endforeach
-                        @endif
-                        </div>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($pemesanan->mobil)->pengemudi->nama ?? '-' }}</p>
+                </div>
+                <div class="mb-4 md:flex items-center">
+                    <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
+                    <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($pemesanan->mobil)->merk ?? ' ' }} {{ optional($pemesanan->mobil)->nama_mobil ?? ' ' }} ({{ optional($pemesanan->mobil)->no_plat_mobil ?? '-' }})</p>
+                </div>
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Harga Paket</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
@@ -124,29 +106,10 @@
                             </div>  
                         </div>
                         <div class="flex items-center hidden">
-                            @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                            @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                    @if ($mobil->pengemudi)
-                                    <input type="text" value="{{ $mobil->pengemudi->no_telp }}" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                    @endif
-                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                @endif
-                            @endforeach
-                            @endif
+                            <input type="text" value="{{ $pemesanan->mobil->pengemudi->no_telp }}" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                         </div>
                         <div class="flex items-center hidden">
-                            <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                                    @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                        @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                            @if ($mobil->pengemudi)
-                                            Halo {{ $mobil->pengemudi->nama }}  , Ini notifikasi bali temple tour, Selamat anda telah mendapatkan pesanan baru, silakan membuka website www.balitempletour.com
-                                            @endif
-                                            {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                        @endif
-                                    @endforeach
-                                @endif
+                            <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">Halo {{ $pemesanan->mobil->pengemudi->nama }}  , Ini notifikasi bali temple tour, Selamat anda telah mendapatkan pesanan baru, silakan membuka website www.balitempletour.com
                             </textarea>
                         </div>
                         <div class="flex items-center hidden">
@@ -169,29 +132,11 @@
                             </div>  
                         </div>
                         <div class="flex items-center hidden">
-                            @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                            @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                    @if ($mobil->pengemudi)
-                                    <input type="text" value="{{ $mobil->pengemudi->no_telp }}" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                    @endif
-                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                @endif
-                            @endforeach
-                            @endif
+                            <input type="text" value="{{ $pemesanan->mobil->pengemudi->no_telp }}" name="recipient_number" placeholder="Nomor Tujuan WhatsApp" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                         </div>
                         <div class="flex items-center hidden">
                             <textarea name="message" placeholder="Pesan untuk Dikirim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                                    @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                        @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                            @if ($mobil->pengemudi)
-                                            Halo {{ $mobil->pengemudi->nama }}  , Ini notifikasi bali temple tour. Anda akan memulai tour pada tanggal {{ \Carbon\Carbon::parse($pemesanan->tgl_tour_mulai)->isoFormat('DD MMMM YYYY') }}, jam keberangkatan {{ \Carbon\Carbon::parse($pemesanan->jam_datang)->isoFormat('HH:mm') }} dan lokasi penjemputan di {{ $pemesanan->lokasi_penjemputan }}. Persiapkan diri anda dan tetap jaga kesehatan. Informasi lebih lanjut bisa buka website www.balitempletour.com Terima Kasih
-                                            @endif
-                                            {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                        @endif
-                                    @endforeach
-                                @endif
+                                Halo {{ $pemesanan->mobil->pengemudi->nama }}  , Ini notifikasi bali temple tour. Anda akan memulai tour pada tanggal {{ \Carbon\Carbon::parse($pemesanan->tgl_tour_mulai)->isoFormat('DD MMMM YYYY') }}, jam keberangkatan {{ \Carbon\Carbon::parse($pemesanan->jam_datang)->isoFormat('HH:mm') }} dan lokasi penjemputan di {{ $pemesanan->lokasi_penjemputan }}. Persiapkan diri anda dan tetap jaga kesehatan. Informasi lebih lanjut bisa buka website www.balitempletour.com Terima Kasih
                             </textarea>
                         </div>
                         <div class="flex items-center hidden">

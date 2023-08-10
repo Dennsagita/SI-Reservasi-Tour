@@ -76,6 +76,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan');
     Route::get('/pemesanan-selesai', [PemesananController::class, 'pemesananSelesai'])->name('pemesananSelesai');
     Route::get('/pemesanan-edit/{id}', [PemesananController::class, 'edit']);
+    Route::get('/api/get-mobil/{id}', [PemesananController::class, 'apiGetMobil'])->name('apiGetMobil');
     Route::put('/pemesanan/{id}', [PemesananController::class, 'update']);
     Route::get('/pemesanan-detail/{id}', [PemesananController::class, 'detailPemesanan'])->name('detailPemesanan');
     Route::post('/pemesanan-konfirmasi/{id}', [PemesananController::class, 'processKonfirmasiPesanan'])->name('processKonfirmasiPesanan');

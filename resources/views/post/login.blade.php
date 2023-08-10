@@ -25,11 +25,11 @@
                     {{ Session::get('logout') }}
                   </div>
                   @endif
-                  @if (session('ubahPassword'))
+                  {{-- @if (session('ubahPassword'))
                   <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md mb-4">
                     {{ session('ubahPassword') }}
                   </div>
-                  @endif
+                  @endif --}}
                   <form action="{{route('processlogin')}}" method="post">
                     {{ csrf_field() }}
                     <label for="email" class="mb-2 ml-1 font-bold text-xs text-slate-700">Email</label>

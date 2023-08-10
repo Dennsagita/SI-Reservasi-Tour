@@ -69,7 +69,9 @@
         <div class="flex-auto px-0 pt-0 pb-2">
           <div class="p-0 overflow-x-auto">
             @php
-                $counter1 = 1;
+                $currentPage = request()->get('page', 1);
+                $itemsPerPage = 5; // Jumlah item per halaman (sesuaikan dengan paginate() Anda)
+                $startNumber = ($currentPage - 1) * $itemsPerPage + 1;
             @endphp
             <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
               <thead class="align-bottom">
@@ -83,7 +85,7 @@
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Jam Berangkat</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Bukti DP</th>
-                  {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Pemesanan</th> --}}
+                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Pemesanan</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pengemudi|Mobil</th>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                 </tr>
@@ -92,7 +94,7 @@
               <tbody>
                 <tr>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $counter1++ }}</h6>
+                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $startNumber + $loop->index }}</h6>
                 </td> 
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <h6 class="mb-0 leading-normal text-sm text-center"><h6 class="mb-0 leading-normal text-sm text-center">{{ sprintf('%06d', $item->id) }}</h6></h6>
@@ -138,29 +140,10 @@
                       <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->status_pemesanan }}</p>
                   @endif
                 </td>
-              
-                {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    @if ($item->paket->mobil1 && $item->paket->mobil1->count() > 0)
-                        @foreach ($item->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->id == $item->paket->id_mobil)
-                                @if ($mobil->pengemudi)
-                                    <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
-                                @endif
-                                <p class="mb-0 leading-tight text-xs text-slate-400">
-                                    {{ $mobil->merk }} {{ $mobil->nama_mobil }}
-                                </p>
-                                <br>
-                            @endif
-                        @endforeach
-                    @else
-                    <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
-                    @endif
-                @if ($id_mobil && count($id_mobil) > 0)
-                  @foreach ($id_mobil as $mobil)
-                      <a href="{{ route('pilihMobil', ['id_mobil' => $mobil->id]) }}">{{ $mobil->nama_mobil }}</a>
-                  @endforeach
-                @endif
-                </td> --}}
+                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                  <h6 class="mb-0 leading-normal text-sm">{{ optional($item->mobil)->pengemudi->nama ?? '-' }}</h6>
+                  <p class="mb-0 leading-tight text-xs text-slate-400">{{ optional($item->mobil)->merk ?? '-' }} {{ optional($item->mobil)->nama_mobil ?? ' ' }}</p>
+                </td>
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                            
                             <button class=" text-white bg-slate-700 hover:bg-slate-900 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
@@ -178,6 +161,31 @@
             </table>
           </div>
         </div>
+      </div>
+      <div class="mb-5">
+        <nav role="navigation" aria-label="Pagination Navigation" class="">
+            {{-- Tombol Previous --}}
+            @if ($pemesananList->onFirstPage())
+                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                    {!! __('pagination.previous') !!}
+                </span>
+            @else
+                <a href="{{ $pemesananList->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.previous') }}">
+                    {!! __('pagination.previous') !!}
+                </a>
+            @endif
+  
+            {{-- Tombol Next --}}
+            @if ($pemesananList->hasMorePages())
+                <a href="{{ $pemesananList->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.next') }}">
+                    {!! __('pagination.next') !!}
+                </a>
+            @else
+                <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                    {!! __('pagination.next') !!}
+                </span>
+            @endif
+        </nav>
       </div>
     </div>
 
@@ -205,7 +213,9 @@
         <div class="flex-auto px-0 pt-0 pb-2">
           <div class="p-0 overflow-x-auto">
             @php
-                $counter2 = 1;
+                $currentPage2 = request()->get('page', 1);
+                $itemsPerPage2 = 5; // Jumlah item per halaman (sesuaikan dengan paginate() Anda)
+                $startNo2 = ($currentPage2 - 1) * $itemsPerPage2 + 1;
             @endphp
             <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">    
               <thead class="align-bottom">
@@ -220,7 +230,7 @@
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga Paket</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Bukti DP</th>
                   <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status Pemesanan</th>
-                  {{-- <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pengemudi|Mobil</th> --}}
+                  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pengemudi|Mobil</th>
                   <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
                 </tr>
               </thead>
@@ -228,7 +238,7 @@
               <tbody>
                 <tr>
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $counter2++ }}</h6>
+                    <h6 class="mb-0 leading-normal text-sm text-center">{{ $startNo2 + $loop->index }}</h6>
                 </td> 
                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                     <h6 class="mb-0 leading-normal text-sm text-center"><h6 class="mb-0 leading-normal text-sm text-center">{{ sprintf('%06d', $item2->id) }}</h6></h6>
@@ -274,43 +284,10 @@
                       <p class="mb-0 font-semibold leading-tight text-xs">{{ $item2->status_pemesanan }}</p>
                   @endif
                 </td>
-              
-                {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent"> --}}
-                  {{-- <h6 class="mb-0 leading-normal text-sm">{{ $item2->mobil->nama_mobil }}</h6>
-                  <p class="mb-0 leading-tight text-xs text-slate-400"></p> --}}
-                  {{-- @if ($item2->paket && $item2->paket->mobil && $item2->paket->mobil->pengemudi) 
-                    <h6 class="mb-0 leading-normal text-sm">
-                      {{ $item2->paket->mobil->pengemudi->nama }} 
-                      @else
-                      -
-                      @endif</h6>
-                    <p class="mb-0 leading-tight text-xs text-slate-400">
-                  @if($item2->paket && $item2->paket->mobil)
-                    {{ $item2->paket->mobil->merk }} {{ $item2->paket->mobil->nama_mobil }}
-                    @else
-                    -
-                    @endif</p> --}}
-                    {{-- @if ($item2->paket->mobil1 && $item2->paket->mobil1->count() > 0)
-                        @foreach ($item2->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item2->paket->id_mobil)
-                                @if ($mobil->pengemudi)
-                                    <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
-                                @endif
-                                <p class="mb-0 leading-tight text-xs text-slate-400">
-                                    {{ $mobil->merk }} {{ $mobil->nama_mobil }}
-                                </p>
-                                <br>
-                            @endif
-                        @endforeach
-                    @else
-                    <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
-                    @endif --}}
-                {{-- @if ($id_mobil && count($id_mobil) > 0)
-                  @foreach ($id_mobil as $mobil)
-                      <a href="{{ route('pilihMobil', ['id_mobil' => $mobil->id]) }}">{{ $mobil->nama_mobil }}</a>
-                  @endforeach
-                @endif 
-                </td>--}}
+                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                  <h6 class="mb-0 leading-normal text-sm">{{ optional($item2->mobil)->pengemudi->nama ?? '-' }}</h6>
+                  <p class="mb-0 leading-tight text-xs text-slate-400">{{ optional($item2->mobil)->merk ?? '-' }} {{ optional($item2->mobil)->nama_mobil ?? ' ' }}</p>
+                </td>
                 <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                   {{-- <button class=" text-white bg-slate-700 hover:bg-slate-900 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
                     onclick="window.location.href='pemesanan-edit/{{ $item2->id }}'">
@@ -331,6 +308,30 @@
     </div>
   </div>
   <div>
-    {{ $pemesananList->links() }}
+    <div class="mb-5">
+      <nav role="navigation" aria-label="Pagination Navigation" class="">
+          {{-- Tombol Previous --}}
+          @if ($pemesanan2->onFirstPage())
+              <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                  {!! __('pagination.previous') !!}
+              </span>
+          @else
+              <a href="{{ $pemesanan2->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.previous') }}">
+                  {!! __('pagination.previous') !!}
+              </a>
+          @endif
+
+          {{-- Tombol Next --}}
+          @if ($pemesanan2->hasMorePages())
+              <a href="{{ $pemesanan2->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150" aria-label="{{ __('pagination.next') }}">
+                  {!! __('pagination.next') !!}
+              </a>
+          @else
+              <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-md leading-5">
+                  {!! __('pagination.next') !!}
+              </span>
+          @endif
+      </nav>
+    </div>
   </div>
 @endsection

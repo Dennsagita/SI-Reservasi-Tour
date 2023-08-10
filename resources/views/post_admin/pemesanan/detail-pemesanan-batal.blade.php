@@ -56,31 +56,13 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($batal->pemesanan->paket->mobil1 && $batal->pemesanan->paket->mobil1->count() > 0)
-                        @foreach ($batal->pemesanan->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $batal->pemesanan->paket->id_mobil)
-                                @if ($mobil->pengemudi)
-                                    <p class="text-gray-900 md:w-8/12">{{ $mobil->pengemudi->nama }}</p>
-                                @endif
-                                {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                            @endif
-                        @endforeach
-                    @endif
-                    </div>
-                    <div class="mb-4 md:flex items-center">
-                        <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
-                        <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($batal->pemesanan->paket->mobil1 && $batal->pemesanan->paket->mobil1->count() > 0)
-                            @foreach ($batal->pemesanan->paket->mobil1 as $mobil)
-                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $batal->pemesanan->paket->id_mobil)
-                                    @if ($mobil->pengemudi)
-                                        <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }} ({{ $mobil->no_plat_mobil }})</p>
-                                    @endif
-                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                @endif
-                            @endforeach
-                        @endif
-                        </div>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($batal->pemesanan->mobil)->pengemudi->nama ?? '-' }}</p>
+                </div>
+                <div class="mb-4 md:flex items-center">
+                    <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
+                    <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($batal->pemesanan->mobil)->merk ?? ' ' }} {{ optional($batal->pemesanan->mobil)->nama_mobil ?? ' ' }} ({{ optional($batal->pemesanan->mobil)->no_plat_mobil ?? '-' }})</p>
+                </div>
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Harga Paket</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
@@ -119,8 +101,29 @@
                     <p class="text-gray-900">{{ $batal->keterangan }}</p>
                 </div>
                 <div class="mt-6">
-                    <form action="{{ route('processKonfirmasiBatalPesanan', ['id' => $batal->id_pemesanan]) }}" method="POST">
+                    @if ($batal->pemesanan->status_pemesanan !== 'batal')
+                    <form action="{{ route('processKonfirmasiBatalPesanan', ['id' => $batal->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        <div class="upload__box">
+                            @error('images[]')
+                            <small class="text-xs text-red-500 ml-1">{{ '*' . $message }}</small>
+                            @enderror
+                            <div class="upload__btn-box">
+                                <label class="upload__btn btn btn-primary">
+                                    <p>Choose An Image</p>
+                                    <input type="file" name="image" accept="image/*" multiple data-max_length="20" class="upload__inputfile">
+                                </label>
+                            </div>
+                            {{-- <div class="upload__img-wrap">
+                                @foreach ($batal->images as $item => $image)
+                                <div class='upload__img-box'>
+                                    <div style='background-image: url({{ asset('storage/' . $image->src) }})' data-number='{{ $batalPemesanan }}' data-id="{{ $image->id }}" data-file='{{ 'storage/' . $image->src }}' class='img-bg'>
+                                        <div class='upload__img-close'></div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div> --}}
+                        </div>
                         <label for="status_pemesanan" class="block font-bold mb-2 text-sm text-gray-900"></label>
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                             <div class="flex items-center hidden">
@@ -128,20 +131,25 @@
                                     <option value="batal">Terima</option>
                                 </select>
                             </div>
-                            <div class="flex items-center">
+                            
+                            <div class="flex mt-5 items-center">
                                 <button type="submit" class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Konfirmasi Batal Pesanan</button>
                             </div>
                         </div>
                     </form>
-                    
+                    @endif
                 </div>
                 <!-- Tambahkan kode untuk atribut lainnya di sini -->
                 </div>
                 
                 <div class="mt-10 w-full md:w-1/3 mb-4 md:mb-0 md:order-last">
-                <div class="border border-gray-300 rounded-5 overflow-hidden">
-                    <img src="{{ asset($batal->pemesanan->images->count() ? 'storage/'. $batal->pemesanan->images->first()->src : 'assets/images/blog/mobilkosong.png') }}" alt="{{ $batal->pemesanan->user->nama }}" class="w-full h-auto mx-auto my-2">
-                </div>
+                    <div class="border border-gray-300 rounded-5 overflow-hidden">
+                        @if(isset($batalPemesanan->images) && $batalPemesanan->images->count())
+                            <img src="{{ asset('storage/' . $batalPemesanan->images->first()->src) }}" alt="" class="w-full h-auto mx-auto my-2">
+                        @else
+                            <img src="{{ asset('assets/images/blog/mobilkosong.png') }}" alt="" class="w-full h-auto mx-auto my-2">
+                        @endif
+                    </div> 
                 </div>
             </div>
         </div>

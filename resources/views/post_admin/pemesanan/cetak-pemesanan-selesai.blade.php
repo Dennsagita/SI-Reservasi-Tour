@@ -115,23 +115,9 @@
                     @endif
                 </td>
                 <td>{{ $item->status_pemesanan }}</td>
+                <td >{{ optional($item->mobil)->pengemudi->nama ?? '-' }}</td>
                 <td>
-                    @foreach ($item->paket->mobil1->random(1) as $mobil)
-                        @if ($mobil->pivot->konfirmasi)
-                            @if ($mobil->pengemudi)
-                                {{ $mobil->pengemudi->nama }}
-                            @endif
-                        @endif
-                    @endforeach
-                </td>
-                <td>
-                    @foreach ($item->paket->mobil1->random(1) as $mobil)
-                        @if ($mobil->pivot->konfirmasi)
-                            @if ($mobil->pengemudi)
-                            {{ $mobil->merk }} {{ $mobil->nama_mobil }} ({{ $mobil->no_plat_mobil }})
-                            @endif
-                        @endif
-                    @endforeach
+                    {{ optional($item->mobil)->merk ?? ' ' }} {{ optional($item->mobil)->nama_mobil ?? ' ' }} ({{ optional($item->mobil)->no_plat_mobil ?? '-' }})
                 </td>
             </tr>
             @endforeach
