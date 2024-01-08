@@ -86,7 +86,7 @@
                         <p class="text-gray-900 md:w-8/12">Menunggu Konfirmasi</p>
                         @endif</p>
                 </div>
-                <div class="mx-auto mt-16">
+                {{-- <div class="mx-auto mt-16">
                     <p class="text-gray-700 text-2xl font-bold">Total Pembayaran</p>
                     <p class="text-gray-900">
                     @if ($batal->pemesanan->paket->harga)
@@ -95,7 +95,7 @@
                         -
                     @endif
                     </p>
-                </div>
+                </div> --}}
                 <div class="mx-auto mt-16">
                     <p class="text-gray-700 text-xl font-bold">Keterangan Pengajuan Batal Pesanan</p>
                     <p class="text-gray-900">{{ $batal->keterangan }}</p>

@@ -56,31 +56,13 @@
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                        @foreach ($pemesanan->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                @if ($mobil->pengemudi)
-                                    <p class="text-gray-900 md:w-8/12">{{ $mobil->pengemudi->nama }}</p>
-                                @endif
-                                {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                            @endif
-                        @endforeach
-                    @endif
-                    </div>
-                    <div class="mb-4 md:flex items-center">
-                        <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
-                        <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                            @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                    @if ($mobil->pengemudi)
-                                        <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }} ({{ $mobil->no_plat_mobil }})</p>
-                                    @endif
-                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                @endif
-                            @endforeach
-                        @endif
-                        </div>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($pemesanan->mobil)->pengemudi->nama ?? '-' }}</p>
+                </div>
+                <div class="mb-4 md:flex items-center">
+                    <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
+                    <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($pemesanan->mobil)->merk ?? ' ' }} {{ optional($pemesanan->mobil)->nama_mobil ?? ' ' }} ({{ optional($pemesanan->mobil)->no_plat_mobil ?? '-' }})</p>
+                </div>
                 <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Harga Paket</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>

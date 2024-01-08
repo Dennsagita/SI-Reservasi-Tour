@@ -162,6 +162,7 @@ Route::middleware('auth:user')->group(function () {
         Route::get('/reservasi', [PemesananController::class, 'create'])->name('reservasi');
         // Tambahkan rute berikut di dalam controller
         Route::get('/get-paket-info/{id}', [PemesananController::class, 'getPaketInfo']);
+        Route::get('/get-gambar/{id}', [PemesananController::class, 'getGambar']);
 
         Route::post('/reservasi-insert', [PemesananController::class, 'store'])->name('reservasi-insert');
         Route::get('/profile-edit', [UserController::class, 'profileedit'])->name('profileedit');

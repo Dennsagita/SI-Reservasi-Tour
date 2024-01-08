@@ -67,83 +67,42 @@ class PengemudiController extends Controller
 
     public function dashboardPengemudi()
     {
-        $pengemudi = Pengemudi::findOrFail(auth()->user()->id);
-        $mobils = $pengemudi->mobil;
+         // Mendapatkan data pengemudi yang sedang login
+         $pengemudi = Pengemudi::findOrFail(auth()->user()->id);
 
-        if ($mobils->isEmpty()) {
-            // Jika pengemudi tidak memiliki mobil, tampilkan pesan error
-            abort(404, 'Mobil tidak ditemukan.');
-        }
+         // Mendapatkan pesanan yang terkait dengan mobil pengemudi
+         $pemesanan = Pemesanan::whereHas('mobil', function ($query) use ($pengemudi) {
+             $query->where('id_pengemudi', $pengemudi->id);
+         })->orderBy('id', 'desc')->paginate(5);
 
-        $paketIds = $mobils->pluck('id');
-        $paket = Paket::whereHas('paketMobil', function ($query) use ($paketIds) {
-            $query->whereIn('id_mobil', $paketIds)->where('konfirmasi', 1);
-        })->get();
-
-        $pengemudiId = Pengemudi::findOrFail(auth()->user()->id)->id;
-
-        $paketMobilIds = Mobil::whereHas('pengemudi', function ($query) use ($pengemudiId) {
-            $query->where('id', $pengemudiId);
-        })->pluck('id');
-
-        $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
-            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
-        })->get();
-         // Urutkan data pemesanan berdasarkan ID secara descending (terbaru di atas)
-         $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
-            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
-        })->orderBy('id', 'desc')->paginate(10);
-
-        return view('post_admin.dash-pengemudi.dashboard', compact('mobils', 'paket', 'pemesanan', 'pengemudi'));
+        return view('post_admin.dash-pengemudi.dashboard', compact('pemesanan','pengemudi'));
     }
 
     public function pesananPengemudi()
     {
+         // Mendapatkan data pengemudi yang sedang login
         $pengemudi = Pengemudi::findOrFail(auth()->user()->id);
-        $mobils = $pengemudi->mobil;
 
-        if ($mobils->isEmpty()) {
-            // Jika pengemudi tidak memiliki mobil, tampilkan pesan error
-            abort(404, 'Mobil tidak ditemukan.');
-        }
-
-        $paketIds = $mobils->pluck('id');
-        $paket = Paket::whereHas('paketMobil', function ($query) use ($paketIds) {
-            $query->whereIn('id_mobil', $paketIds)->where('konfirmasi', 1);
-        })->get();
-
-        $pengemudiId = Pengemudi::findOrFail(auth()->user()->id)->id;
-
-        $paketMobilIds = Mobil::whereHas('pengemudi', function ($query) use ($pengemudiId) {
-            $query->where('id', $pengemudiId);
-        })->pluck('id');
-
-        $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
-            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
-        })->get();
-
-         // Urutkan data pemesanan berdasarkan ID secara descending (terbaru di atas)
-        $pemesanan = Pemesanan::whereHas('paket.paketMobil', function ($query) use ($paketMobilIds) {
-            $query->whereIn('paket_mobil.id_mobil', $paketMobilIds);
-        })->orderBy('id', 'desc')->paginate(10);
-
-        return view('post_admin.dash-pengemudi.pengemudi-pesanan.pesanan', compact('mobils', 'paket', 'pemesanan'));
+        // Mendapatkan pesanan yang terkait dengan mobil pengemudi
+        $pemesanan = Pemesanan::whereHas('mobil', function ($query) use ($pengemudi) {
+            $query->where('id_pengemudi', $pengemudi->id);
+        })->orderBy('id', 'desc')->paginate(5);
+        return view('post_admin.dash-pengemudi.pengemudi-pesanan.pesanan', compact('pemesanan'));
     }
 
     public function detailPesananPengemudi($id)
     {
-        $pemesanan = Pemesanan::findOrFail($id);
+        // Mendapatkan data pengemudi yang sedang login
+        $pengemudi = Pengemudi::findOrFail(auth()->user()->id);
 
-        // Pastikan bahwa pengemudi yang sedang login adalah pengemudi yang terkait dengan mobil pada pemesanan
-        $authenticatedPengemudiId = auth()->user()->id;
-        if (!$pemesanan->paket->mobil1->where('pivot.konfirmasi', true)
-                ->where('exists', true)
-                ->where('pengemudi.id', $authenticatedPengemudiId)->isEmpty()) {
-            return view('post_admin.dash-pengemudi.pengemudi-pesanan.detail-pesanan', compact('pemesanan'));
-        }
+        // Mendapatkan detail pesanan berdasarkan ID pesanan dan ID pengemudi
+        $pemesanan = Pemesanan::where('id', $id)
+            ->whereHas('mobil', function ($query) use ($pengemudi) {
+                $query->where('id_pengemudi', $pengemudi->id);
+            })
+            ->firstOrFail();
 
-        // Jika pengemudi yang sedang login tidak terkait dengan mobil pada pemesanan, tampilkan pesan error atau redirect ke halaman lain
-        abort(403, 'Anda tidak memiliki akses ke detail pesanan ini.');
+        return view('post_admin.dash-pengemudi.pengemudi-pesanan.detail-pesanan', compact('pemesanan'));
     }
 
     public function processSelesaiPesanan(Request $request, $id)

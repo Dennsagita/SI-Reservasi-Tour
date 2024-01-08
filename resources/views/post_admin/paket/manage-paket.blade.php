@@ -253,10 +253,10 @@
                                     @csrf
                                     <input type="hidden" name="id_paket" value="{{ $paket->id }}">
                                     <input type="hidden" name="id_mobil" value="{{ $mobil->id }}">
-                                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">Konfirmasi</button>
+                                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-darkblue rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">Terima</button>
                                     @if ($mobil->pivot->konfirmasi === 0)
                                         <!-- Ubah tombol hapus menjadi mengaktifkan modal -->
-                                        <button type="button" class="btn-hapus inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-red-700" onclick="showModal({{ $paket->id }}, {{ $mobil->id }})">Hapus</button>
+                                        <button type="button" class="btn-hapus inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-red-700" onclick="showModal({{ $paket->id }}, {{ $mobil->id }})">Tolak</button>
                                     @endif
                                   </form>
                             </td>

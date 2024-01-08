@@ -75,11 +75,6 @@
                 </tr>
               </thead>
               @forelse ($pemesanan as $data => $item)
-                @php
-                    $authenticatedPengemudiId = Auth::guard('pengemudi')->user()->id;
-                @endphp
-                @foreach ($item->paket->mobil1 as $mobil)
-                    @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil && $mobil->pengemudi && $mobil->pengemudi->id == $authenticatedPengemudiId)
                         @if ($item->status_pemesanan === 'diterima')
                         <tr>
                             <!-- Tampilkan data pemesanan seperti biasa -->
@@ -128,48 +123,13 @@
                                 <p class="mb-0 font-semibold leading-tight text-xs">{{ $item->status_pemesanan }}</p>
                             @endif
                             </td>
-                        
                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                            {{-- <h6 class="mb-0 leading-normal text-sm">{{ $item->mobil->nama_mobil }}</h6>
-                            <p class="mb-0 leading-tight text-xs text-slate-400"></p> --}}
-                            {{-- @if ($item->paket && $item->paket->mobil && $item->paket->mobil->pengemudi) 
-                                <h6 class="mb-0 leading-normal text-sm">
-                                {{ $item->paket->mobil->pengemudi->nama }} 
-                                @else
-                                -
-                                @endif</h6>
-                                <p class="mb-0 leading-tight text-xs text-slate-400">
-                            @if($item->paket && $item->paket->mobil)
-                                {{ $item->paket->mobil->merk }} {{ $item->paket->mobil->nama_mobil }}
-                                @else
-                                -
-                                @endif</p> --}}
-                                @if ($item->paket->mobil1 && $item->paket->mobil1->count() > 0)
-                                    @foreach ($item->paket->mobil1 as $mobil)
-                                        @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil)
-                                            @if ($mobil->pengemudi)
-                                                <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
-                                            @endif
-                                            <p class="mb-0 leading-tight text-xs text-slate-400">
-                                                {{ $mobil->merk }} {{ $mobil->nama_mobil }}
-                                            </p>
-                                            <br>
-                                        @endif
-                                    @endforeach
-                                @else
-                                <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
-                                @endif
+                                <h6 class="mb-0 leading-normal text-sm">{{ optional($item->mobil)->pengemudi->nama ?? '-' }}</h6>
+                                <p class="mb-0 leading-tight text-xs text-slate-400">{{ optional($item->mobil)->merk ?? '-' }} {{ optional($item->mobil)->nama_mobil ?? ' ' }}</p>
                             </td>
                         </tr>
-                        @endif
-                        @break <!-- Keluar dari loop jika data sesuai -->
                     @endif
                 @endforeach
-
-                @empty <!-- Eksekusi jika tidak ada data pemesanan yang sesuai -->
-                    <!-- Tampilkan pesan jika tidak ada data pemesanan -->
-                @endforelse
-
               </tbody>
             </table>
           </div>

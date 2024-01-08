@@ -89,13 +89,13 @@
                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="w-full">
+                            {{-- <div class="w-full">
                                 <label for="tgl_berangkat" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Berangkat</label>
                                 <input type="date" name="tgl_berangkat" id="tgl_berangkat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999">
                                 @error('tgl_berangkat')
                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="w-full">
                                 <label for="jam_datang" class="block mb-2 text-sm font-medium text-gray-900">Jam Berangkat</label>
                                 <input type="time" name="jam_datang" id="jam_datang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="$2999">
@@ -161,6 +161,31 @@
   
     nominalDpInput.addEventListener('input', updateTotalPembayaran);
   </script>
+  <script>
+    window.onload = function() {
+      // Mendapatkan elemen input tanggal mulai
+      var startDateInput = document.getElementById("tgl_tour_mulai");
+      
+      // Mendapatkan elemen input tanggal selesai
+      var endDateInput = document.getElementById("tgl_tour_selesai");
+      
+      // Mendapatkan tanggal saat ini
+      var today = new Date();
+      
+      // Menambahkan 2 hari ke tanggal saat ini
+      var minDate = new Date(today);
+      minDate.setDate(today.getDate() + 2);
+      
+      // Mengubah format tanggal menjadi YYYY-MM-DD (sesuai format input type date)
+      var minDateFormatted = minDate.toISOString().slice(0, 10);
+      
+      // Mengatur atribut min pada input tanggal mulai
+      startDateInput.min = minDateFormatted;
+      
+      // Mengatur atribut min pada input tanggal selesai
+      endDateInput.min = minDateFormatted;
+    }
+</script>
 <!-- ====== END Contact ====== -->
 
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Paket;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PemesananRequest extends FormRequest
@@ -22,18 +23,34 @@ class PemesananRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
-        return [
-            'id_paket' => 'required',
-            'tgl_tour_mulai' => 'required',
-            'tgl_tour_selesai' => 'required',
-            'tgl_berangkat' => 'required',
-            'jam_datang' => 'required',
-            'lokasi_penjemputan' => 'required',
-            'nominal_dp' => 'required|numeric',
-            // 'images[]' => 'required',
-        ];
-    }
+{
+    return [
+        'id_paket' => 'required',
+        'tgl_tour_mulai' => 'required',
+        'tgl_tour_selesai' => 'required',
+        'tgl_berangkat' => 'required',
+        'jam_datang' => 'required',
+        'lokasi_penjemputan' => 'required',
+        'nominal_dp' => [
+            'required',
+            'numeric',
+            function ($attribute, $value, $fail) {
+                $paket = Paket::find($this->id_paket);
+
+                if (!$paket) {
+                    $fail('Paket tidak ditemukan.');
+                } else {
+                    $harga_paket = $paket->harga;
+                    $harga_diskon = $harga_paket * 0.2; // Harga paket dikurangi 20%
+
+                    if ($value < $harga_diskon) {
+                        $fail("Nominal DP kurang dari 20% (Rp." . number_format($harga_diskon, 0). ")");
+                    }
+                }
+            },
+        ],
+    ];
+}
 
     public function attributes()
     {

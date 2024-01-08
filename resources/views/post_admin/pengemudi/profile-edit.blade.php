@@ -37,19 +37,19 @@
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="w-full">
                             <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 ">Nama</label>
-                            <input type="text" name="nama" id="nama" value="{{ Auth::guard('pengemudi')->user()->nama }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan nama anda" required="">
+                            <input type="text" name="nama" id="nama" value="{{ Auth::guard('pengemudi')->user()->nama }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan nama anda" required="">
                         </div>
                         <div class="w-full">
                             <label for="no_telp" class="block mb-2 text-sm font-medium text-gray-900 ">Nomor Telphone</label>
-                            <input type="text" name="no_telp" id="no_telp" value="{{ Auth::guard('pengemudi')->user()->no_telp }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Contoh: 081234555666" required="">
+                            <input type="text" name="no_telp" id="no_telp" value="{{ Auth::guard('pengemudi')->user()->no_telp }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Contoh: 081234555666" required="">
                         </div>
                         <div class="w-full">
                             <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                            <input type="text" name="email" id="email" readonly value="{{ Auth::guard('pengemudi')->user()->email }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan alamat" required="">
+                            <input type="text" name="email" id="email" readonly value="{{ Auth::guard('pengemudi')->user()->email }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan alamat" required="">
                         </div>
                         <div class="w-full">
                             <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 ">Alamat</label>
-                            <input type="text" name="alamat" id="alamat" value="{{ Auth::guard('pengemudi')->user()->alamat }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan alamat" required="">
+                            <input type="text" name="alamat" id="alamat" value="{{ Auth::guard('pengemudi')->user()->alamat }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Masukan alamat" required="">
                         </div>
                         <div class="upload__box">
                             @error('images[]')

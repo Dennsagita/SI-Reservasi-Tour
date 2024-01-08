@@ -28,13 +28,7 @@ class AdminController extends Controller
         $pengemudi = Pengemudi::count();
         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
         $keyword = @$request['search'];
-        $pemesanan = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])
+        $pemesanan = Pemesanan::with(['paket','user','mobil'])
         ->where(function ($query) {
             // Kondisi untuk status "baru" dan "pergantian-pengemudi"
             $query->whereIn('status_pemesanan', ['baru', 'pergantian-pengemudi']);
@@ -51,13 +45,7 @@ class AdminController extends Controller
 
         // Fitur Pencarian data berdasarkan input pengguna yang difilter berdasarkan nama pelanggan pada tabel pemesanan
         $keyword = @$request['search2'];
-        $pemesanan2 = Pemesanan::with(['paket' => function ($query) {
-            $query->whereHas('paketMobil', function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            })->with(['paketMobil' => function ($subquery) {
-                $subquery->where('konfirmasi', 1);
-            }]);
-        }, 'user'])
+        $pemesanan2 = Pemesanan::with(['paket','user','mobil'])
             ->where('status_pemesanan', 'diterima') // Tambahkan kondisi ini
             ->orderBy('created_at', 'desc');
         if (isset($request['search2'])) {

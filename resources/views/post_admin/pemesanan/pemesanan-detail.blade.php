@@ -86,6 +86,18 @@
                         <p class="text-gray-900 md:w-8/12">Menunggu Konfirmasi</p>
                         @endif</p>
                 </div>
+                @if ($pemesanan->status_pemesanan === 'selesai')
+                <div class="mx-auto mt-16 hidden">
+                    <p class="text-gray-700 text-2xl font-bold">Total Pembayaran</p>
+                    <p class="text-gray-900">
+                    @if ($pemesanan->paket->harga)
+                        Rp. {{ number_format($pemesanan->paket->harga - $pemesanan->nominal_dp, 0, ',', '.') }}
+                    @else
+                        -
+                    @endif
+                    </p>
+                </div>
+                @else
                 <div class="mx-auto mt-16">
                     <p class="text-gray-700 text-2xl font-bold">Total Pembayaran</p>
                     <p class="text-gray-900">
@@ -96,10 +108,12 @@
                     @endif
                     </p>
                 </div>
+                @endif
                 @if ($pemesanan->status_pemesanan === 'baru' || $pemesanan->status_pemesanan === 'pergantian-pengemudi')
                 <div class="mt-6">
                     <form action="{{ route('processKonfirmasiPesanan', ['id' => $pemesanan->id]) }}" method="POST">
                         @csrf
+                        @if($pemesanan->mobil)
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 hidden">
                             <div class="flex items-center">
                                 <input type="text" name="status_pemesanan" id="status_pemesanan" value="diterima" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
@@ -118,10 +132,15 @@
                         <div class="flex items-center">
                             <button type="submit" class="text-white font-semibold bg-gradient-to-tl from-gray-900 to-slate-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Konfirmasi Pesanan</button>
                         </div>
+                        @else
+                        <div class="flex items-center">
+                            <p class="text-red-900">Isi Data Pengemudi Untuk Konfirmasi Pesanan</p>
+                        </div>
+                        @endif
                     </form>
                 </div>
                 @elseif ($pemesanan->status_pemesanan === 'selesai')
-
+                <p class="text-green-700 text-2xl font-bold">(LUNAS)</p>
                 @else
                 <div class="mt-6">
                     <form action="{{ route('processPengingatPesanan', ['id' => $pemesanan->id]) }}" method="POST">

@@ -75,31 +75,13 @@
                   <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Pengemudi</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                    @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                        @foreach ($pemesanan->paket->mobil1 as $mobil)
-                            @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                @if ($mobil->pengemudi)
-                                    <p class="text-gray-900 md:w-8/12">{{ $mobil->pengemudi->nama }}</p>
-                                @endif
-                                {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                            @endif
-                        @endforeach
-                    @endif
-                    </div>
-                    <div class="mb-4 md:flex items-center">
-                        <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
-                        <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
-                        @if ($pemesanan->paket->mobil1 && $pemesanan->paket->mobil1->count() > 0)
-                            @foreach ($pemesanan->paket->mobil1 as $mobil)
-                                @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $pemesanan->paket->id_mobil)
-                                    @if ($mobil->pengemudi)
-                                        <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }} ({{ $mobil->no_plat_mobil }})</p>
-                                    @endif
-                                    {{-- <p class="text-gray-900 md:w-8/12">{{ $mobil->merk }} {{ $mobil->nama_mobil }}</p> --}}
-                                @endif
-                            @endforeach
-                        @endif
-                        </div>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($pemesanan->mobil)->pengemudi->nama ?? '-' }}</p>
+                </div>
+                <div class="mb-4 md:flex items-center">
+                    <p class="text-gray-700 font-bold md:w-1/3">Mobil (Nomor Plat)</p>
+                    <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
+                    <p class="text-gray-900 md:w-8/12">{{ optional($pemesanan->mobil)->merk ?? ' ' }} {{ optional($pemesanan->mobil)->nama_mobil ?? ' ' }} ({{ optional($pemesanan->mobil)->no_plat_mobil ?? '-' }})</p>
+                </div>
                   <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Harga Paket</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
@@ -108,13 +90,13 @@
                         @else
                         -
                         @endif</p></p>
-                  </div>
-                  <div class="mb-4 md:flex items-center">
+                </div>
+                <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Nominal DP</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
                     <p class="text-gray-900 md:w-8/12">Rp. {{ number_format($pemesanan->nominal_dp, 0, ',', '.') }}</p>
-                  </div>
-                  <div class="mb-4 md:flex items-center">
+                </div>
+                <div class="mb-4 md:flex items-center">
                     <p class="text-gray-700 font-bold md:w-1/3">Status Pesanan</p>
                     <p class="hidden md:block text-gray-700 font-bold md:w-1/6">:</p>
                         @if ($pemesanan->status_pemesanan == 'diterima' || $pemesanan->status_pemesanan == 'batal' || $pemesanan->status_pemesanan == 'selesai')
@@ -124,17 +106,23 @@
                         @else
                         <p class="text-gray-900 md:w-8/12">Menunggu Konfirmasi</p>
                         @endif</p>
-                  </div>
-                  <div class="mx-auto mt-16">
+                </div>
+                @if ($pemesanan->status_pemesanan === 'selesai')
+                <div class="mx-auto mt-5">
+                  <p class="text-green-700 text-2xl font-bold">(LUNAS)</p>
+                </div>
+                @else
+                <div class="mx-auto mt-16">
                     <p class="text-gray-700 text-2xl font-bold">Total Pembayaran</p>
                     <p class="text-gray-900">
-                      @if ($pemesanan->paket->harga)
+                    @if ($pemesanan->paket->harga)
                         Rp. {{ number_format($pemesanan->paket->harga - $pemesanan->nominal_dp, 0, ',', '.') }}
-                      @else
+                    @else
                         -
-                      @endif
+                    @endif
                     </p>
-                  </div>
+                </div>
+                @endif
                   @if($pemesanan->status_pemesanan != 'batal' && $pemesanan->status_pemesanan != 'selesai')
                       <div class="mt-6">
                           <button class="text-white font-semibold bg-gradient-to-tl from-red-900 to-red-800 rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">

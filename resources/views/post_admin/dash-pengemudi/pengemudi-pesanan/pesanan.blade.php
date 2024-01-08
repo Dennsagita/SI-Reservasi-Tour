@@ -102,11 +102,6 @@
                 </tr>
               </thead>
               @forelse ($pemesanan as $data => $item)
-                @php
-                    $authenticatedPengemudiId = Auth::guard('pengemudi')->user()->id;
-                @endphp
-                @foreach ($item->paket->mobil1 as $mobil)
-                    @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil && $mobil->pengemudi && $mobil->pengemudi->id == $authenticatedPengemudiId)
                         @if ($item->status_pemesanan === 'diterima')
                         <tr>
                             <!-- Tampilkan data pemesanan seperti biasa -->
@@ -153,21 +148,8 @@
                             @endif
                             </td>
                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                @if ($item->paket->mobil1 && $item->paket->mobil1->count() > 0)
-                                    @foreach ($item->paket->mobil1 as $mobil)
-                                        @if ($mobil->pivot->konfirmasi && $mobil->exists && $mobil->id == $item->paket->id_mobil)
-                                            @if ($mobil->pengemudi)
-                                                <h6 class="mb-0 leading-normal text-sm">{{ $mobil->pengemudi->nama }}</h6>
-                                            @endif
-                                            <p class="mb-0 leading-tight text-xs text-slate-400">
-                                                {{ $mobil->merk }} {{ $mobil->nama_mobil }}
-                                            </p>
-                                            <br>
-                                        @endif
-                                    @endforeach
-                                @else
-                                <h6 class="mb-0 leading-normal text-sm">Pengemudi Tidak Mempunyai Mobil</h6>
-                                @endif
+                                <h6 class="mb-0 leading-normal text-sm">{{ optional($item->mobil)->pengemudi->nama ?? '-' }}</h6>
+                                <p class="mb-0 leading-tight text-xs text-slate-400">{{ optional($item->mobil)->merk ?? '-' }} {{ optional($item->mobil)->nama_mobil ?? ' ' }}</p>
                             </td>
                             <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap shadow-transparent">
                                 {{-- <a href="mobil-edit/{{ $item->id }}" class="px-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center"><i class="fa-solid fa-pen-to-square"></i></a> --}}
@@ -235,14 +217,7 @@
                             </td>
                         </tr>
                         @endif
-                        @break <!-- Keluar dari loop jika data sesuai -->
-                    @endif
                 @endforeach
-
-                @empty <!-- Eksekusi jika tidak ada data pemesanan yang sesuai -->
-                    <!-- Tampilkan pesan jika tidak ada data pemesanan -->
-                @endforelse
-
               </tbody>
             </table>
           </div>
