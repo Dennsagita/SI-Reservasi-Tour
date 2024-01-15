@@ -144,11 +144,24 @@
                     </button>
                 </div>
             </div>
+            <div id="myDiv"></div>
             @endif
 
         </div>
     </div>
 </section>
+<script type="text/javascript">
+  $(function () {
+    $('#myDiv').floatingWhatsApp({
+      phone: '6282340170686',
+      showPopup: 'True',
+      popupMessage: "Ada yang bisa kami bantu?",
+      headerTitle: "whatsapp Chat",
+      message: "Halo saya ingin mengetahui detail dari {{ $paket->nama }}",
+      position: "right"
+    });
+  });
+</script>
 <script>
     const nominalDpInput = document.getElementById('nominal_dp');
     const totalPembayaran = document.getElementById('total_pembayaran');

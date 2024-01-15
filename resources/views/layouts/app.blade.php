@@ -10,6 +10,7 @@
     <div>
         @include('template_lp.navbar')
         @yield('content')
+        
     </div>
     @include('template_lp.footer')
     @include('template_lp.metascript')

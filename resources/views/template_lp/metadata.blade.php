@@ -33,5 +33,46 @@
     }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+{{-- <!-- Gaya Tombol WhatsApp -->
+<style>
+    .whatsapp-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25d366;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .whatsapp-popup {
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        display: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Gaya Tambahan jika diperlukan */
+    .whatsapp-popup h3 {
+        margin-bottom: 10px;
+    }
+
+    .whatsapp-popup img {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+</style> --}}
+<script type="text/javascript" src="{{ asset('assets/floating-whatsapp-master/jquery-3.3.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/floating-whatsapp-master/floating-wpp.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('assets/floating-whatsapp-master/floating-wpp.min.css') }}">
 @vite(['resources/css/app.css','resources/js/app.js']) 
